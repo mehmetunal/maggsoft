@@ -6,6 +6,7 @@ using Dev.Core.Infrastructure;
 using Dev.Core.Model;
 using Dev.Core.Model.Pagination;
 using Dev.Data.Npgsql;
+using Dev.Framework.Exceptions;
 using Dev.Framework.Mapper;
 using Dev.Npgsql.Repository;
 using Dev.Services.Events;
@@ -93,7 +94,7 @@ namespace Dev.Npgsql.Service
         public virtual async Task<TResultDto> AddAsync(TAddDto tAddDto, bool publishEvent = true)
         {
             if (tAddDto == null)
-                throw new ArgumentNullException($"{nameof(tAddDto)}");
+                throw new NotFoundException($"{nameof(tAddDto)}");
 
             var domainEntity = Mapper.Map<TTable>(tAddDto);
 
@@ -112,13 +113,13 @@ namespace Dev.Npgsql.Service
         public virtual async Task<TResultDto> UpdateAsync(TEditDto tEditDto, bool publishEvent = true)
         {
             if (tEditDto == null)
-                throw new ArgumentNullException($"{nameof(tEditDto)}");
+                throw new NotFoundException($"{nameof(tEditDto)}");
 
             var domainEntity = Mapper.Map<TTable>(tEditDto);
 
             var dbData = await Repository.FindByIdAsync(domainEntity.Id);
             if (dbData == null)
-                throw new ArgumentNullException($"{domainEntity.Id} is null data");
+                throw new NotFoundException($"{domainEntity.Id} is null data");
 
             var mapperData = Mapper.Map(domainEntity, dbData);
 
@@ -169,7 +170,7 @@ namespace Dev.Npgsql.Service
         //    //return Mapper.Map<TResultDto>(result);
         //}
 
-        public virtual async Task<TResultDto> DeleteAsync(Guid id)
+        public virtual async Task<TResultDto> DeleteAsync(Guid id, bool publishEvent = true)
         {
             var result = await Repository.DeleteAsync(id);
 
