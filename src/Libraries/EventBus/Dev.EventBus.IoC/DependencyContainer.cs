@@ -17,11 +17,11 @@ namespace Dev.EventBus.IoC
             var azureServiceBusEnabled = Configuration.GetSection("EventBus:AzureServiceBusEnabled");
             if (azureServiceBusEnabled != null && bool.Parse(azureServiceBusEnabled.Value) == true)
             {
-                services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+                services.AddSingleton<IAzureServiceBusPersisterConnection>(sp =>
                 {
                     var serviceBusConnectionString = Configuration["EventBus:EventBusConnection"];
 
-                    return new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+                    return new DefaultAzureServiceBusPersisterConnection(serviceBusConnectionString);
                 });
             }
             else
@@ -60,15 +60,15 @@ namespace Dev.EventBus.IoC
             var azureServiceBusEnabled = Configuration.GetSection("EventBus:AzureServiceBusEnabled");
             if (azureServiceBusEnabled != null && bool.Parse(azureServiceBusEnabled.Value) == true)
             {
-                services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+                services.AddSingleton<IEventBus, AzureEventBusServiceBus>(sp =>
                 {
-                    var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
+                    var serviceBusPersisterConnection = sp.GetRequiredService<IAzureServiceBusPersisterConnection>();
                     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                    var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+                    var logger = sp.GetRequiredService<ILogger<AzureEventBusServiceBus>>();
                     var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
                     string subscriptionName = Configuration["EventBus:SubscriptionClientName"];
 
-                    return new EventBusServiceBus(serviceBusPersisterConnection, logger,
+                    return new AzureEventBusServiceBus(serviceBusPersisterConnection, logger,
                         eventBusSubcriptionsManager, iLifetimeScope, subscriptionName);
                 });
 

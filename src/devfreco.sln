@@ -69,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.EventBus.IoC", "Librari
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.EventBus.Example.Subscribe", "Example\Dev.EventBus.Example.Subscribe\Dev.EventBus.Example.Subscribe.csproj", "{B152066D-68BA-406B-9EE4-A84F4D8AF731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dev.EventBus.ServiceBus", "Libraries\EventBus\Dev.EventBus.ServiceBus\Dev.EventBus.ServiceBus.csproj", "{C4D0F483-EA89-459C-8469-4CE1B4A89935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.EventBus.AzureServiceBus", "Libraries\EventBus\Dev.EventBus.ServiceBus\Dev.EventBus.AzureServiceBus.csproj", "{C4D0F483-EA89-459C-8469-4CE1B4A89935}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

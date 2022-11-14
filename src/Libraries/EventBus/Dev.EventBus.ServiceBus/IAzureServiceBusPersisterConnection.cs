@@ -4,7 +4,7 @@ using System;
 
 namespace Dev.EventBus.ServiceBus
 {
-    public interface IServiceBusPersisterConnection : IDisposable
+    public interface IAzureServiceBusPersisterConnection : IDisposable
     {
         ServiceBusClient TopicClient { get; }
         ServiceBusAdministrationClient AdministrationClient { get; }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Dev.Core.Entities;
 using Dev.Core.Extensions;
 using Dev.Core.Infrastructure;
 using Dev.Core.Model;
@@ -7,6 +8,7 @@ using Dev.Core.Model.Pagination;
 using Dev.Data.Npgsql;
 using Dev.Framework.Mapper;
 using Dev.Npgsql.Repository;
+using Dev.Services.Events;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,6 +28,7 @@ namespace Dev.Npgsql.Service
         #region Properties
 
         protected readonly IMapper Mapper;
+        private readonly IEventPublisher EventPublisher;
         public readonly INpgsqlRepository<TTable> Repository;
 
         #endregion
@@ -36,6 +39,7 @@ namespace Dev.Npgsql.Service
         {
             Mapper = EngineContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
+            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>();
             Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>();
         }
 
@@ -85,7 +89,8 @@ namespace Dev.Npgsql.Service
             var result = await Repository.FindByIdAsync(id);
             return Mapper.Map<TResultDto>(result);
         }
-        public virtual async Task<TResultDto> AddAsync(TAddDto tAddDto)
+            
+        public virtual async Task<TResultDto> AddAsync(TAddDto tAddDto, bool publishEvent = true)
         {
             if (tAddDto == null)
                 throw new ArgumentNullException($"{nameof(tAddDto)}");
@@ -97,12 +102,14 @@ namespace Dev.Npgsql.Service
 
             await Repository.AddAsync(domainEntity);
 
-            // event notification
-            // await _mediator.EntityInserted(vendor);
+            //event notification
+            if (publishEvent)
+                await EventPublisher.EntityInsertedAsync(domainEntity);
 
             return Mapper.Map<TResultDto>(domainEntity);
         }
-        public virtual async Task<TResultDto> UpdateAsync(TEditDto tEditDto)
+
+        public virtual async Task<TResultDto> UpdateAsync(TEditDto tEditDto, bool publishEvent = true)
         {
             if (tEditDto == null)
                 throw new ArgumentNullException($"{nameof(tEditDto)}");
@@ -121,8 +128,9 @@ namespace Dev.Npgsql.Service
             if (string.IsNullOrEmpty(mapperData.CreatorIP))
                 mapperData.CreatorIP = RemoteIp;
 
-            // event notification
-            // await _mediator.EntityUpdated(vendor);
+            //event notification
+            if (publishEvent)
+                await EventPublisher.EntityUpdatedAsync(mapperData);
 
             var result = await Repository.UpdateAsync(mapperData);
 
@@ -165,8 +173,10 @@ namespace Dev.Npgsql.Service
         {
             var result = await Repository.DeleteAsync(id);
 
-            // event notification
-            // await _mediator.EntityDeleted(vendorNote);
+            //event notification
+            if (publishEvent)
+                await EventPublisher.EntityDeletedAsync(result);
+
             return Mapper.Map<TResultDto>(result);
         }
 

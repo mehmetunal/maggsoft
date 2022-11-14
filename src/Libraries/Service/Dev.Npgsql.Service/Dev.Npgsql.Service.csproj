@@ -21,6 +21,7 @@
 		<ProjectReference Include="..\..\..\Presentation\Dev.Framework\Dev.Framework.csproj" />
 		<ProjectReference Include="..\..\Dev.Core\Dev.Core.csproj" />
 		<ProjectReference Include="..\..\Dev.Npgsql\Dev.Npgsql.csproj" />
+		<ProjectReference Include="..\Dev.Services\Dev.Services.csproj" />
 	</ItemGroup>
 
 </Project>

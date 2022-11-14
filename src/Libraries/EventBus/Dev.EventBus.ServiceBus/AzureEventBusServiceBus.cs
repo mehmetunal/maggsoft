@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Dev.EventBus.ServiceBus
 {
-    public class EventBusServiceBus : IEventBus, IDisposable
+    public class AzureEventBusServiceBus : IEventBus, IDisposable
     {
-        private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
-        private readonly ILogger<EventBusServiceBus> _logger;
+        private readonly IAzureServiceBusPersisterConnection _serviceBusPersisterConnection;
+        private readonly ILogger<AzureEventBusServiceBus> _logger;
         private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly ILifetimeScope _autofac;
         private readonly string _topicName = "devfreco_event_bus";
@@ -24,8 +24,8 @@ namespace Dev.EventBus.ServiceBus
         private readonly string AUTOFAC_SCOPE_NAME = "devfreco_event_bus";
         private const string INTEGRATION_EVENT_SUFFIX = "IntegrationEvent";
 
-        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
-            ILogger<EventBusServiceBus> logger, IEventBusSubscriptionsManager subsManager, ILifetimeScope autofac, string subscriptionClientName)
+        public AzureEventBusServiceBus(IAzureServiceBusPersisterConnection serviceBusPersisterConnection,
+            ILogger<AzureEventBusServiceBus> logger, IEventBusSubscriptionsManager subsManager, ILifetimeScope autofac, string subscriptionClientName)
         {
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
