@@ -30,8 +30,8 @@ namespace Dev.Npgsql.Repository
 
         #region Methos
 
-        public IQueryable<T> AsNoTracking()
-            => _dbSet.AsNoTracking();
+        public IQueryable<T> AsNoTrackingWithIdentityResolution()
+            => _dbSet.AsNoTrackingWithIdentityResolution();
 
         public IQueryable<T> Get()
             => _dbSet;

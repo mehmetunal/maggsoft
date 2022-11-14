@@ -9,7 +9,7 @@ namespace Dev.Npgsql.Repository
     public interface INpgsqlRepository<T> : IRepository<T> where T : BaseEntity, IEntity
     {
         #region CustomMethod
-        IQueryable<T> AsNoTracking();
+        IQueryable<T> AsNoTrackingWithIdentityResolution();
         IQueryable<T> FromSqlRaw(string sql, params object[] par);
         int Execute(string sql, params object[] par);
         Task<int> ExecuteAsync(string sql, params object[] par);
