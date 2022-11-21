@@ -58,6 +58,11 @@ namespace Dev.Npgsql.Extensions
 
             builder.Entity<Table>().Property(p => p.ModifierUserId);
 
+            builder.Entity<Table>()
+                .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsDeleted)) == false);
+
+            builder.Entity<Table>()
+                .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsPublish)) == true);
 
             return builder;
 
