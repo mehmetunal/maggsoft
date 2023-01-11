@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 
 namespace Dev.Framework.RazorEngine
 {
+    /// <summary>
+    /// https://github.com/adoconnection/RazorEngineCore
+    /// </summary>
     internal class RazorTemplateEngine : ITemplateEngine
     {
         private static ConcurrentDictionary<int, IRazorEngineCompiledTemplate> TemplateCache;
