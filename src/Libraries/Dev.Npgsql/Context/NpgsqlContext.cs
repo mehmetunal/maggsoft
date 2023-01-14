@@ -6,15 +6,16 @@ using Dev.Data.Npgsql.Messages;
 using Dev.Npgsql.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Dev.Npgsql.Context
 {
     public class NpgsqlContext : DbContext
     {
         #region Ctor
+        public NpgsqlContext()
+        {
+
+        }
         public NpgsqlContext(DbContextOptions<NpgsqlContext> options)
             : base(options)
         {

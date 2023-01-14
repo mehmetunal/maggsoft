@@ -14,7 +14,16 @@ namespace Dev.Npgsql.Extensions
             IConfiguration configuration) where TContext : DbContext
         {
             var connection = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<TContext>(options => { options.UseNpgsql(connection); });
+            services.AddDbContext<TContext>(options =>
+            {
+                options.UseNpgsql(connection,
+                    conOption => conOption.EnableRetryOnFailure(
+                            maxRetryCount: 15, 
+                            maxRetryDelay: TimeSpan.FromSeconds(30), 
+                            errorCodesToAdd: null
+                        )
+                );
+            });
             services.AddScoped<DbContext, TContext>();
             return services;
         }

@@ -44,6 +44,7 @@ namespace Dev.Mongo.Extensions
                     {
                         setting.Credential = MongoCredential.CreateCredential(databaseName, client.Settings.Credential.Username, client.Settings.Credential.Password);
                     }
+
                     client = new MongoClient(setting);
                 }
             }

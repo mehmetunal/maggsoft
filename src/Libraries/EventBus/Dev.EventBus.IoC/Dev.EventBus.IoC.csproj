@@ -20,7 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Dev.EventBus.RabbitMQ\Dev.EventBus.RabbitMQ.csproj" />
-		<ProjectReference Include="..\Dev.EventBus.ServiceBus\Dev.EventBus.ServiceBus.csproj" />
+		<ProjectReference Include="..\Dev.EventBus.ServiceBus\Dev.EventBus.AzureServiceBus.csproj" />
 	</ItemGroup>
 
 </Project>

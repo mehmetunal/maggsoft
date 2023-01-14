@@ -30,8 +30,8 @@ namespace Dev.Npgsql.Repository
 
         #region Methos
 
-        public IQueryable<T> AsNoTracking()
-            => _dbSet.AsNoTracking();
+        public IQueryable<T> AsNoTrackingWithIdentityResolution()
+            => _dbSet.AsNoTrackingWithIdentityResolution();
 
         public IQueryable<T> Get()
             => _dbSet;
@@ -146,6 +146,43 @@ namespace Dev.Npgsql.Repository
         //    await _context.Entry(order)
         //            .Reference(i => i.OrderStatus).LoadAsync();
         //}
+
+        /*
+         https://stackoverflow.com/questions/43571338/ef-core-helper-method-for-explicit-loading-references-and-collections
+         public async Task Load<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] propertyExpressions)
+            where TEntity : class
+        {
+            foreach (var propertyExpression in propertyExpressions)
+            {
+                var propertyName = propertyExpression.GetPropertyAccess().Name;
+                await Entry(entity).Navigation(propertyName).LoadAsync();
+            }
+        }
+
+            public async Task Load<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] propertyExpressions)
+              where TEntity : class
+            {
+
+              foreach (var propertyExpression in propertyExpressions) {
+
+                var isCollection = typeof(IEnumerable).GetTypeInfo()
+                                   .IsAssignableFrom(propertyExpression.Body.Type);
+
+                if(isCollection)
+                {
+                  await Entry(entity)
+                    .Collection(propertyExpression)     // problem is here !!!!!
+                    .LoadAsync();
+                }
+                else
+                {
+                  await Entry(entity)
+                    .Reference(propertyExpression)
+                    .LoadAsync();
+                }
+              }
+            }
+         */
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>

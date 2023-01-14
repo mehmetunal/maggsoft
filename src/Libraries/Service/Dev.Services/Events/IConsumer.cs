@@ -1,4 +1,6 @@
-﻿namespace Dev.Services.Events
+﻿using System.Threading.Tasks;
+
+namespace Dev.Services.Events
 {
     /// <summary>
     /// Consumer interface
@@ -11,5 +13,12 @@
         /// </summary>
         /// <param name="eventMessage">Event</param>
         void HandleEvent(T eventMessage);
+
+        /// <summary>
+        /// Handle event
+        /// </summary>
+        /// <param name="eventMessage">Event</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task HandleEventAsync(T eventMessage);
     }
 }

@@ -3,7 +3,7 @@ using Azure.Messaging.ServiceBus.Administration;
 
 namespace Dev.EventBus.ServiceBus
 {
-    public class DefaultServiceBusPersisterConnection : IServiceBusPersisterConnection
+    public class DefaultAzureServiceBusPersisterConnection : IAzureServiceBusPersisterConnection
     {
         private readonly string _serviceBusConnectionString;
         private ServiceBusClient _topicClient;
@@ -11,7 +11,7 @@ namespace Dev.EventBus.ServiceBus
 
         bool _disposed;
 
-        public DefaultServiceBusPersisterConnection(string serviceBusConnectionString)
+        public DefaultAzureServiceBusPersisterConnection(string serviceBusConnectionString)
         {
             _serviceBusConnectionString = serviceBusConnectionString;
             _subscriptionClient = new ServiceBusAdministrationClient(_serviceBusConnectionString);

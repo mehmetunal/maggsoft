@@ -51,6 +51,9 @@ namespace Dev.Framework.Systems
 
             services.RegisterAll<IService>();
 
+            //TODO: WepApi de eklenmesi gerek
+            //services.AddSingleton<IEventPublisher, EventPublisher>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter(); });

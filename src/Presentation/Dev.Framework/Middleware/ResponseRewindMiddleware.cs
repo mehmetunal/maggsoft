@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Dev.Framework.Middleware
 {
+    [AttributeUsage(AttributeTargets.All)]
+    public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
+
     public class ResponseRewindMiddleware
     {
         private readonly RequestDelegate _next;
@@ -22,7 +25,7 @@ namespace Dev.Framework.Middleware
             _configuration = configuration;
         }
 
-        public async Task Invoke(HttpContext context)
+        public virtual async Task Invoke(HttpContext context)
         {
             var originalBody = context.Response.Body;
 
