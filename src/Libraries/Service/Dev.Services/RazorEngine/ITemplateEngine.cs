@@ -1,4 +1,4 @@
-﻿namespace Dev.Framework.RazorEngine
+﻿namespace Dev.Services.RazorEngine
 {
     internal interface ITemplateEngine
     {

@@ -1,7 +1,7 @@
 ﻿using RazorEngineCore;
 using System.Collections.Concurrent;
 
-namespace Dev.Framework.RazorEngine
+namespace Dev.Services.RazorEngine
 {
     /// <summary>
     /// https://github.com/adoconnection/RazorEngineCore
