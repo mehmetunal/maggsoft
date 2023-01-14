@@ -27,6 +27,12 @@ namespace Dev.Framework.Middleware
 
         public virtual async Task Invoke(HttpContext context)
         {
+            if(IgnoreResponse(context))
+            {
+                await _next(context);
+                return;
+            }
+
             var originalBody = context.Response.Body;
 
             var response = new Response<object>();
@@ -98,6 +104,16 @@ namespace Dev.Framework.Middleware
             }
 
             return responseBody;
+        }
+
+        /// <summary>
+        /// IgnoreResponseRewindMiddlewareAttribute
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private bool IgnoreResponse(HttpContext context)
+        {
+            return context.GetEndpoint().Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0;
         }
     }
 }
