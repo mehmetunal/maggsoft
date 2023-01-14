@@ -12,11 +12,11 @@
 		<RepositoryUrl>https://github.com/mehmetunal/devfreco</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="RazorEngineCore" Version="2022.8.1" />
-	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="RazorEngineCore" Version="2022.8.1" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\..\Data\Dev.Data\Dev.Data.csproj" />
 		<ProjectReference Include="..\..\Dev.Core\Dev.Core.csproj" />
