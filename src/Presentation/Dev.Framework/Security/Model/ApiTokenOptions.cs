@@ -2,6 +2,22 @@
 
 namespace Dev.Framework.Security.Model
 {
+    /*
+     * appsettings.json
+     "TokenOptions": {
+        "AccessTokenExpiration": 2,
+        "ApiName": "Elearning Api",
+        "ApiVersion": "v1",
+        "ApiBaseUrl": "https://localhost:5001",
+        "IdentityServerBaseUrl": "https://is4user.seyirone.com",
+        "OidcSwaggerUIClientId": "elearning_api_swaggerui",
+        "OidcApiName": "elearning_api",
+        "AdministrationRole": "Administrator",
+        "RequireHttpsMetadata": true,
+        "CorsAllowAnyOrigin": true,
+        "CorsAllowOrigins": []
+    },
+     */
     public class ApiTokenOptions
     {
         public string ApiName { get; set; }
