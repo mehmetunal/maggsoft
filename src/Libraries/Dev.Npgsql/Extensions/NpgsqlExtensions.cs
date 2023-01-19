@@ -5,6 +5,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Dev.Npgsql.Extensions
 {
@@ -60,8 +62,14 @@ namespace Dev.Npgsql.Extensions
             try
             {
                 var context = services.GetRequiredService<TContext>();
-                context.Database.EnsureCreated();
-                //context.Database.Migrate();
+                RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+                if (!databaseCreator.Exists())
+                {
+                    bool ensureCreated = context.Database.EnsureCreated();
+                    //databaseCreator.CreateTables();
+                    //context.Database.Migrate();
+                }
+                Console.WriteLine("Database migration completed.");
                 logger.LogInformation("Database migration completed.");
             }
             catch (Exception ex)
