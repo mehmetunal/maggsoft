@@ -3,6 +3,7 @@ using Dev.Framework.Security.Model;
 using Dev.Framework.Security.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -72,7 +73,7 @@ namespace Dev.Framework.Extensions
                         OnMessageReceived = (context) =>
                         {
                             context.Request.Headers.TryGetValue("Authorization", out var BearerToken);
-                            if (BearerToken.Count == 0)
+                            if (BearerToken.Count == 0 && tokenOptions.IgnoreUrls.Any(p => p == context.Request.Path) == false)
                                 throw new UnauthorizedAccessException();
 
                             return Task.CompletedTask;
