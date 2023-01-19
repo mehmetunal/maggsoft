@@ -15,7 +15,8 @@ namespace Dev.Framework.Security.Model
         "AdministrationRole": "Administrator",
         "RequireHttpsMetadata": true,
         "CorsAllowAnyOrigin": true,
-        "CorsAllowOrigins": []
+        "CorsAllowOrigins": [],
+        "IgnoreUrls":[]
     },
      */
     public class ApiTokenOptions
@@ -34,5 +35,6 @@ namespace Dev.Framework.Security.Model
 
         [DefaultValue("Qqert___---&/^+%^+/&)((/=)IDFXGAS'34slşfkdsf.asdasdfdgdf.g..hg.jy.uı.yuı.yu..dxc.v.xzc.sarf.erwt..hgf.f.gh.fgh.fgg.1.23.123..435.46.45.!!!!&+%&'^+&//()YGFDBSDF%++^%'^!'^(/))/(=GDZXC'")]
         public string SecurityKey { get; set; }
+        public string[] IgnoreUrls { get; set; }
     }
 }
