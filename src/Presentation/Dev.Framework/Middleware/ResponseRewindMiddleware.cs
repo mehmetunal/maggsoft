@@ -110,9 +110,9 @@ namespace Dev.Framework.Middleware
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        private static bool IgnoreResponse(HttpContext context)
+        private bool IgnoreResponse(HttpContext context)
         {
-            return context.GetEndpoint()!=null && context.GetEndpoint().Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0;
+            return context.GetEndpoint().Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0;
         }
     }
 }
