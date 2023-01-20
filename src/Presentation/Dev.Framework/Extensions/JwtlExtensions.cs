@@ -1,9 +1,7 @@
 ﻿using Dev.Framework.Exceptions;
 using Dev.Framework.Security.Model;
-using Dev.Framework.Security.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -45,9 +43,9 @@ namespace Dev.Framework.Extensions
                         // Validet eilecek Issure
                         ValidIssuer = tokenOptions.IdentityServerBaseUrl,
                         //Gelen isteğin doğru siteden olduğunu kontrol eder, //Bu iki ayar ise "aud" ve "iss" claimlerini kontrol edelim mi diye soruyor
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         //Gelen her tokenun doğrulankasını sağlıyor.Token 3.kısım(imza) kontrolü
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = false,
                         //Doğrulama Keyini Tanımladığımız yer.Neyle kontrol etmesi gerektigi
                         //IssuerSigningKey = SingHandler.GetSecurityKey(tokenOptions.SecurityKey),
 
@@ -72,8 +70,11 @@ namespace Dev.Framework.Extensions
                         },
                         OnMessageReceived = (context) =>
                         {
+                            if (tokenOptions.IgnoreUrls.Any(p => context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(p)) == true)
+                                return Task.CompletedTask;
+
                             context.Request.Headers.TryGetValue("Authorization", out var BearerToken);
-                            if (BearerToken.Count == 0 && tokenOptions.IgnoreUrls.Any(p => p == context.Request.Path) == false)
+                            if (BearerToken.Count == 0)
                                 throw new UnauthorizedAccessException();
 
                             return Task.CompletedTask;
