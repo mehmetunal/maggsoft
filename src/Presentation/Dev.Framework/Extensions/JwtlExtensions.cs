@@ -71,8 +71,11 @@ namespace Dev.Framework.Extensions
                         },
                         OnMessageReceived = (context) =>
                         {
+                            if (tokenOptions.IgnoreUrls.Any(p => context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(p)) == true)
+                                return Task.CompletedTask;
+
                             context.Request.Headers.TryGetValue("Authorization", out var BearerToken);
-                            if (BearerToken.Count == 0 && tokenOptions.IgnoreUrls.Any(p => p == context.Request.Path) == false)
+                            if (BearerToken.Count == 0)
                                 throw new UnauthorizedAccessException();
 
                             return Task.CompletedTask;
