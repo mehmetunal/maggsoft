@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,7 +60,7 @@ namespace Dev.Framework.Extensions
                         OnAuthenticationFailed = (context) =>
                         {
                             context.NoResult();
-                            context.Response.Headers.Add("Token-Expired", "true");
+                            context.Response.Headers.TryAdd("Token-Expired", "true");
                             throw new UnauthorizedAccessException();
                             return Task.CompletedTask;
                         },
