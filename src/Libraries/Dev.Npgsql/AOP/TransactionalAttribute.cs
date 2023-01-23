@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Dev.Npgsql.AOP
 {
@@ -34,26 +35,47 @@ namespace Dev.Npgsql.AOP
     {
         public async override Task Invoke(AspectContext context, AspectDelegate next)
         {
-            var dbContext = context.ServiceProvider.GetService(typeof(DbContext)) as DbContext;
-            if (dbContext != null && dbContext.Database.CurrentTransaction == null)
+            if (context.ServiceProvider.GetService(typeof(DbContext)) is DbContext dbContext && dbContext.Database.CurrentTransaction == null)
             {
-                await dbContext.Database.BeginTransactionAsync();
-                try
+                using var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
                 {
-                    await next(context);
-                    await dbContext.SaveChangesAsync();
-                    await dbContext.Database.CommitTransactionAsync();
-                }
-                catch
-                {
-                    await dbContext.Database.RollbackTransactionAsync();
-                    throw;
+                    try
+                    {
+                        await next(context);
+                        await dbContext.SaveChangesAsync();
+                        scope.Complete();
+                    }
+                    catch
+                    {
+                        scope.Dispose();
+                        throw;
+                    }
                 }
             }
             else
             {
                 await next(context);
             }
+            //    var dbContext = context.ServiceProvider.GetService(typeof(DbContext)) as DbContext;
+            //    if (dbContext != null && dbContext.Database.CurrentTransaction == null)
+            //    {
+            //        await dbContext.Database.BeginTransactionAsync();
+            //        try
+            //        {
+            //            await next(context);
+            //            await dbContext.SaveChangesAsync();
+            //            await dbContext.Database.CommitTransactionAsync();
+            //        }
+            //        catch
+            //        {
+            //            await dbContext.Database.RollbackTransactionAsync();
+            //            throw;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        await next(context);
+            //    }
         }
     }
 }
