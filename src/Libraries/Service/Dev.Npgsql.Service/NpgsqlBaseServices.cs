@@ -49,7 +49,7 @@ namespace Dev.Npgsql.Service
             return await Repository.Table.CountAsync();
         }
 
-        public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, bool>> @order = null)
+        public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, object>> @order = null)
         {
             var query = Repository.Table;
 
