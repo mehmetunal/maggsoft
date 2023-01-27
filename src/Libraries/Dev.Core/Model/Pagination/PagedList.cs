@@ -41,12 +41,12 @@ namespace Dev.Core.Model.Pagination
             Filters = filters;
             Sorts = sorts;
 
-            #region dxGrid
-            Data = source.AddFilterQuery(Filters).Skip(pageIndex).Take(pageSize).AddSortQuery(Sorts).ToList();
+            #region dxGrid  devexpress
+            //Data = source.AddFilterQuery(Filters).Skip(pageIndex).Take(pageSize).AddSortQuery(Sorts).ToList();
             #endregion
 
             #region NormalPage
-            //            Data = source.AddFilterQuery(Filters).Skip(skip * take).Take(take).AddSortQuery(Sorts).ToList();
+            Data = source.AddFilterQuery(Filters).Skip(pageIndex * pageSize).Take(pageSize).AddSortQuery(Sorts).ToList();
             #endregion
         }
 
