@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Dev.Npgsql.Service
@@ -48,7 +49,7 @@ namespace Dev.Npgsql.Service
             return await Repository.Table.CountAsync();
         }
 
-        public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
+        public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, bool>> @order = null)
         {
             var query = Repository.Table;
 
@@ -57,7 +58,10 @@ namespace Dev.Npgsql.Service
 
             query = query.Where(p => !p.IsDeleted);
 
-            query = query.OrderBy(v => v.DisplayOrder);
+            if (@order == null)
+                query = query.OrderBy(@order);
+            else
+                query = query.OrderBy(v => v.DisplayOrder);
 
             var result = query.ProjectTo<TResultDto>(AutoMapperConfiguration.MapperConfiguration).ToPagedListAsync(pageIndex, pageSize);
 
