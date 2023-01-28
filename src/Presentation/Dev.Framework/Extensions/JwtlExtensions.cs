@@ -1,5 +1,6 @@
 ﻿using Dev.Framework.Exceptions;
 using Dev.Framework.Security.Model;
+using Dev.Framework.Security.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -103,12 +104,14 @@ namespace Dev.Framework.Extensions
                 {
                     DefaultProxyCredentials = CredentialCache.DefaultCredentials
                 };
-                     https://gitter.im/IdentityServer/IdentityServer4?at=5d386c06437a3a13484950aa
+                    https://gitter.im/IdentityServer/IdentityServer4?at=5d386c06437a3a13484950aa
                     https://support.abp.io/QA/Questions/2659/Identity-API-with-JWT
                     https://support.abp.io/QA/Questions/491/Mac-devlop-problem-error-IDX20803
                     https://blog.antosubash.com/posts/abp-deploy-with-docker
 
                     https://www.appsloveworld.com/csharp/100/605/building-an-integration-test-for-an-aspnetcore-api-that-uses-identityserver-4-for
+
+                    https://www.gencayyildiz.com/blog/asp-net-core-3-1-ile-token-bazli-kimlik-dogrulamasi-ve-refresh-token-kullanimijwt/
                      */
                 });
             return services;
