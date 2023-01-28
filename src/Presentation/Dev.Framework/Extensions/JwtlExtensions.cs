@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Dev.Framework.Extensions
@@ -87,6 +88,10 @@ namespace Dev.Framework.Extensions
                             throw new UnauthorizedAccessException();
                             return Task.CompletedTask;
                         }
+                    };
+                    x.BackchannelHttpHandler = new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
                     };
                 });
             return services;
