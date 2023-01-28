@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Dev.Framework.Extensions
@@ -89,6 +90,25 @@ namespace Dev.Framework.Extensions
                             return Task.CompletedTask;
                         }
                     };
+                    x.BackchannelHttpHandler = new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+                    /*
+                      x.JwtBackChannelHandler = new HttpClientHandler
+                    {
+                        DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                    };
+
+                      x.BackchannelHttpHandler = new HttpClientHandler
+                {
+                    DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                };
+                     https://gitter.im/IdentityServer/IdentityServer4?at=5d386c06437a3a13484950aa
+                    https://support.abp.io/QA/Questions/2659/Identity-API-with-JWT
+                    https://support.abp.io/QA/Questions/491/Mac-devlop-problem-error-IDX20803
+                    https://blog.antosubash.com/posts/abp-deploy-with-docker
+                     */
                 });
             return services;
         }
