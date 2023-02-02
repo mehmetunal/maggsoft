@@ -74,9 +74,9 @@ namespace Dev.Core.Extensions
         }
 
         public static bool IsEmpty<TSource>(this IEnumerable<TSource> source)
-           => source != null && source.Any();
+                  => source == null || source.Any();
 
         public static bool IsEmpty(this object source)
-           => source != null;
+            => source == null;
     }
 }
