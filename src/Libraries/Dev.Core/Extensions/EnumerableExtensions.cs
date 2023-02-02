@@ -1,5 +1,6 @@
 ﻿using Dev.Core.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -70,6 +71,16 @@ namespace Dev.Core.Extensions
             }
 
             return q;
+        }
+
+        public static bool IsEmpty<TSource>(this IEnumerable<TSource> source)
+        {
+            return source != null && source.Any();
+        }
+
+        public static bool IsEmpty(this IEnumerable source)
+        {
+            return source != null;
         }
     }
 }
