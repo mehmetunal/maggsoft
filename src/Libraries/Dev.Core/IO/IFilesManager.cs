@@ -17,7 +17,7 @@ namespace Dev.Core.IO
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        DirectoryInfo FolderCreat(string path);
+        DirectoryInfo FolderCreate(string path);
 
         /// <summary>
         /// 
@@ -34,7 +34,7 @@ namespace Dev.Core.IO
         /// <param name="file"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        FileResponseModel FilesCreat(string createdPath, IFormFile file, string fileName);
+        FileResponseModel FilesCreate(string createdPath, IFormFile file, string fileName);
 
         /// <summary>
         /// 
