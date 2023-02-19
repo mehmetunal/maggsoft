@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using FluentMigrator;
+using FluentMigrator.Infrastructure;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using Maggsoft.Core.Infrastructure;
+using Maggsoft.Data.Migration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -54,8 +59,7 @@ namespace Maggsoft.Npgsql.Extensions
                     builder.WithGlobalConnectionString(connection);
                     builder.ScanIn(mAssemblies).For.Migrations();
                 })
-                .AddLogging(op => op.AddFluentMigratorConsole())
-                .BuildServiceProvider(false);
+                .AddLogging(op => op.AddFluentMigratorConsole());
 
             return services;
         }
@@ -83,51 +87,33 @@ namespace Maggsoft.Npgsql.Extensions
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
-        public static IApplicationBuilder AddMigrate(this IApplicationBuilder app)
+        public static IApplicationBuilder AddUpMigrate(this IApplicationBuilder app)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            return RunMigration(app, (runner, assembly) => runner.ApplyUpMigrations(assembly));
+        }
+
+
+        public static IApplicationBuilder AddDownMigrate(this IApplicationBuilder app)
+        {
+            return RunMigration(app, (runner, assembly) => runner.ApplyDownMigrations(assembly));
+        }
+
+        private static IApplicationBuilder RunMigration(IApplicationBuilder app, Action<IMigrationManager, Assembly> call)
+        {
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var runner = serviceScope.ServiceProvider.GetRequiredService<IMigrationManager>();
+
+            var mAssemblies = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())
+                .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true).Select(t => t.Assembly)
+                .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner")).Distinct().ToArray();
+
+            foreach (var assembly in mAssemblies)
             {
-                var runner = serviceScope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-                runner.MigrateUp();
-                //bura devam edilecek
-                runner.MigrateDown(0);
+                call(runner, assembly);
             }
 
             return app;
         }
-
-        ///// <summary>  
-        ///// Migrates the database.  
-        ///// </summary>  
-        ///// <typeparam name="T"></typeparam>  
-        ///// <param name="host">The web host.</param>  
-        ///// <returns>IWebHost.</returns>  
-        //public static IHost CreateDatabase<TContext>(this IHost host) where TContext : DbContext
-        //{
-        //    using var scope = host.Services.CreateScope();
-        //    var services = scope.ServiceProvider;
-        //    var logger = services.GetRequiredService<ILogger<TContext>>();
-        //    try
-        //    {
-        //        var context = services.GetRequiredService<TContext>();
-        //        RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-        //        if (!databaseCreator.Exists())
-        //        {
-        //            bool ensureCreated = context.Database.EnsureCreated();
-        //            //databaseCreator.CreateTables();
-        //            //context.Database.Migrate();
-        //        }
-        //        Console.WriteLine("Database migration completed.");
-        //        logger.LogInformation("Database migration completed.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.LogError(ex, "An error occurred migrate the DB.");
-        //    }
-
-        //    return host;
-        //}
-
 
         /// <summary>  
         /// Migrates the database.  

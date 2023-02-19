@@ -1,5 +1,5 @@
 ﻿using FluentMigrator;
-using Maggsoft.ExampleTest.Entity;
+using FluentMigrator.Builders.Create.Table;
 
 namespace Maggsoft.ExampleTest.Migrations
 {
@@ -22,7 +22,7 @@ namespace Maggsoft.ExampleTest.Migrations
 
 
     [Migration(202201011201)]
-    public class UserLogTable : Migration
+    public class UserLogTable : Migration // AutoReversingMigration
     {
         public override void Up()
         {
