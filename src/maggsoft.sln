@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.Example.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.AzureServiceBus", "Libraries\EventBus\Maggsoft.EventBus.ServiceBus\Maggsoft.EventBus.AzureServiceBus.csproj", "{C4D0F483-EA89-459C-8469-4CE1B4A89935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.ExampleTest", "Example\Maggsoft.ExampleTest\Maggsoft.ExampleTest.csproj", "{531014C9-CCDA-4AD2-B86B-009C552EDC46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,10 @@ Global
 		{C4D0F483-EA89-459C-8469-4CE1B4A89935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4D0F483-EA89-459C-8469-4CE1B4A89935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4D0F483-EA89-459C-8469-4CE1B4A89935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,6 +217,7 @@ Global
 		{9723B17F-B31E-4161-BE44-65E02E9F1090} = {D3832EBA-203F-4F21-943B-7060F0AF6941}
 		{B152066D-68BA-406B-9EE4-A84F4D8AF731} = {AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}
 		{C4D0F483-EA89-459C-8469-4CE1B4A89935} = {D3832EBA-203F-4F21-943B-7060F0AF6941}
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46} = {AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}
