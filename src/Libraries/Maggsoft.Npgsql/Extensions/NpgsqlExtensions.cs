@@ -89,6 +89,7 @@ namespace Maggsoft.Npgsql.Extensions
             {
                 var runner = serviceScope.ServiceProvider.GetRequiredService<IMigrationRunner>();
                 runner.MigrateUp();
+                //bura devam edilecek
                 runner.MigrateDown(0);
             }
 
