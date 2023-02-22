@@ -27,7 +27,16 @@ namespace Dev.Core.Extensions
                 var prop = typeof(TSource).GetProperty(f.Field);
                 var member = Expression.Property(parameter, prop.Name);
                 var converter = TypeDescriptor.GetConverter(prop.PropertyType); // 1
-                var propertyValue = converter.ConvertFromInvariantString(f.Value.ToString()); // 3
+                object propertyValue = null;
+                try
+                {
+                    propertyValue = converter.ConvertFromInvariantString(f.Value.ToString()); // 3
+                }
+                catch
+                {
+                    propertyValue = converter.ConvertFrom(f.Value.ToString()); // 3
+                }
+
                 var constant = Expression.Constant(propertyValue);
                 var valueExpression = Expression.Convert(constant, prop.PropertyType); // 4
                 Expression filter = Expression.Equal(member, valueExpression);
