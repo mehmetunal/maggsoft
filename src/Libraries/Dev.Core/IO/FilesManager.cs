@@ -53,7 +53,7 @@ namespace Dev.Core.IO
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        public DirectoryInfo FolderCreat(string path)
+        public DirectoryInfo FolderCreate(string path)
             => !Directory.Exists(path)
                 ? Directory.CreateDirectory(path)
                 : new DirectoryInfo(path);
@@ -172,7 +172,7 @@ namespace Dev.Core.IO
         /// <param name="fileName"></param>
         /// <returns></returns>
         /// <exception cref="FileLoadException"></exception>
-        public FileResponseModel FilesCreat(string createdPath, IFormFile file, string fileName)
+        public FileResponseModel FilesCreate(string createdPath, IFormFile file, string fileName)
         {
             var model = new FileResponseModel();
             model.FileInfo = new FileInfo(file.FileName);
