@@ -27,7 +27,23 @@ namespace Maggsoft.Core.Extensions
                 var prop = typeof(TSource).GetProperty(f.Field);
                 var member = Expression.Property(parameter, prop.Name);
                 var converter = TypeDescriptor.GetConverter(prop.PropertyType); // 1
-                var propertyValue = converter.ConvertFromInvariantString(f.Value.ToString()); // 3
+                object propertyValue = null;
+                try
+                {
+                    propertyValue = converter.ConvertFromInvariantString(
+                        f.Operator == Operators.Contains
+                        ? f.Value.ToString().ToLower()
+                        : f.Value.ToString()
+                        ); // 3
+                }
+                catch
+                {
+                    propertyValue = converter.ConvertFrom(
+                        f.Operator == Operators.Contains
+                        ? f.Value.ToString().ToLower()
+                        : f.Value.ToString()
+                        ); // 3
+                }
                 var constant = Expression.Constant(propertyValue);
                 var valueExpression = Expression.Convert(constant, prop.PropertyType); // 4
                 Expression filter = Expression.Equal(member, valueExpression);
@@ -37,7 +53,11 @@ namespace Maggsoft.Core.Extensions
                 else if (f.Operator == Operators.StartsWith)
                     filter = Expression.Call(member, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), valueExpression);
                 else if (f.Operator == Operators.Contains)
-                    filter = Expression.Call(member, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
+                {
+                    var toLower = Expression.Call(member, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes));
+                    filter = Expression.Call(toLower, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
+                }
+                //filter = Expression.Call(member, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
                 else if (f.Operator == Operators.EndsWith)
                     filter = Expression.Call(member, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), valueExpression);
                 else if (f.Operator == Operators.DoesNotContain)

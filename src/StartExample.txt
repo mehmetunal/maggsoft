@@ -1,0 +1,170 @@
+using AspectCore.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+using Dev.Core.IO;
+using Dev.Core.IoC;
+using Dev.Data.Npgsql.Identity.Persistence;
+using Dev.Dto.Npgsql.ModelBinder;
+using Dev.Framework.Exceptions;
+using Dev.Framework.Extensions;
+using Dev.Framework.Middleware;
+using Dev.Framework.Systems;
+using Dev.Npgsql.AOP;
+using Dev.Npgsql.Context;
+using Dev.Npgsql.Extensions;
+using Dev.Npgsql.Repository;
+using Dev.Services.Identity;
+using Dev.Services.Quizs;
+using Elearning.Api.ErrorDescriber;
+using Elearning.Api.Mapper;
+using Elearning.Api.Model;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
+using System.IO;
+using System.Threading.Tasks;
+
+namespace Elearning.Api
+{
+
+    public class Startup : BaseStartup
+    {
+        public Startup(IConfiguration configuration) : base(configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            base.ConfigureServices(services);
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DecimalToStringConverter());
+                options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                options.JsonSerializerOptions.AllowTrailingCommas = true;
+            }).AddControllersAsServices();
+
+            services.AddAutoMapperConfig(p => p.AddProfile<AutoMapping>(), typeof(Startup));
+
+            services.AddNpgsqlConfig<NpgsqlContext>(Configuration);
+
+            services.AddDatabaseConfiguration(Configuration.GetConnectionString("DefaultConnection"))
+             .AddIdentityServerConfig(Configuration)
+             .AddServices<AppUser>();
+
+            services.AddScoped<IdentityErrorDescriber, MultilanguageIdentityErrorDescriber>();
+
+            services.AddJwtConfig(Configuration);
+
+            services.AddScoped(typeof(INpgsqlRepository<>), typeof(NpgsqlRepository<>));
+
+            services.AddSingleton(typeof(ITemplateEngine), typeof(RazorTemplateEngine));
+
+            services.RegisterAll<IService>();
+
+            services.ConfigureDynamicProxy(config =>
+            {
+                //Add AOP configuration
+                config.Interceptors.AddTyped<TransactionalAttribute>();
+            });
+
+            services.AddAuthentication();
+
+            services.AddSingleton<IFileManagerProviderBase>(
+               new FileManagerProviderBase(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
+            services.AddTransient<IFilesManager, FilesManager>();
+
+            services.AddTransient<IDevFileProvider, DevFileProvider>();
+
+            services.AddSingleton(typeof(DevAppSettingsConfig), Configuration.Get<DevAppSettingsConfig>());
+
+            services.AddFluentValidation(fv =>
+            {
+                fv.DisableDataAnnotationsValidation = true;
+                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+            });
+
+            services.AddScoped<IUserServices, UserServices>();
+        }
+
+        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.Use(async (context, next) =>
+                {
+                    if (context.Request.IsLocal())
+                    {
+                        // Forbidden http status code
+                        context.Response.StatusCode = 403;
+                        return;
+                    }
+
+                    await next.Invoke();
+                });
+            }
+
+            app.UseStaticFiles();
+
+            app.UseSwaggerUIConfig(TokenOptions);
+
+            app.UseRouting();
+
+            app.UseCorsConfig();
+
+            app.UseMiddleware<ResponseRewindMiddleware>();
+
+            //app.UseExceptionHandler(c => c.Run(async context =>
+            //{
+            //    var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+            //    throw exception;
+            //    //var response = new { error = exception.Message };
+            //    //await context.Response.WriteAsJsonAsync(response);
+            //}));
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            app.UseStatusCodePages(new StatusCodePagesOptions()
+            {
+                HandleAsync = (ctx) =>
+                {
+                    if (ctx.HttpContext.Response.StatusCode == 404)
+                    {
+                        throw new NotFoundException($"Not Found Page");
+                    }
+
+                    return Task.FromResult(0);
+                }
+            });
+
+            app.ConfigureRequestPipeline();
+            //UseMiddleware<ResponseRewindMiddleware>(Array.Empty<object>());
+            //var supportedCultures = new[] { "tr-TR" };
+            //var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+            //    .AddSupportedCultures(supportedCultures)
+            //    .AddSupportedUICultures(supportedCultures);
+
+            //app.UseRequestLocalization(localizationOptions);
+        }
+    }
+}

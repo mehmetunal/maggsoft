@@ -177,6 +177,9 @@ namespace Maggsoft.Core.IO
             var model = new FileResponseModel();
             model.FileInfo = new FileInfo(file.FileName);
 
+            if (string.IsNullOrEmpty(fileName))
+                fileName = Guid.NewGuid().ToString();
+
             var newName = $"{fileName}{model.FileInfo.Extension}";
             model.FileName = newName;
 
