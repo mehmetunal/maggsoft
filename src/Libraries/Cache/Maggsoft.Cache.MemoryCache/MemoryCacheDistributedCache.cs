@@ -1,0 +1,187 @@
+﻿using MessagePack;
+using MessagePack.Resolvers;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.Caching;
+using System.Threading.Tasks;
+
+namespace Maggsoft.Cache.MemoryCache
+{
+    public class MemoryCacheDistributedCache : IMaggsoftDistributedCache
+    {
+        #region Properties
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IDistributedCache _distributedCache;
+        #endregion
+
+        #region Ctor
+        public MemoryCacheDistributedCache(IDistributedCache distributedCache, IServiceProvider serviceProvider)
+        {
+            _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));
+            _serviceProvider = serviceProvider;
+        }
+        #endregion
+
+        #region Method
+        public object Get(string cacheKey)
+           => Get(cacheKey, typeof(object));
+
+        public object Get(string cacheKey, Type deserializeType)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            if (deserializeType == null)
+                throw new ArgumentNullException(nameof(deserializeType));
+
+            byte[] cacheData = _distributedCache.Get(cacheKey);
+            if (cacheData == null)
+                return null;
+
+            return MessagePackSerializer.Deserialize(deserializeType, cacheData, ContractlessStandardResolver.Options);
+        }
+
+        public async Task<object> GetAsync(string cacheKey)
+            => await GetAsync(cacheKey, typeof(object));
+
+        public async Task<object> GetAsync(string cacheKey, Type deserializeType)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            if (deserializeType == null)
+                throw new ArgumentNullException(nameof(deserializeType));
+
+            byte[] cacheData = await _distributedCache.GetAsync(cacheKey);
+            if (cacheData == null)
+                return null;
+
+            return MessagePackSerializer.Deserialize(deserializeType, cacheData, ContractlessStandardResolver.Options);
+        }
+
+        public T Get<T>(string cacheKey)
+            => (T)Get(cacheKey, typeof(T));
+
+        public async Task<T> GetAsync<T>(string cacheKey)
+            => await (GetAsync(cacheKey, typeof(T)) as Task<T>);
+
+        public void Set(string cacheKey, TimeSpan duration, bool slidingExpiration, object data)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
+
+            _distributedCache.Set(cacheKey, cacheData, new DistributedCacheEntryOptions()
+            {
+                SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
+                AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
+            });
+        }
+
+        public async Task SetAsync(string cacheKey, TimeSpan duration, bool slidingExpiration, object data)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
+
+            await _distributedCache.SetAsync(cacheKey, cacheData, new DistributedCacheEntryOptions()
+            {
+                SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
+                AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
+            });
+        }
+
+        public void Refresh(string cacheKey)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            _distributedCache.Refresh(cacheKey);
+        }
+
+        public async Task RefreshAsync(string cacheKey)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            await _distributedCache.RefreshAsync(cacheKey);
+        }
+
+        public void Remove(string cacheKey)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            _distributedCache.Remove(cacheKey);
+        }
+
+        public async Task RemoveAsync(string cacheKey)
+        {
+            if (string.IsNullOrEmpty(cacheKey))
+                throw new ArgumentNullException(nameof(cacheKey));
+
+            await _distributedCache.RemoveAsync(cacheKey);
+        }
+
+        public void RemoveByPattern(string cachePattern)
+        {
+            var keyList = GetAllKeysList(cachePattern);
+
+            foreach (var key in keyList)
+                _distributedCache.Remove(key);
+        }
+
+        public Task RemoveByPatternAsync(string cachePattern)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ClearAsync()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Private
+        private List<string> GetAllKeysList(string cachePattern)
+        {
+            var items = new List<string>();
+
+            if (string.IsNullOrEmpty(cachePattern)) return items;
+
+            FieldInfo coherentState = typeof(MemoryDistributedCache).GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
+            object coherentStateValue = coherentState.GetValue(_distributedCache);
+            PropertyInfo entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
+            {
+                foreach (dynamic cacheItem in entriesCollectionValue)
+                {
+                    ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
+                    if (cacheItemValue != null && cacheItemValue.Key.ToString().StartsWith(cachePattern.TrimEnd('*')))
+                        items.Add(cacheItemValue.Key.ToString());
+                }
+            }
+
+            return items;
+        }
+
+        #endregion
+    }
+}

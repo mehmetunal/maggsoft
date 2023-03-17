@@ -1,0 +1,108 @@
+using Serilog;
+using System;
+using System.IO;
+using Dev.Npgsql.Context;
+using Dev.Npgsql.Extensions;
+using Elearning.Api.SeedData;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using AspectCore.Extensions.DependencyInjection;
+
+namespace Elearning.Api
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            Log.Information("Application starting up...");
+            var configuration = GetConfiguration(args);
+            Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(configuration)
+                    .CreateLogger();
+            try
+            {
+                // DockerHelpers.ApplyDockerConfiguration(configuration);
+                CreateHostBuilder(args)
+                    .Build()
+                    .CreateDatabase<NpgsqlContext>()
+                    .GetSeedDataJson()
+                    .SeedData()
+                    .Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+        }
+
+        private static IConfiguration GetConfiguration(string[] args)
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var isDevelopment = environment == Environments.Development;
+
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory());
+
+            configurationBuilder = JsonLoad(configurationBuilder, environment); ;
+
+            if (isDevelopment)
+            {
+                configurationBuilder.AddUserSecrets<Startup>();
+            }
+
+            configurationBuilder.AddCommandLine(args);
+            configurationBuilder.AddEnvironmentVariables();
+
+            // configurationBuilder.AddAzureKeyVaultConfiguration(configurationBuilder);
+
+            return configurationBuilder.Build();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostContext, configApp) =>
+                {
+                    var configurationRoot = configApp.Build();
+                    var env = hostContext.HostingEnvironment;
+
+                    configApp = JsonLoad(configApp, env.EnvironmentName);
+
+                    if (env.IsDevelopment())
+                    {
+                        configApp.AddUserSecrets<Startup>();
+                    }
+
+                    //configurationRoot.AddAzureKeyVaultConfiguration(configApp);
+                    configApp.AddEnvironmentVariables();
+                    configApp.AddCommandLine(args);
+                })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseServiceProviderFactory(new DynamicProxyServiceProviderFactory())
+                .UseSerilog((hostContext, loggerConfig) =>
+                {
+                    loggerConfig
+                        .ReadFrom.Configuration(hostContext.Configuration)
+                        .Enrich.WithProperty("ApplicationName", hostContext.HostingEnvironment.ApplicationName);
+                });
+
+        private static IConfigurationBuilder JsonLoad(IConfigurationBuilder configApp, string env)
+        {
+            configApp.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            configApp.AddJsonFile($"appsettings.{env}.json", optional: true, reloadOnChange: true);
+            configApp.AddJsonFile("serilog.json", optional: true, reloadOnChange: true);
+            configApp.AddJsonFile("devappsettings.json", optional: true, reloadOnChange: true);
+            configApp.AddJsonFile($"serilog.{env}.json", optional: true, reloadOnChange: true);
+            configApp.AddJsonFile($"devappsettings.{env}.json", optional: true, reloadOnChange: true);
+            return configApp;
+        }
+    }
+}
