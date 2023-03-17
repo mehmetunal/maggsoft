@@ -1,10 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection;
+using FluentMigrator;
+using FluentMigrator.Infrastructure;
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
+using Maggsoft.Core.Infrastructure;
+using Maggsoft.Data.Migration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Maggsoft.Npgsql.Extensions
 {
@@ -18,8 +30,8 @@ namespace Maggsoft.Npgsql.Extensions
             {
                 options.UseNpgsql(connection,
                     conOption => conOption.EnableRetryOnFailure(
-                            maxRetryCount: 15, 
-                            maxRetryDelay: TimeSpan.FromSeconds(30), 
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorCodesToAdd: null
                         )
                 );
@@ -27,13 +39,40 @@ namespace Maggsoft.Npgsql.Extensions
             services.AddScoped<DbContext, TContext>();
             return services;
         }
+        public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true)
+                .Select(t => t.Assembly)
+                .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner"))
+                .Distinct()
+                .ToArray();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="app"></param>
-        /// <typeparam name="TContext"></typeparam>
-        /// <returns></returns>
+            var connection = configuration.GetConnectionString("DefaultConnection");
+            services
+                .AddFluentMigratorCore()
+                .ConfigureRunner(builder =>
+                {
+                    builder.AddPostgres11_0();
+                    builder.WithGlobalConnectionString(connection);
+                    builder.ScanIn(mAssemblies).For.Migrations();
+                })
+                .AddLogging(op => op.AddFluentMigratorConsole());
+
+            services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
+            services.AddScoped<IMigrationManager, MigrationManager>();
+
+            return services;
+        }
+
+        // <summary>
+        // 
+        // </summary>
+        // <param name = "app" ></ param >
+        // < typeparam name="TContext"></typeparam>
+        // <returns></returns>
         public static IApplicationBuilder AddMigrateConfigure<TContext>(this IApplicationBuilder app) where TContext : DbContext
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -41,6 +80,39 @@ namespace Maggsoft.Npgsql.Extensions
                 var context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
                 context.Database.EnsureCreated();
                 //context.Database.Migrate();
+            }
+
+            return app;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public static IApplicationBuilder AddUpMigrate(this IApplicationBuilder app)
+        {
+            return RunMigration(app, (runner, assembly) => runner.ApplyUpMigrations(assembly));
+        }
+
+
+        public static IApplicationBuilder AddDownMigrate(this IApplicationBuilder app)
+        {
+            return RunMigration(app, (runner, assembly) => runner.ApplyDownMigrations(assembly));
+        }
+
+        private static IApplicationBuilder RunMigration(IApplicationBuilder app, Action<IMigrationManager, Assembly> call)
+        {
+            using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+            var runner = serviceScope.ServiceProvider.GetRequiredService<IMigrationManager>();
+
+            var mAssemblies = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())
+                .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true).Select(t => t.Assembly)
+                .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner")).Distinct().ToArray();
+
+            foreach (var assembly in mAssemblies)
+            {
+                call(runner, assembly);
             }
 
             return app;
@@ -60,8 +132,14 @@ namespace Maggsoft.Npgsql.Extensions
             try
             {
                 var context = services.GetRequiredService<TContext>();
-                context.Database.EnsureCreated();
-                //context.Database.Migrate();
+                RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
+                if (!databaseCreator.Exists())
+                {
+                    bool ensureCreated = context.Database.EnsureCreated();
+                    //databaseCreator.CreateTables();
+                    //context.Database.Migrate();
+                }
+                Console.WriteLine("Database migration completed.");
                 logger.LogInformation("Database migration completed.");
             }
             catch (Exception ex)

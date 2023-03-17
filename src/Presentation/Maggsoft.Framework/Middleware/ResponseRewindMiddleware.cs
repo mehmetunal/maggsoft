@@ -27,6 +27,12 @@ namespace Maggsoft.Framework.Middleware
 
         public virtual async Task Invoke(HttpContext context)
         {
+            if(IgnoreResponse(context))
+            {
+                await _next(context);
+                return;
+            }
+
             var originalBody = context.Response.Body;
 
             var response = new Response<object>();
@@ -98,6 +104,16 @@ namespace Maggsoft.Framework.Middleware
             }
 
             return responseBody;
+        }
+
+        /// <summary>
+        /// IgnoreResponseRewindMiddlewareAttribute
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static bool IgnoreResponse(HttpContext context)
+        {
+            return context.GetEndpoint() != null && context.GetEndpoint().Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0;
         }
     }
 }

@@ -7,7 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Extensions
@@ -59,7 +61,7 @@ namespace Maggsoft.Framework.Extensions
                         OnAuthenticationFailed = (context) =>
                         {
                             context.NoResult();
-                            context.Response.Headers.Add("Token-Expired", "true");
+                            context.Response.Headers.TryAdd("Token-Expired", "true");
                             throw new UnauthorizedAccessException();
                             return Task.CompletedTask;
                         },
@@ -71,6 +73,9 @@ namespace Maggsoft.Framework.Extensions
                         },
                         OnMessageReceived = (context) =>
                         {
+                            if (tokenOptions.IgnoreUrls.Any(p => context.Request.Path.HasValue && context.Request.Path.Value.StartsWith(p)) == true)
+                                return Task.CompletedTask;
+
                             context.Request.Headers.TryGetValue("Authorization", out var BearerToken);
                             if (BearerToken.Count == 0)
                                 throw new UnauthorizedAccessException();
@@ -85,6 +90,27 @@ namespace Maggsoft.Framework.Extensions
                             return Task.CompletedTask;
                         }
                     };
+                    x.BackchannelHttpHandler = new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+                    /*
+                      x.JwtBackChannelHandler = new HttpClientHandler
+                    {
+                        DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                    };
+
+                      x.BackchannelHttpHandler = new HttpClientHandler
+                {
+                    DefaultProxyCredentials = CredentialCache.DefaultCredentials
+                };
+                     https://gitter.im/IdentityServer/IdentityServer4?at=5d386c06437a3a13484950aa
+                    https://support.abp.io/QA/Questions/2659/Identity-API-with-JWT
+                    https://support.abp.io/QA/Questions/491/Mac-devlop-problem-error-IDX20803
+                    https://blog.antosubash.com/posts/abp-deploy-with-docker
+
+                    https://www.appsloveworld.com/csharp/100/605/building-an-integration-test-for-an-aspnetcore-api-that-uses-identityserver-4-for
+                     */
                 });
             return services;
         }

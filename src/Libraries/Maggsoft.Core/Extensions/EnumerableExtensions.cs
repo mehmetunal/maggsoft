@@ -1,5 +1,6 @@
 ﻿using Maggsoft.Core.Model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -91,5 +92,11 @@ namespace Maggsoft.Core.Extensions
 
             return q;
         }
+
+        public static bool IsEmpty<TSource>(this IEnumerable<TSource> source)
+                  => source == null || source.Any();
+
+        public static bool IsEmpty(this object source)
+            => source == null;
     }
 }

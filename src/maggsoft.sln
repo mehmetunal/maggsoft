@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Cache.MemoryCache"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationExample", "WebApplicationExample\WebApplicationExample.csproj", "{E67B503C-AFF0-4BE0-A8D4-5E80A3F6EB4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.ExampleTest", "Example\Maggsoft.ExampleTest\Maggsoft.ExampleTest.csproj", "{531014C9-CCDA-4AD2-B86B-009C552EDC46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -197,6 +199,10 @@ Global
 		{E67B503C-AFF0-4BE0-A8D4-5E80A3F6EB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E67B503C-AFF0-4BE0-A8D4-5E80A3F6EB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67B503C-AFF0-4BE0-A8D4-5E80A3F6EB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -239,6 +245,7 @@ Global
 		{5D84C64D-BAEE-467B-9644-F010882046AB} = {B96670A8-20A1-41F1-96F8-644EA1462EF4}
 		{3D94D04A-4E66-4CF9-8871-8F2CFEC71FAA} = {B2E2B8B8-17B6-4D5C-8B71-2E50A2F01A8B}
 		{E67B503C-AFF0-4BE0-A8D4-5E80A3F6EB4E} = {AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}
+		{531014C9-CCDA-4AD2-B86B-009C552EDC46} = {AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}
