@@ -61,6 +61,9 @@ namespace Maggsoft.Npgsql.Extensions
                 })
                 .AddLogging(op => op.AddFluentMigratorConsole());
 
+            services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
+            services.AddScoped<IMigrationManager, MigrationManager>();
+
             return services;
         }
 

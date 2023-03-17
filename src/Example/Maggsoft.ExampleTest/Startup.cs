@@ -33,9 +33,6 @@ namespace Maggsoft.ExampleTest
             services
                 .AddNpgsqlConfig<NpgsqlContext>(Configuration)
                 .AddFluentMigratorConfig(Configuration);
-
-            services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
-            services.AddScoped<IMigrationManager, MigrationManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
