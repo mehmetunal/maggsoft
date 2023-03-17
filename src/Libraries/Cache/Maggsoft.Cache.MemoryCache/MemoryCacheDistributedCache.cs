@@ -5,8 +5,11 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Caching;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.MemoryCache
@@ -137,35 +140,70 @@ namespace Maggsoft.Cache.MemoryCache
 
         public void RemoveByPattern(string cachePattern)
         {
-            var keyList = GetAllKeysList(cachePattern);
+            if (string.IsNullOrEmpty(cachePattern))
+                throw new ArgumentNullException(nameof(cachePattern));
 
-            foreach (var key in keyList)
-                _distributedCache.Remove(key);
+            var keyList = GetAllKeysList(cachePattern);
+            this.Removes(keyList);
         }
 
         public Task RemoveByPatternAsync(string cachePattern)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(cachePattern))
+                throw new ArgumentNullException(nameof(cachePattern));
+
+            var keyList = GetAllKeysList(cachePattern);
+
+            this.Removes(keyList);
+
+            return Task.FromResult(0);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            var keyList = GetAllKeysList();
+            this.Removes(keyList);
         }
 
         public Task ClearAsync()
         {
-            throw new NotImplementedException();
+            var keyList = GetAllKeysList();
+            this.Removes(keyList);
+
+            return Task.FromResult(0);
         }
         #endregion
 
         #region Private
+        private void Removes(List<string> keyList)
+            => keyList.ForEach((key) => _distributedCache.Remove(key));
+        
+        private List<string> GetAllKeysList()
+        {
+            var items = new List<string>();
+
+            ReadCacheKeys((cacheItemValue) => { items.Add(cacheItemValue.Key.ToString()); });
+
+            return items;
+        }
+
         private List<string> GetAllKeysList(string cachePattern)
         {
             var items = new List<string>();
 
             if (string.IsNullOrEmpty(cachePattern)) return items;
 
+            ReadCacheKeys((cacheItemValue) =>
+            {
+                if (cacheItemValue != null && cacheItemValue.Key.ToString().StartsWith(cachePattern.TrimEnd('*')))
+                    items.Add(cacheItemValue.Key.ToString());
+            });
+
+            return items;
+        }
+
+        private void ReadCacheKeys(Action<ICacheEntry> call)
+        {
             FieldInfo coherentState = typeof(MemoryDistributedCache).GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
             object coherentStateValue = coherentState.GetValue(_distributedCache);
             PropertyInfo entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -174,14 +212,10 @@ namespace Maggsoft.Cache.MemoryCache
                 foreach (dynamic cacheItem in entriesCollectionValue)
                 {
                     ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
-                    if (cacheItemValue != null && cacheItemValue.Key.ToString().StartsWith(cachePattern.TrimEnd('*')))
-                        items.Add(cacheItemValue.Key.ToString());
+                    call(cacheItemValue);
                 }
             }
-
-            return items;
         }
-
         #endregion
     }
 }
