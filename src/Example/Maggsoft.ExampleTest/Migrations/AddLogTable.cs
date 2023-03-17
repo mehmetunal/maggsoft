@@ -28,6 +28,7 @@ namespace Maggsoft.ExampleTest.Migrations
         {
             Create.Table("user")
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
+                //.WithColumn("ID").AsGuid().WithDefaultValue("uuid_generate_v1")
                 .WithColumn("Text").AsString();
         }
 
