@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dev.Framework.Model
+namespace Dev.Core.Model
 {
     public interface ILocalizedLocaleModel : ILocalizedLocaleModel<Guid>
     {

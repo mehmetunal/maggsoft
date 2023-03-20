@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Dev.Framework.Model
+namespace Dev.Core.Model
 {
     /// <summary>
     /// Represents localized model
