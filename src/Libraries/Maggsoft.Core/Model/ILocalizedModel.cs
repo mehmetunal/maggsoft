@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Maggsoft.Framework.Model
+namespace Maggsoft.Core.Model
 {
     /// <summary>
     /// Represents localized model
