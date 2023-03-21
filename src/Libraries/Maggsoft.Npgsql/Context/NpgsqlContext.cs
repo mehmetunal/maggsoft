@@ -50,7 +50,7 @@ namespace Maggsoft.Npgsql.Context
             //CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
             #region Language
-
+            /*BU KISIM KULLANIYORSAN fluentmigrator API Kullanmaman gerek*/
             modelBuilder.BaseModelBuilder<Language>();
 
             modelBuilder.Entity<Language>()
