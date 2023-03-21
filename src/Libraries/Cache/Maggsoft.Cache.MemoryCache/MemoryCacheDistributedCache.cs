@@ -204,9 +204,14 @@ namespace Maggsoft.Cache.MemoryCache
 
         private void ReadCacheKeys(Action<ICacheEntry> call)
         {
-            FieldInfo coherentState = typeof(MemoryDistributedCache).GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo coherentState = typeof(MemoryDistributedCache)
+                .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
+            
             object coherentStateValue = coherentState.GetValue(_distributedCache);
-            PropertyInfo entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            PropertyInfo entriesCollection = coherentStateValue.GetType()
+                .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            
             if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
             {
                 foreach (dynamic cacheItem in entriesCollectionValue)
