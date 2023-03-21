@@ -54,14 +54,14 @@ namespace Maggsoft.Data.Npgsql.Localization
         /// <summary>
         /// Gets or sets a value indicating whether the language is published
         /// </summary>
-        public decimal State { get; set; }
+        public int State { get; set; }
 
         [Required]
         [Column(Order = 14)]
         /// <summary>
         /// Gets or sets the display order
         /// </summary>
-        public decimal DisplayOrder { get; set; }
+        public int DisplayOrder { get; set; }
 
 
         public virtual ICollection<LocaleStringResource> LocaleStringResources { get; set; }
