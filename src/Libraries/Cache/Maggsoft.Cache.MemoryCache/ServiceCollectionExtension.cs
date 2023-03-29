@@ -9,7 +9,7 @@ namespace Maggsoft.Cache.MemoryCache
             this IServiceCollection services, params Type[] assemblyPointerTypes)
         {
             services.AddDistributedMemoryCache();
-            services.AddSingleton<IMaggsoftDistributedCache, MemoryCacheDistributedCache>();
+            services.AddSingleton<IMaggsoftDistributedCache, MaggsoftDistributedCache>();
             services.DecorateAllInterfacesUsingAspect(assemblyPointerTypes);
             return services;
         }
