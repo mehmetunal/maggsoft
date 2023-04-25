@@ -19,6 +19,8 @@ namespace Maggsoft.ExampleTest.Context
             //modelBuilder.Entity<Table>()
             //    .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsPublish)) == true);
 
+            ///ignore query context.Users.IgnoreQueryFilters().ToListAsync();
+
             base.OnModelCreating(modelBuilder);
         }
 
