@@ -1,12 +1,11 @@
 ﻿using Maggsoft.Core.Entities;
-using Maggsoft.Core.Repository;
 using Maggsoft.Data.Npgsql;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Npgsql.Repository
 {
-    public interface INpgsqlRepository<T> : IRepository<T> where T : BaseEntity, IEntity
+    public interface INpgsqlRepository<T> where T : BaseEntity, IEntity
     {
         #region CustomMethod
         IQueryable<T> AsNoTrackingWithIdentityResolution();

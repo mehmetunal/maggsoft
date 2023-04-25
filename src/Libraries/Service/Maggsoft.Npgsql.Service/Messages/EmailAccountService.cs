@@ -16,15 +16,17 @@ namespace Maggsoft.Npgsql.Service.Messages
     public partial class EmailAccountService : IEmailAccountService
     {
         #region Fields
-        private readonly INpgsqlRepository<EmailAccount> _emailAccountRepository;
+        private readonly INpgsqlWriteRepository<EmailAccount> _emailWriteRepository;
+        private readonly INpgsqlReadRepository<EmailAccount> _emailReadRepository;
 
         #endregion
 
         #region Ctor
 
-        public EmailAccountService(INpgsqlRepository<EmailAccount> emailAccountRepository)
+        public EmailAccountService(INpgsqlWriteRepository<EmailAccount> emailWriteRepository, INpgsqlReadRepository<EmailAccount> emailReadRepository)
         {
-            _emailAccountRepository = emailAccountRepository;
+            _emailWriteRepository = emailWriteRepository;
+            _emailReadRepository  = emailReadRepository;
         }
 
         #endregion
@@ -59,7 +61,7 @@ namespace Maggsoft.Npgsql.Service.Messages
             emailAccount.Username = CommonHelper.EnsureMaximumLength(emailAccount.Username, 255);
             emailAccount.Password = CommonHelper.EnsureMaximumLength(emailAccount.Password, 255);
 
-            await _emailAccountRepository.AddAsync(emailAccount);
+            await _emailWriteRepository.AddAsync(emailAccount);
         }
 
         /// <summary>
@@ -90,7 +92,7 @@ namespace Maggsoft.Npgsql.Service.Messages
             emailAccount.Username = CommonHelper.EnsureMaximumLength(emailAccount.Username, 255);
             emailAccount.Password = CommonHelper.EnsureMaximumLength(emailAccount.Password, 255);
 
-            await _emailAccountRepository.UpdateAsync(emailAccount);
+            await _emailWriteRepository.UpdateAsync(emailAccount);
         }
 
         /// <summary>
@@ -106,7 +108,7 @@ namespace Maggsoft.Npgsql.Service.Messages
             if ((await GetAllEmailAccountsAsync()).Count() == 1)
                 throw new MaggsoftException("You cannot delete this email account. At least one account is required.");
 
-            await _emailAccountRepository.DeleteAsync(emailAccount);
+            await _emailWriteRepository.DeleteAsync(emailAccount);
         }
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Maggsoft.Npgsql.Service.Messages
         /// </returns>
         public virtual async Task<EmailAccount> GetEmailAccountByIdAsync(object emailAccountId)
         {
-            return await _emailAccountRepository.FindByIdAsync(emailAccountId);
+            return await _emailReadRepository.FindByIdAsync(emailAccountId);
         }
 
         /// <summary>
@@ -131,7 +133,7 @@ namespace Maggsoft.Npgsql.Service.Messages
         /// </returns>
         public virtual async Task<IEnumerable<EmailAccount>> GetAllEmailAccountsAsync()
         {
-            var emailAccounts = await _emailAccountRepository.GetAsync();
+            var emailAccounts = await _emailReadRepository.GetAsync();
 
             return emailAccounts;
         }

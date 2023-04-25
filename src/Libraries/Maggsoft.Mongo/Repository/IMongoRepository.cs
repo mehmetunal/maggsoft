@@ -1,14 +1,13 @@
-﻿using MongoDB.Driver;
+﻿using Maggsoft.Core.Entities;
 using Maggsoft.Data.Mongo;
-using Maggsoft.Core.Entities;
-using Maggsoft.Core.Repository;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using System.Collections.Generic;
-using MongoDB.Driver.GridFS;
 
 namespace Maggsoft.Mongo.Repository
 {
-    public interface IMongoRepository<T> : IRepository<T> where T : BaseEntity, IEntity
+
+    public interface IMongoRepository<T>  where T : BaseEntity, IEntity
     {
         #region Collection
         IMongoCollection<T> Collection { get; }
