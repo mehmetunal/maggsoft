@@ -1,6 +1,6 @@
 ﻿namespace Maggsoft.Core.Model
 {
-    public class BaseMaggsoftModel
+    public class BaseDtoModel
     {
     }
 }

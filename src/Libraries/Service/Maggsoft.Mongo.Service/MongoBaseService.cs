@@ -14,11 +14,11 @@ namespace Maggsoft.Services
 {
     public partial class MongoBaseService<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
         new()
-        where TResultDto : BaseMaggsoftModel,
+        where TResultDto : BaseDtoModel,
         new()
-        where TEditDto : BaseMaggsoftModel,
+        where TEditDto : BaseDtoModel,
         new()
-        where TAddDto : BaseMaggsoftModel
+        where TAddDto : BaseDtoModel
     {
         #region Properties
 

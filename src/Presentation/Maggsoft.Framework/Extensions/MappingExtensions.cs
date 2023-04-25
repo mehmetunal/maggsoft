@@ -65,7 +65,7 @@ namespace Maggsoft.Framework.Extensions
         /// <typeparam name="TModel">Model type</typeparam>
         /// <param name="entity">Entity to map from</param>
         /// <returns>Mapped model</returns>
-        public static TModel ToModel<TModel>(this BaseEntity entity) where TModel : BaseMaggsoftModel
+        public static TModel ToModel<TModel>(this BaseEntity entity) where TModel : BaseDtoModel
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -82,7 +82,7 @@ namespace Maggsoft.Framework.Extensions
         /// <param name="model">Model to map into</param>
         /// <returns>Mapped model</returns>
         public static TModel ToModel<TEntity, TModel>(this TEntity entity, TModel model)
-            where TEntity : BaseEntity where TModel : BaseMaggsoftModel
+            where TEntity : BaseEntity where TModel : BaseDtoModel
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -99,7 +99,7 @@ namespace Maggsoft.Framework.Extensions
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <param name="model">Model to map from</param>
         /// <returns>Mapped entity</returns>
-        public static TEntity ToEntity<TEntity>(this BaseMaggsoftModel model) where TEntity : BaseEntity
+        public static TEntity ToEntity<TEntity>(this BaseDtoModel model) where TEntity : BaseEntity
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -116,7 +116,7 @@ namespace Maggsoft.Framework.Extensions
         /// <param name="entity">Entity to map into</param>
         /// <returns>Mapped entity</returns>
         public static TEntity ToEntity<TEntity, TModel>(this TModel model, TEntity entity)
-            where TEntity : BaseEntity where TModel : BaseMaggsoftModel
+            where TEntity : BaseEntity where TModel : BaseDtoModel
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
