@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Maggsoft.Core.Infrastructure;
 using Maggsoft.Core.Model;
-using Maggsoft.Core.Repository;
 using Maggsoft.Data.Mongo;
 using Maggsoft.Mongo.Model.Pagination;
 using Maggsoft.Mongo.Repository;
-using Maggsoft.Services.Events;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -25,9 +23,7 @@ namespace Maggsoft.Services
         #region Properties
 
         protected readonly IMapper Mapper;
-        protected readonly IMongoWriteRepository<TTable> WriteRepository;
-        protected readonly IMongoReadRepository<TTable> ReadRepository;
-        private readonly IEventPublisher EventPublisher;
+        protected readonly IMongoRepository<TTable> Repository;
 
         #endregion
 
@@ -37,11 +33,8 @@ namespace Maggsoft.Services
         {
             Mapper = EngineContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
-            WriteRepository = EngineContext.Current.Resolve<IMongoWriteRepository<TTable>>()
-                         ?? throw new ArgumentNullException($"{nameof(IMongoWriteRepository<TTable>)} is null");
-            ReadRepository = EngineContext.Current.Resolve<IMongoReadRepository<TTable>>()
-                         ?? throw new ArgumentNullException($"{nameof(IMongoReadRepository<TTable>)} is null");
-            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>();
+            Repository = EngineContext.Current.Resolve<IMongoRepository<TTable>>()
+                         ?? throw new ArgumentNullException($"{nameof(IMongoRepository<TTable>)} is null");
         }
 
         #endregion
@@ -61,7 +54,7 @@ namespace Maggsoft.Services
 
             var builderSort = Builders<TTable>.Sort.Descending(x => x.DisplayOrder);
 
-            var query = ReadRepository.Collection;
+            var query = Repository.Collection;
 
             var result = await PagedList<TTable>.Create(query, filter, builderSort, pageIndex, pageSize);
 
@@ -70,13 +63,13 @@ namespace Maggsoft.Services
 
         public virtual async Task<TResultDto> GetByIdAsync(object id)
         {
-            var result = await ReadRepository.FindByIdAsync(id);
+            var result = await Repository.FindByIdAsync(id);
             return Mapper.Map<TResultDto>(result);
         }
 
         public virtual async Task<int> CountAsync()
         {
-            return await ReadRepository.Table.CountAsync();
+            return await Repository.Table.CountAsync();
         }
 
         public virtual async Task<TResultDto> AddAsync(TAddDto companyAddDto)
@@ -89,11 +82,10 @@ namespace Maggsoft.Services
             domainEntity.CreatedDate = DateTime.UtcNow;
             domainEntity.CreatorIP = RemoteIp;
 
-            var result = await WriteRepository.AddAsync(domainEntity);
+            var result = await Repository.AddAsync(domainEntity);
 
             // event notification
             // await _mediator.EntityInserted(vendor);
-            EventPublisher.EntityInserted(domainEntity);
 
             return Mapper.Map<TResultDto>(domainEntity);
         }
@@ -108,11 +100,10 @@ namespace Maggsoft.Services
             domainEntity.ModifiedDate = DateTime.UtcNow;
             domainEntity.ModifierIP = RemoteIp;
 
-            var result = await WriteRepository.UpdateAsync(domainEntity);
-
             // event notification
             // await _mediator.EntityUpdated(vendor);
-            EventPublisher.EntityUpdated(domainEntity);
+
+            var result = await Repository.UpdateAsync(domainEntity);
 
             return Mapper.Map<TResultDto>(result);
         }
@@ -120,12 +111,9 @@ namespace Maggsoft.Services
         public virtual async Task<TResultDto> DeleteAsync(object id)
         {
             // var filter = Builders<Company>.Filter.Eq("Id", id);
-            var result = await WriteRepository.DeleteAsync(id);
-            
+            var result = await Repository.DeleteAsync(id);
             // event notification
             // await _mediator.EntityDeleted(vendorNote);
-            EventPublisher.EntityDeleted(result);
-
             return Mapper.Map<TResultDto>(result);
         }
 

@@ -16,18 +16,15 @@ namespace Maggsoft.Mongo.Service.Messages
     public partial class EmailAccountService : IEmailAccountService
     {
         #region Fields
-        private readonly IMongoReadRepository<EmailAccount> _emailReadAccountRepository;
-        private readonly IMongoWriteRepository<EmailAccount> _emailWriteAccountRepository;
+        private readonly IMongoRepository<EmailAccount> _emailAccountRepository;
 
         #endregion
 
         #region Ctor
 
-        public EmailAccountService(IMongoReadRepository<EmailAccount> emailReadAccountRepository,
-            IMongoWriteRepository<EmailAccount> emailWriteAccountRepository)
+        public EmailAccountService(IMongoRepository<EmailAccount> emailAccountRepository)
         {
-            _emailReadAccountRepository = emailReadAccountRepository;
-            _emailWriteAccountRepository = emailWriteAccountRepository;
+            _emailAccountRepository = emailAccountRepository;
         }
 
         #endregion
@@ -62,7 +59,7 @@ namespace Maggsoft.Mongo.Service.Messages
             emailAccount.Username = CommonHelper.EnsureMaximumLength(emailAccount.Username, 255);
             emailAccount.Password = CommonHelper.EnsureMaximumLength(emailAccount.Password, 255);
 
-            await _emailWriteAccountRepository.AddAsync(emailAccount);
+            await _emailAccountRepository.AddAsync(emailAccount);
         }
 
         /// <summary>
@@ -93,7 +90,7 @@ namespace Maggsoft.Mongo.Service.Messages
             emailAccount.Username = CommonHelper.EnsureMaximumLength(emailAccount.Username, 255);
             emailAccount.Password = CommonHelper.EnsureMaximumLength(emailAccount.Password, 255);
 
-            await _emailWriteAccountRepository.UpdateAsync(emailAccount);
+            await _emailAccountRepository.UpdateAsync(emailAccount);
         }
 
         /// <summary>
@@ -109,7 +106,7 @@ namespace Maggsoft.Mongo.Service.Messages
             if ((await GetAllEmailAccountsAsync()).Count() == 1)
                 throw new MaggsoftException("You cannot delete this email account. At least one account is required.");
 
-            await _emailWriteAccountRepository.DeleteAsync(emailAccount);
+            await _emailAccountRepository.DeleteAsync(emailAccount);
         }
 
         /// <summary>
@@ -122,7 +119,7 @@ namespace Maggsoft.Mongo.Service.Messages
         /// </returns>
         public virtual async Task<EmailAccount> GetEmailAccountByIdAsync(object emailAccountId)
         {
-            return await _emailReadAccountRepository.FindByIdAsync(emailAccountId);
+            return await _emailAccountRepository.FindByIdAsync(emailAccountId);
         }
 
         /// <summary>
@@ -134,7 +131,7 @@ namespace Maggsoft.Mongo.Service.Messages
         /// </returns>
         public virtual async Task<IEnumerable<EmailAccount>> GetAllEmailAccountsAsync()
         {
-            var emailAccounts = await _emailReadAccountRepository.GetAsync();
+            var emailAccounts = await _emailAccountRepository.GetAsync();
 
             return emailAccounts;
         }

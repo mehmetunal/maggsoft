@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Maggsoft.Core.Entities;
 using Maggsoft.Core.Extensions;
 using Maggsoft.Core.Infrastructure;
 using Maggsoft.Core.Model;
@@ -30,8 +31,7 @@ namespace Maggsoft.Npgsql.Service
 
         protected readonly IMapper Mapper;
         private readonly IEventPublisher EventPublisher;
-        public readonly INpgsqlReadRepository<TTable> ReadRepository;
-        public readonly INpgsqlWriteRepository<TTable> WriteRepository;
+        public readonly INpgsqlRepository<TTable> Repository;
 
         #endregion
 
@@ -42,10 +42,7 @@ namespace Maggsoft.Npgsql.Service
             Mapper = EngineContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
             EventPublisher = EngineContext.Current.Resolve<IEventPublisher>();
-            ReadRepository = EngineContext.Current.Resolve<INpgsqlReadRepository<TTable>>() 
-                ?? throw new ArgumentNullException($"{nameof(INpgsqlReadRepository<TTable>)} is null"); 
-            WriteRepository = EngineContext.Current.Resolve<INpgsqlWriteRepository<TTable>>() 
-                ?? throw new ArgumentNullException($"{nameof(INpgsqlWriteRepository<TTable>)} is null");
+            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>();
         }
 
         #endregion
@@ -54,12 +51,12 @@ namespace Maggsoft.Npgsql.Service
 
         public virtual async Task<int> CountAsync()
         {
-            return await ReadRepository.Table.CountAsync();
+            return await Repository.Table.CountAsync();
         }
 
         public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, object>> @order = null)
         {
-            var query = ReadRepository.Table;
+            var query = Repository.Table;
 
             if (!showHidden)
                 query = query.Where(p => p.IsPublish);
@@ -78,7 +75,7 @@ namespace Maggsoft.Npgsql.Service
 
         public virtual async Task<PagedList<TResultDto>> GetAsync(PaginationFilter paginationFilter, bool showHidden = false)
         {
-            var query = ReadRepository.Table;
+            var query = Repository.Table;
 
             if (!showHidden)
                 query = query.Where(p => p.IsPublish);
@@ -94,7 +91,7 @@ namespace Maggsoft.Npgsql.Service
 
         public virtual async Task<TResultDto> GetByIdAsync(Guid id)
         {
-            var result = await ReadRepository.FindByIdAsync(id);
+            var result = await Repository.FindByIdAsync(id);
             return Mapper.Map<TResultDto>(result);
         }
 
@@ -108,7 +105,7 @@ namespace Maggsoft.Npgsql.Service
             domainEntity.CreatedDate = DateTime.UtcNow;
             domainEntity.CreatorIP = RemoteIp;
 
-            await WriteRepository.AddAsync(domainEntity);
+            await Repository.AddAsync(domainEntity);
 
             //event notification
             if (publishEvent)
@@ -124,7 +121,7 @@ namespace Maggsoft.Npgsql.Service
 
             var domainEntity = Mapper.Map<TTable>(tEditDto);
 
-            var dbData = await ReadRepository.FindByIdAsync(domainEntity.Id);
+            var dbData = await Repository.FindByIdAsync(domainEntity.Id);
             if (dbData == null)
                 throw new NotFoundException($"{domainEntity.Id} is null data");
 
@@ -140,12 +137,12 @@ namespace Maggsoft.Npgsql.Service
             if (publishEvent)
                 await EventPublisher.EntityUpdatedAsync(mapperData);
 
-            var result = await WriteRepository.UpdateAsync(mapperData);
+            var result = await Repository.UpdateAsync(mapperData);
 
             return Mapper.Map<TResultDto>(result);
         }
 
-        /*Sadece değişen güncellenmesini istiyorsak*/
+        /*Sadece değişen gincellenmesini istiyorsak*/
         //public virtual async Task<TResultDto> UpdateAsync(TEditDto tEditDto)
         //{
         //    if (tEditDto == null)
@@ -179,7 +176,7 @@ namespace Maggsoft.Npgsql.Service
 
         public virtual async Task<TResultDto> DeleteAsync(Guid id, bool publishEvent = true)
         {
-            var result = await WriteRepository.DeleteAsync(id);
+            var result = await Repository.DeleteAsync(id);
 
             //event notification
             if (publishEvent)
