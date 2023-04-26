@@ -9,10 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\Aspect\Maggsoft.Aspect.Core\Maggsoft.Aspect.Core.csproj" />
-    <ProjectReference Include="..\Libraries\Cache\Maggsoft.Cache.MemoryCache\Maggsoft.Cache.MemoryCache.csproj" />
-    <ProjectReference Include="..\Libraries\Logging\Maggsoft.Logging\Maggsoft.Logging.csproj" />
-    <ProjectReference Include="..\Libraries\Maggsoft.Core\Maggsoft.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\Aspect\Maggsoft.Aspect.Core\Maggsoft.Aspect.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\Cache\Maggsoft.Cache.MemoryCache\Maggsoft.Cache.MemoryCache.csproj" />
+    <ProjectReference Include="..\..\Libraries\Logging\Maggsoft.Logging\Maggsoft.Logging.csproj" />
+    <ProjectReference Include="..\..\Libraries\Maggsoft.Core\Maggsoft.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Maggsoft.Framework.Exceptions
+namespace Maggsoft.Core.Exceptions
 {
     [Serializable]
     public class NotFoundException : Exception

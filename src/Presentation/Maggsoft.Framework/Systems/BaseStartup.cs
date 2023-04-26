@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
 using Maggsoft.Framework.Security.Model;
 using Microsoft.AspNetCore.Diagnostics;
+using Maggsoft.Core.Exceptions;
 
 namespace Maggsoft.Framework.Systems
 {

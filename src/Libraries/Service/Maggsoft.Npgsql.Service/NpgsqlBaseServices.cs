@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Maggsoft.Core.Entities;
+using Maggsoft.Core.Exceptions;
 using Maggsoft.Core.Extensions;
 using Maggsoft.Core.Infrastructure;
+using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
 using Maggsoft.Core.Model.Pagination;
 using Maggsoft.Data.Npgsql;
-using Maggsoft.Framework.Exceptions;
-using Maggsoft.Framework.Mapper;
 using Maggsoft.Npgsql.Repository;
 using Maggsoft.Services.Events;
 using Microsoft.AspNetCore.Http;

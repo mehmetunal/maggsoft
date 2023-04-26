@@ -25,7 +25,7 @@ namespace WebApplicationExample
             services.AddControllers();
             services.RegisterAll<IService>();
             services.DecorateWithAspect<ITestService>();
-            services.AddDevDistributedMemoryCache(typeof(IService));
+            services.AddMaggsoftDistributedMemoryCache(typeof(IService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

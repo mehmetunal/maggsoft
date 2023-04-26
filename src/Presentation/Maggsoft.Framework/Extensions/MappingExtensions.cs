@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
 using Maggsoft.Data;
-using Maggsoft.Framework.Mapper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

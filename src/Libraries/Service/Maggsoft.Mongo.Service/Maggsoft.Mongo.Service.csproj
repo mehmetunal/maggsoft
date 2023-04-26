@@ -25,4 +25,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.13.1" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Mapper\" />
+	</ItemGroup>
 </Project>

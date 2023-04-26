@@ -24,4 +24,8 @@
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Mapper\" />
+	</ItemGroup>
+
 </Project>
