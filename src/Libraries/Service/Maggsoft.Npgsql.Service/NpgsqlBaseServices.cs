@@ -41,8 +41,12 @@ namespace Maggsoft.Npgsql.Service
         {
             Mapper = EngineContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
-            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>();
-            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>();
+
+            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>()
+                     ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
+            
+            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>()
+                     ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<TTable>)} is null");
         }
 
         #endregion
