@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 
 
-namespace Maggsoft.Framework.Extensions
+namespace Maggsoft.Services.Extensions
 {
     /// <summary>
     /// Represents the extensions to map entity to model and vise versa
