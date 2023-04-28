@@ -14,7 +14,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
 		<ProjectReference Include="..\..\Maggsoft.Mongo\Maggsoft.Mongo.csproj" />
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
 	</ItemGroup>
