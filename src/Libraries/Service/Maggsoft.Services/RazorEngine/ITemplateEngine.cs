@@ -1,6 +1,6 @@
 ﻿namespace Maggsoft.Services.RazorEngine
 {
-    internal interface ITemplateEngine
+    public interface ITemplateEngine
     {
         string Render(string template, object model);
     }

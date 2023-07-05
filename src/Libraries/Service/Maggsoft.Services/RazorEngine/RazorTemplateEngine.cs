@@ -6,7 +6,7 @@ namespace Maggsoft.Services.RazorEngine
     /// <summary>
     /// https://github.com/adoconnection/RazorEngineCore
     /// </summary>
-    internal class RazorTemplateEngine : ITemplateEngine
+    public class RazorTemplateEngine : ITemplateEngine
     {
         private static ConcurrentDictionary<int, IRazorEngineCompiledTemplate> TemplateCache;
 
