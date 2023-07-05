@@ -12,7 +12,7 @@ namespace Maggsoft.Data.Npgsql.Localization
         /// <summary>
         /// Gets or sets the language identifier
         /// </summary>
-        public decimal LanguageId { get; set; }
+        public Guid LanguageId { get; set; }
 
         [Required]
         [Column(Order = 9)]

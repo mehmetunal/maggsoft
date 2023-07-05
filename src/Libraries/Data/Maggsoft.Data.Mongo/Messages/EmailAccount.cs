@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 
 namespace Maggsoft.Data.Mongo.Messages
 {
     /// <summary>
     /// Represents an email account
     /// </summary>
-    public partial class EmailAccount : BaseEntity, IPrimaryKey<Guid>
+    public partial class EmailAccount : BaseEntity, IPrimaryKey<ObjectId>
     {
         /// <summary>
         /// Gets or sets an email address

@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Maggsoft.Data
 {
-    public interface ILanguageModel
+    public interface ILanguageModel<T>
     {
         [Required]
-        Guid LanguageId { get; set; }
+        T LanguageId { get; set; }
 
         [Required]
         [StringLength(200)]

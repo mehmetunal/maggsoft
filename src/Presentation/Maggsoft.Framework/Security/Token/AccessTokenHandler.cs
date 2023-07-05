@@ -1,4 +1,4 @@
-﻿using Maggsoft.Framework.Mapper;
+﻿using Maggsoft.Core.Mapper;
 using Maggsoft.Framework.Security.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;

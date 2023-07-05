@@ -20,7 +20,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Data\Maggsoft.Data.Mongo\Maggsoft.Data.Mongo.csproj" />
-		<ProjectReference Include="..\Maggsoft.Core\Maggsoft.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,23 +1,24 @@
 ﻿using Maggsoft.Data.Mongo.Attributes;
+using MongoDB.Bson;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Maggsoft.Data.Mongo.Localization
 {
     [BsonCollection("dev_localized_property")]
-    public class LocalizedProperty : BaseEntity, IPrimaryKey<Guid>
+    public class LocalizedProperty : BaseEntity, IPrimaryKey<ObjectId>
     {
         [Required]
         /// <summary>
         /// Gets or sets the entity identifier
         /// </summary>
-        public Guid EntityId { get; set; }
+        public ObjectId EntityId { get; set; }
 
         [Required]
         /// <summary>
         /// Gets or sets the language identifier
         /// </summary>
-        public Guid LanguageId { get; set; }
+        public ObjectId LanguageId { get; set; }
 
         [Required]
         /// <summary>

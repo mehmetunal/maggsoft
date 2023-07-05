@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Maggsoft.Framework.Model
+namespace Maggsoft.Core.Model
 {
     public interface ILocalizedLocaleModel : ILocalizedLocaleModel<Guid>
     {

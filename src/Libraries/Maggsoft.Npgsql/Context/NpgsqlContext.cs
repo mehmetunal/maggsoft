@@ -1,7 +1,5 @@
 ﻿using Maggsoft.Core.DbType.Npgsql;
-using Maggsoft.Data.Npgsql.Enum;
-using Maggsoft.Data.Npgsql.Identity;
-using Maggsoft.Data.Npgsql.Location;
+using Maggsoft.Data.Npgsql.Localization;
 using Maggsoft.Data.Npgsql.Messages;
 using Maggsoft.Npgsql.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -26,24 +24,10 @@ namespace Maggsoft.Npgsql.Context
 
         #region DbSet
 
-        #region ENUM
-        public DbSet<Parameter> Parameter { get; set; }
-        public DbSet<ParameterValue> ParameterValue { get; set; }
-        #endregion
-
-        #region IDENTITY
-        public DbSet<Permission> Permission { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<RolePermission> RolePermission { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<UserRole> UserRole { get; set; }
-        public DbSet<UserToken> UserToken { get; set; }
-        #endregion
-
         #region LOCATION
-        public DbSet<Country> Country { get; set; }
-        public DbSet<City> City { get; set; }
-        public DbSet<County> County { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<LocaleStringResource> LocaleStringResources { get; set; }
+        public DbSet<LocalizedProperty> LocalizedProperties { get; set; }
         #endregion
 
         #endregion
@@ -65,7 +49,54 @@ namespace Maggsoft.Npgsql.Context
         {
             //CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-            #region ENUM
+            #region Language
+            /*BU KISIM KULLANIYORSAN fluentmigrator API Kullanmaman gerek*/
+            modelBuilder.BaseModelBuilder<Language>();
+
+            modelBuilder.Entity<Language>()
+                .Property(p => p.Name)
+                .HasColumnType(ColumnType.String)
+                .IsRequired();
+            #endregion
+            
+            #region Language
+            modelBuilder.BaseModelBuilder<LocaleStringResource>();
+
+            modelBuilder.Entity<LocaleStringResource>()
+                .Property(p => p.ResourceName)
+                .HasColumnType(ColumnType.String)
+                .IsRequired();
+            #endregion
+
+            #region LocalizedProperty
+            modelBuilder.BaseModelBuilder<LocalizedProperty>();
+
+            modelBuilder.Entity<LocalizedProperty>()
+                .Property(p => p.EntityId)
+                .HasColumnType(ColumnType.Uuid)
+                .IsRequired();
+            #endregion
+
+            #region EMAILSETTING
+            modelBuilder.BaseModelBuilder<EmailAccount>();
+            #endregion
+
+            //SEED_DATA
+            modelBuilder.Entity<Language>().HasData(new Language() { }, new Language() { });
+
+            //All Decimals will have 18,6 Range
+            //foreach (var property in modelBuilder.Model.GetEntityTypes()
+            //.SelectMany(t => t.GetProperties())
+            //.Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+            //{
+            //    property.SetColumnType("decimal(18,6)");
+            //}
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.HasPostgresExtension("uuid-ossp");
+
+            /* OLD
+              #region ENUM
             #region PARAMETER
 
             modelBuilder.BaseModelBuilder<Parameter>();
@@ -393,24 +424,7 @@ namespace Maggsoft.Npgsql.Context
             #endregion
 
             #endregion
-
-            #region EMAILSETTING
-            modelBuilder.BaseModelBuilder<EmailAccount>();
-            #endregion
-
-            //SEED_DATA
-            modelBuilder.Entity<Parameter>().HasData(new Parameter() { }, new Parameter() { });
-
-            //All Decimals will have 18,6 Range
-            //foreach (var property in modelBuilder.Model.GetEntityTypes()
-            //.SelectMany(t => t.GetProperties())
-            //.Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
-            //{
-            //    property.SetColumnType("decimal(18,6)");
-            //}
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.HasPostgresExtension("uuid-ossp");
+             */
         }
         #endregion
     }

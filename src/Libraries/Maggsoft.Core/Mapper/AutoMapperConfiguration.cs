@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Maggsoft.Framework.Mapper
+namespace Maggsoft.Core.Mapper
 {
     /// <summary>
     /// AutoMapper configuration

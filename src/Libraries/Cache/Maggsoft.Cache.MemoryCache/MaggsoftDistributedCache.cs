@@ -5,16 +5,12 @@ using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.Caching;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.MemoryCache
 {
-    public class MemoryCacheDistributedCache : IMaggsoftDistributedCache
+    public class MaggsoftDistributedCache : IMaggsoftDistributedCache
     {
         #region Properties
         private readonly IServiceProvider _serviceProvider;
@@ -22,7 +18,7 @@ namespace Maggsoft.Cache.MemoryCache
         #endregion
 
         #region Ctor
-        public MemoryCacheDistributedCache(IDistributedCache distributedCache, IServiceProvider serviceProvider)
+        public MaggsoftDistributedCache(IDistributedCache distributedCache, IServiceProvider serviceProvider)
         {
             _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));
             _serviceProvider = serviceProvider;
@@ -204,9 +200,14 @@ namespace Maggsoft.Cache.MemoryCache
 
         private void ReadCacheKeys(Action<ICacheEntry> call)
         {
-            FieldInfo coherentState = typeof(MemoryDistributedCache).GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo coherentState = typeof(MemoryDistributedCache)
+                .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
+            
             object coherentStateValue = coherentState.GetValue(_distributedCache);
-            PropertyInfo entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            
+            PropertyInfo entriesCollection = coherentStateValue.GetType()
+                .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            
             if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
             {
                 foreach (dynamic cacheItem in entriesCollectionValue)

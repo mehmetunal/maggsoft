@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Maggsoft.Core.Entities;
+using Maggsoft.Core.Exceptions;
 using Maggsoft.Core.Extensions;
 using Maggsoft.Core.Infrastructure;
+using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
 using Maggsoft.Core.Model.Pagination;
 using Maggsoft.Data.Npgsql;
-using Maggsoft.Framework.Exceptions;
-using Maggsoft.Framework.Mapper;
 using Maggsoft.Npgsql.Repository;
 using Maggsoft.Services.Events;
 using Microsoft.AspNetCore.Http;
@@ -21,11 +20,11 @@ namespace Maggsoft.Npgsql.Service
 {
     public partial class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
         new()
-        where TResultDto : BaseMaggsoftModel,
+        where TResultDto : BaseDtoModel,
         new()
-        where TEditDto : BaseMaggsoftModel,
+        where TEditDto : BaseDtoModel,
         new()
-        where TAddDto : BaseMaggsoftModel
+        where TAddDto : BaseDtoModel
     {
         #region Properties
 
@@ -41,8 +40,12 @@ namespace Maggsoft.Npgsql.Service
         {
             Mapper = EngineContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
-            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>();
-            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>();
+
+            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>()
+                     ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
+            
+            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>()
+                     ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<TTable>)} is null");
         }
 
         #endregion
@@ -94,7 +97,7 @@ namespace Maggsoft.Npgsql.Service
             var result = await Repository.FindByIdAsync(id);
             return Mapper.Map<TResultDto>(result);
         }
-            
+
         public virtual async Task<TResultDto> AddAsync(TAddDto tAddDto, bool publishEvent = true)
         {
             if (tAddDto == null)

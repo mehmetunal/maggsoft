@@ -14,14 +14,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Data\Maggsoft.Data.Mongo\Maggsoft.Data.Mongo.csproj" />
-		<ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
 		<ProjectReference Include="..\..\Maggsoft.Mongo\Maggsoft.Mongo.csproj" />
+		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="10.1.1" />
 		<PackageReference Include="MailKit" Version="2.15.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Mapper\" />
 	</ItemGroup>
 </Project>

@@ -18,10 +18,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Presentation\Maggsoft.Framework\Maggsoft.Framework.csproj" />
-		<ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
 		<ProjectReference Include="..\..\Maggsoft.Npgsql\Maggsoft.Npgsql.csproj" />
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Mapper\" />
 	</ItemGroup>
 
 </Project>
