@@ -43,7 +43,7 @@ namespace Maggsoft.Npgsql.Service
 
             EventPublisher = EngineContext.Current.Resolve<IEventPublisher>()
                      ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
-            
+
             Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>()
                      ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<TTable>)} is null");
         }
@@ -76,7 +76,8 @@ namespace Maggsoft.Npgsql.Service
             return await result;
         }
 
-        public virtual async Task<PagedList<TResultDto>> GetAsync(PaginationFilter paginationFilter, bool showHidden = false)
+
+        public virtual async Task<PagedList<TResultDto>> GetAsync(PaginationFilter paginationFilter, Expression<Func<TTable, object>> @order = null, bool showHidden = false)
         {
             var query = Repository.Table;
 
@@ -85,7 +86,10 @@ namespace Maggsoft.Npgsql.Service
 
             query = query.Where(p => !p.IsDeleted);
 
-            query = query.OrderBy(v => v.DisplayOrder);
+            if (@order == null)
+                query = query.OrderBy(@order);
+            else
+                query = query.OrderBy(v => v.DisplayOrder);
 
             var result = query.ProjectTo<TResultDto>(AutoMapperConfiguration.MapperConfiguration).ToPagedListAsync(paginationFilter);
 
