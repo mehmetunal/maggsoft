@@ -46,6 +46,7 @@ namespace Maggsoft.ExampleTest
             });
 
             app.AddUpMigrate();
+            app.AddDownMigrate();
         }
     }
 }
