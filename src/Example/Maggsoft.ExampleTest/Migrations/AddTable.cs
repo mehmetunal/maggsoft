@@ -3,7 +3,7 @@ using Maggsoft.Data.Migration.Attribute;
 
 namespace Maggsoft.ExampleTest.Migrations
 {
-    [MaggsoftMigration("2023/07/13 21:37:00",maggsoftVersion:"v1")]
+    [MaggsoftMigration("2023/07/13 21:37:00","Database Init ")]
     public class AddTable : Migration
     {
         public override void Up()
