@@ -2,6 +2,7 @@
 using FluentMigrator.Infrastructure;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
+using Maggsoft.Data.Migration.Attribute;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace Maggsoft.Data.Migration
             var migrations = _filteringMigrationSource
                 .GetMigrations(t =>
                 {
-                    var migrationAttribute = t.GetCustomAttribute<MigrationAttribute>();
+                    var migrationAttribute = t.GetCustomAttribute<MaggsoftMigrationAttribute>();
 
                     if (migrationAttribute is null || _versionLoader.Value.VersionInfo.HasAppliedMigration(migrationAttribute.Version))
                         return false;
@@ -76,7 +77,7 @@ namespace Maggsoft.Data.Migration
             var migrations = _filteringMigrationSource
                 .GetMigrations(t =>
                 {
-                    var migrationAttribute = t.GetCustomAttribute<MigrationAttribute>();
+                    var migrationAttribute = t.GetCustomAttribute<MaggsoftMigrationAttribute>();
 
                     if (migrationAttribute is null || !_versionLoader.Value.VersionInfo.HasAppliedMigration(migrationAttribute.Version))
                         return false;
