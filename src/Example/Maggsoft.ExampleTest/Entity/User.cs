@@ -8,6 +8,6 @@ namespace Maggsoft.ExampleTest.Entity
         public int Id { get; set; }
         public string Text { get; set; }
 
-        public virtual ICollection<Log> Logs { get; set; }
+        public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
     }
 }

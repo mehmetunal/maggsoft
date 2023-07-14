@@ -28,6 +28,7 @@ namespace Maggsoft.ExampleTest.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            //var users = _npgsqlContext.Users.ToList();
             var user = new Entity.User { Text = "t" };
             user.Logs.Add(new Log() { Text = "tt", UserId = user.Id });
 

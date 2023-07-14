@@ -3,28 +3,29 @@ using Maggsoft.Data.Migration.Attribute;
 
 namespace Maggsoft.ExampleTest.Migrations
 {
-    [MaggsoftMigration("2023/07/13 21:37:00","Database Init ")]
+    [MaggsoftMigration("2023/07/13 21:37:00", "Database Init ")]
     public class AddTable : Migration
     {
         public override void Up()
         {
-            Create.Table("User")
+            Create.Table("Users")
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("Text").AsString();
 
-            Create.Table("Log")
+            Create.Table("Logs")
                 .WithColumn("Id").AsInt64().PrimaryKey().Identity()
                 .WithColumn("Text").AsString()
-                .WithColumn("UserId").AsInt64().ForeignKey("User", "Id");
+                .WithColumn("UserId").AsInt64().ForeignKey("Users", "Id").OnDeleteOrUpdate(System.Data.Rule.Cascade);
+            //               .OnDeleteOrUpdate(System.Data.Rule.Cascade);
 
-            Create.Index("IX_Log_UserId")
-                .OnTable("Log")
+            Create.Index("IX_Logs_UserId")
+                .OnTable("Logs")
                 .OnColumn("UserId")
                 .Ascending()
                 .WithOptions()
                 .NonClustered();
 
-            Insert.IntoTable("User").Row(new { Text = "Memoli" });
+            //Insert.IntoTable("User").Row(new { Text = "Memoli" });
             //Bunu yapıcam https://fluentmigrator.github.io/articles/migration/migration-attribute-custom.html
 
 
