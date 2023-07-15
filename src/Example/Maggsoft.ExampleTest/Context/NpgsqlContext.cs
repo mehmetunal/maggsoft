@@ -23,7 +23,8 @@ namespace Maggsoft.ExampleTest.Context
 
 
             base.OnModelCreating(modelBuilder);
-
+            //CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+            //modelBuilder.HasPostgresExtension("uuid-ossp");
         }
 
         public DbSet<User> Users { get; set; }

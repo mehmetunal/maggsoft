@@ -3,6 +3,7 @@ using Maggsoft.Data.Npgsql.Localization;
 using Maggsoft.Data.Npgsql.Messages;
 using Maggsoft.Npgsql.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 
 namespace Maggsoft.Npgsql.Context
@@ -14,6 +15,7 @@ namespace Maggsoft.Npgsql.Context
         {
 
         }
+
         public NpgsqlContext(DbContextOptions<NpgsqlContext> options)
             : base(options)
         {
@@ -58,7 +60,7 @@ namespace Maggsoft.Npgsql.Context
                 .HasColumnType(ColumnType.String)
                 .IsRequired();
             #endregion
-            
+
             #region Language
             modelBuilder.BaseModelBuilder<LocaleStringResource>();
 

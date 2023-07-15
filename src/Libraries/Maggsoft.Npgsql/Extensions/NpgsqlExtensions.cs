@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using FluentMigrator;
-using FluentMigrator.Infrastructure;
+﻿using FluentMigrator;
 using FluentMigrator.Runner;
-using FluentMigrator.Runner.Initialization;
-using Maggsoft.Core.Infrastructure;
+using Maggsoft.Core.IoC;
 using Maggsoft.Data.Migration;
+using Maggsoft.Npgsql.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -17,6 +11,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
 
 namespace Maggsoft.Npgsql.Extensions
 {
@@ -148,6 +150,107 @@ namespace Maggsoft.Npgsql.Extensions
             }
 
             return host;
+        }
+
+        /// <summary>  
+        /// Migrates the database.  
+        /// </summary>  
+        /// <typeparam name="T"></typeparam>  
+        /// <param name="host">The web host.</param>  
+        /// <returns>IWebHost.</returns>  
+        public static IHost CreateDatabase(this IHost host, int triesToConnect = 10)
+        {
+            if (DatabaseExists(host))
+                return host;
+
+            var builder = GetConnectionStringBuilder(host);
+
+            //gets database name
+            var databaseName = builder.Database;
+
+            //now create connection string to 'postgres' - default administrative connection database.
+            builder.Database = "postgres";
+
+            using (var connection = GetInternalDbConnection(builder.ConnectionString))
+            {
+                var query = $"CREATE DATABASE \"{databaseName}\" WITH OWNER = '{builder.Username}'";
+
+                var command = connection.CreateCommand();
+                command.CommandText = query;
+                command.Connection.Open();
+
+                command.ExecuteNonQuery();
+            }
+
+            //try connect
+            if (triesToConnect <= 0)
+                return host;
+
+            //sometimes on slow servers (hosting) there could be situations when database requires some time to be created.
+            //but we have already started creation of tables and sample data.
+            //as a result there is an exception thrown and the installation process cannot continue.
+            //that's why we are in a cycle of "triesToConnect" times trying to connect to a database with a delay of one second.
+            for (var i = 0; i <= triesToConnect; i++)
+            {
+                if (i == triesToConnect)
+                    throw new Exception("Unable to connect to the new database. Please try one more time");
+
+                if (!DatabaseExists(host))
+                {
+                    Thread.Sleep(1000);
+                }
+                else
+                {
+                    builder.Database = databaseName;
+                    using var connection = GetInternalDbConnection(builder.ConnectionString) as NpgsqlConnection;
+                    var command = connection.CreateCommand();
+                    command.CommandText = "CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS pgcrypto; CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";";
+                    command.Connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.ReloadTypes();
+
+                    break;
+                }
+            }
+
+            return host;
+        }
+        /// <summary>
+        /// Checks if the specified database exists, returns true if database exists
+        /// </summary>
+        /// <param name="host">IHost</param>
+        /// <returns>Returns true if the database exists.</returns>
+        private static bool DatabaseExists(IHost host)
+        {
+            try
+            {
+                using var context = GetInternalDbConnection(GetCurrentConnectionString(host));
+                context.Open();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static NpgsqlConnectionStringBuilder GetConnectionStringBuilder(IHost host)
+        {
+            return new NpgsqlConnectionStringBuilder(GetCurrentConnectionString(host));
+        }
+
+
+        private static DbConnection GetInternalDbConnection(string connectionString)
+        {
+            return new NpgsqlConnection(connectionString);
+        }
+
+        private static string GetCurrentConnectionString(IHost host)
+        {
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var configuration = services.GetRequiredService<IConfiguration>();
+            return configuration.GetConnectionString("DefaultConnection");
         }
     }
 }
