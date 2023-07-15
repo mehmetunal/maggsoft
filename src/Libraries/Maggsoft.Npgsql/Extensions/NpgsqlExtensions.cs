@@ -239,7 +239,6 @@ namespace Maggsoft.Npgsql.Extensions
             return new NpgsqlConnectionStringBuilder(GetCurrentConnectionString(host));
         }
 
-
         private static DbConnection GetInternalDbConnection(string connectionString)
         {
             return new NpgsqlConnection(connectionString);
