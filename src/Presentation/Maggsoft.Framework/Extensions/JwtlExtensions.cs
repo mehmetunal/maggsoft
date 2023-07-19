@@ -137,23 +137,6 @@ namespace Maggsoft.Framework.Extensions
                     x.RequireHttpsMetadata = tokenOptions.RequireHttpsMetadata;
                     x.Audience = tokenOptions.OidcApiName;
                     x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        //Gelen isteğin doğru siteden olduğunu kontrol eder,
-                        ValidateAudience = true,
-                        // Validet eilecek Issure
-                        ValidIssuer = tokenOptions.IdentityServerBaseUrl,
-                        //Gelen isteğin doğru siteden olduğunu kontrol eder, //Bu iki ayar ise "aud" ve "iss" claimlerini kontrol edelim mi diye soruyor
-                        ValidateIssuer = false,
-                        //Gelen her tokenun doğrulankasını sağlıyor.Token 3.kısım(imza) kontrolü
-                        ValidateIssuerSigningKey = true,
-                        //Doğrulama Keyini Tanımladığımız yer.Neyle kontrol etmesi gerektigi
-                        //IssuerSigningKey = SingHandler.GetSecurityKey(tokenOptions.SecurityKey),
-
-                        ClockSkew = TimeSpan.Zero,
-                        //Süresi dolmamış token vermesini sağlıyor
-                        ValidateLifetime = true,
-                    };
                     x.Events = new JwtBearerEvents()
                     {
                         OnAuthenticationFailed = (context) =>
