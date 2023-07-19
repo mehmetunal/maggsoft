@@ -33,7 +33,7 @@ namespace Maggsoft.Framework.Extensions
                     x.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
                     x.DefaultForbidScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(x =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x =>
                 {
                     x.Authority = tokenOptions.IdentityServerBaseUrl;
                     x.RequireHttpsMetadata = tokenOptions.RequireHttpsMetadata;
