@@ -45,10 +45,10 @@ namespace Maggsoft.Npgsql.AOP
                         await dbContext.SaveChangesAsync();
                         scope.Complete();
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         scope.Dispose();
-                        throw;
+                        throw ex;
                     }
                 }
             }
