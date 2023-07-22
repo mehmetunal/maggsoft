@@ -1,5 +1,7 @@
 ﻿using Maggsoft.Core.IoC;
 using Maggsoft.Framework.Security.Model;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Maggsoft.Framework.Security.Token
 {
@@ -13,5 +15,7 @@ namespace Maggsoft.Framework.Security.Token
         AccessTokenDto CreateAccessToken(object user);
 
         object GetAccessToken();
+
+        IEnumerable<Claim> GetUserClaims();
     }
 }

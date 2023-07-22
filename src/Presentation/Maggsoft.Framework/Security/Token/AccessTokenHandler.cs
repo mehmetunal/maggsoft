@@ -78,6 +78,22 @@ namespace Maggsoft.Framework.Security.Token
             throw new ArgumentNullException($"accountnumber");
         }
 
+        public IEnumerable<Claim> GetUserClaims()
+        {
+            string authorizationHeader = _context.HttpContext.Request.Headers["Authorization"];
+
+            if (authorizationHeader != null)
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = authorizationHeader.Split(" ")[1];
+                var parsedToken = tokenHandler.ReadJwtToken(token);
+
+                return parsedToken.Claims;
+            }
+
+            throw new ArgumentNullException($"accountnumber");
+        }
+
         #region private
 
         private string CreateRefreshToke()
