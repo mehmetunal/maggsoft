@@ -15,7 +15,7 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
         }
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
-            response.SystemError = ex.Message;
+            response.SystemError = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
             response.IsError = true;
             response.StatusCode = StatusCodes.Status500InternalServerError;
             await base.Bind(body, response);
