@@ -25,6 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Aspect\Maggsoft.Aspect.Core\Maggsoft.Aspect.Core.csproj" />
 		<ProjectReference Include="..\Data\Maggsoft.Data.Npgsql\Maggsoft.Data.Npgsql.csproj" />
 	</ItemGroup>
 

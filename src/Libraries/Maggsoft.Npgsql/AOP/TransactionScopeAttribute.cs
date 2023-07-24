@@ -1,4 +1,5 @@
 ﻿using AspectCore.DynamicProxy;
+using Maggsoft.Aspect.Core.Aspects;
 using Maggsoft.Npgsql.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,33 @@ using System.Transactions;
 
 namespace Maggsoft.Npgsql.AOP
 {
+    /*
+
+     [AttributeUsage(AttributeTargets.Method)]
+ public class UnitOfWorkAttribute : AspectAttribute
+ {
+     private IUnitOfWork _unitOfWork;
+     private IDatabaseTransaction _transaction;
+
+     public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
+     {
+         _unitOfWork ??= serviceProvider.GetRequiredService<IUnitOfWork>();
+         return base.LoadDependencies(serviceProvider);
+     }
+
+     public override void OnBefore(MethodExecutionArgs args) => _transaction = _unitOfWork.BeginTransaction();
+
+     public override async Task OnBeforeAsync(MethodExecutionArgs args) => _transaction = await _unitOfWork.BeginTransactionAsync();
+
+     public override void OnSuccess(MethodExecutionArgs args) => _transaction.Commit();
+
+     public override async Task OnSuccessAsync(MethodExecutionArgs args) => await _transaction.CommitAsync();
+
+     public override void OnException(MethodExecutionArgs args) => _transaction.Rollback();
+
+     public override async Task OnExceptionAsync(MethodExecutionArgs args) => await _transaction.RollbackAsync();
+ }
+     */
     public class TransactionScopeAttribute : AbstractInterceptorAttribute
     {
         public async override Task Invoke(AspectContext context, AspectDelegate next)

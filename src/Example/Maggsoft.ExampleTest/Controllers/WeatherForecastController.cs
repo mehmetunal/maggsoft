@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace Maggsoft.ExampleTest.Controllers
 {
@@ -52,17 +53,33 @@ namespace Maggsoft.ExampleTest.Controllers
             //_npgsqlContext.SaveChanges();
             var user = new Entity.User
             {
-                Text = "Memoli",
+                Text = "Memoliasdasdasdsdfsdfsdfsdf",
                 CreatedDate = DateTime.Now,
                 CreatorIP = "123.1",
                 CreatorUserId = Guid.NewGuid(),
             };
             user.Logs.Add(new Entity.Log { Text = "Memoli", CreatedDate = DateTime.Now, CreatorIP = "123.1", CreatorUserId = Guid.NewGuid() });
-            var beginTran = _uow.BeginNewTransaction();
-            _uow.GetRepository<User>().Add(user);
-            //var log = new Entity.Log { UserId = user.Id, Text = "Memoli", CreatedDate = DateTime.Now, CreatorIP = "123.1", CreatorUserId = Guid.NewGuid() };
-            //_uow.GetRepository<Log>().Add(log);
-            _uow.SaveChanges();
+
+            using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            {
+                try
+                {
+                    _npgsqlContext.Add(user);
+                    _npgsqlContext.SaveChanges();
+                    scope.Dispose();
+                }
+                catch (Exception)
+                {
+                    scope.Dispose();
+                    throw;
+                }
+            }
+
+            //var beginTran = _uow.BeginNewTransaction();
+            //_uow.GetRepository<User>().Add(user);
+            ////var log = new Entity.Log { UserId = user.Id, Text = "Memoli", CreatedDate = DateTime.Now, CreatorIP = "123.1", CreatorUserId = Guid.NewGuid() };
+            ////_uow.GetRepository<Log>().Add(log);
+            //_uow.SaveChanges();
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
