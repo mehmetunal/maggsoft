@@ -43,7 +43,7 @@ namespace Maggsoft.Npgsql.Extensions
             //return services;
             var connection = configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<TContext>(options => { options.UseNpgsql(connection); });
-            services.AddTransient<DbContext, TContext>();
+            services.AddScoped<DbContext, TContext>();
             return services;
         }
         public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
