@@ -98,7 +98,6 @@ namespace Maggsoft.Npgsql.UnitOfWork
                     {
                         throw new ArgumentException($"Context is null");
                     }
-
                     var result = _context.SaveChanges();
 
                     transaction.Commit();

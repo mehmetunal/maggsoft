@@ -1,4 +1,5 @@
 ﻿using Maggsoft.ExampleTest.Entity;
+using Maggsoft.Npgsql.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -17,11 +18,12 @@ namespace Maggsoft.ExampleTest.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
         private readonly Context.NpgsqlContext _npgsqlContext;
-
+        private readonly IUnitOfWork _uow;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.NpgsqlContext npgsqlContext)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.NpgsqlContext npgsqlContext, IUnitOfWork uow)
         {
+            _uow = uow;
             _logger = logger;
             _npgsqlContext = npgsqlContext;
         }
@@ -30,25 +32,37 @@ namespace Maggsoft.ExampleTest.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             //var users = _npgsqlContext.Users.ToList();
-            var user = new Entity.User { Text = "tt" };
-            user.Logs.Add(new Log() { Text = "tt", UserId = user.Id });
-            _npgsqlContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            //var user = new Entity.User { Text = "tt" };
+            //user.Logs.Add(new Log() { Text = "tt", UserId = user.Id });
+            //_npgsqlContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
-            _npgsqlContext.Users.Add(user);
-            //var userDb = _npgsqlContext.Users.FirstOrDefault(p => p.Id == 1);
-            //userDb.Text = "t3";
-            var entries = _npgsqlContext.ChangeTracker.Entries();
+            //_npgsqlContext.Users.Add(user);
+            ////var userDb = _npgsqlContext.Users.FirstOrDefault(p => p.Id == 1);
+            ////userDb.Text = "t3";
+            //var entries = _npgsqlContext.ChangeTracker.Entries();
 
-            foreach (var entry in entries)
+            //foreach (var entry in entries)
+            //{
+            //    //Console.WriteLine($"Entity: {entry.Entity.GetType().Name},
+
+
+            //    //                     State: { entry.State.ToString()}
+            //    //");
+            //}
+            //_npgsqlContext.SaveChanges();
+            var user = new Entity.User
             {
-                //Console.WriteLine($"Entity: {entry.Entity.GetType().Name},
-
-
-                //                     State: { entry.State.ToString()}
-                //");
-            }
-            _npgsqlContext.SaveChanges();
-
+                Text = "Memoli",
+                CreatedDate = DateTime.Now,
+                CreatorIP = "123.1",
+                CreatorUserId = Guid.NewGuid(),
+            };
+            user.Logs.Add(new Entity.Log { Text = "Memoli", CreatedDate = DateTime.Now, CreatorIP = "123.1", CreatorUserId = Guid.NewGuid() });
+            var beginTran = _uow.BeginNewTransaction();
+            _uow.GetRepository<User>().Add(user);
+            //var log = new Entity.Log { UserId = user.Id, Text = "Memoli", CreatedDate = DateTime.Now, CreatorIP = "123.1", CreatorUserId = Guid.NewGuid() };
+            //_uow.GetRepository<Log>().Add(log);
+            _uow.SaveChanges();
 
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

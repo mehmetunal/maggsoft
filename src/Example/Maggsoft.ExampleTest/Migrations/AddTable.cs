@@ -1,5 +1,7 @@
 ﻿using FluentMigrator;
 using Maggsoft.Data.Migration.Attribute;
+using Maggsoft.Data.Npgsql;
+using System;
 
 namespace Maggsoft.ExampleTest.Migrations
 {
@@ -9,15 +11,30 @@ namespace Maggsoft.ExampleTest.Migrations
         public override void Up()
         {
             Create.Table("Users")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
+                .WithColumn(nameof(BaseEntity.Id)).AsGuid().PrimaryKey().WithDefaultValue(SystemMethods.NewSequentialId).NotNullable()
+                .WithColumn(nameof(BaseEntity.IsPublish)).AsBoolean().WithDefaultValue(true).NotNullable()
+                .WithColumn(nameof(BaseEntity.IsDeleted)).AsBoolean().WithDefaultValue(false).NotNullable()
+                .WithColumn(nameof(BaseEntity.CreatedDate)).AsDateTime().WithDefaultValue(DateTime.Now).NotNullable()
+                .WithColumn(nameof(BaseEntity.CreatorIP)).AsString()
+                .WithColumn(nameof(BaseEntity.CreatorUserId)).AsGuid().NotNullable()
+                .WithColumn(nameof(BaseEntity.ModifiedDate)).AsDateTime().Nullable()
+                .WithColumn(nameof(BaseEntity.ModifierIP)).AsString().Nullable()
+                .WithColumn(nameof(BaseEntity.ModifierUserId)).AsGuid().Nullable()
+                .WithColumn(nameof(BaseEntity.DisplayOrder)).AsInt16().NotNullable().WithDefaultValue(0)
                 .WithColumn("Text").AsString();
 
             Create.Table("Logs")
-                .WithColumn("Id").AsInt64().PrimaryKey().Identity()
-                .WithColumn("Text").AsString()
-                .WithColumn("UserId").AsInt64()
-                    .ForeignKey("Users", "Id")
-                    .OnDeleteOrUpdate(System.Data.Rule.Cascade);
+                .WithColumn(nameof(BaseEntity.Id)).AsGuid().PrimaryKey().WithDefaultValue(SystemMethods.NewSequentialId).NotNullable()
+                .WithColumn(nameof(BaseEntity.IsPublish)).AsBoolean().WithDefaultValue(true).NotNullable()
+                .WithColumn(nameof(BaseEntity.IsDeleted)).AsBoolean().WithDefaultValue(false).NotNullable()
+                .WithColumn(nameof(BaseEntity.CreatedDate)).AsDateTime().WithDefaultValue(DateTime.Now).NotNullable()
+                .WithColumn(nameof(BaseEntity.CreatorIP)).AsString()
+                .WithColumn(nameof(BaseEntity.CreatorUserId)).AsGuid().NotNullable()
+                .WithColumn(nameof(BaseEntity.ModifiedDate)).AsDateTime().Nullable()
+                .WithColumn(nameof(BaseEntity.ModifierIP)).AsString().Nullable()
+                .WithColumn(nameof(BaseEntity.ModifierUserId)).AsGuid().Nullable()
+                .WithColumn(nameof(BaseEntity.DisplayOrder)).AsInt16().NotNullable().WithDefaultValue(0).WithColumn("Text").AsString()
+                .WithColumn("UserId").AsGuid().ForeignKey("Users", "Id").OnDeleteOrUpdate(System.Data.Rule.Cascade);
 
             Create.Index("IX_Logs_UserId")
                 .OnTable("Logs")

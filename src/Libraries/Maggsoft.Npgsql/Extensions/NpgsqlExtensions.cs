@@ -19,6 +19,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Maggsoft.Npgsql.Extensions
 {
@@ -27,18 +28,22 @@ namespace Maggsoft.Npgsql.Extensions
         public static IServiceCollection AddNpgsqlConfig<TContext>(this IServiceCollection services,
             IConfiguration configuration) where TContext : DbContext
         {
+            //var connection = configuration.GetConnectionString("DefaultConnection");
+            //services.AddDbContext<TContext>(options =>
+            //{
+            //    options.UseNpgsql(connection,
+            //        conOption => conOption.EnableRetryOnFailure(
+            //                maxRetryCount: 15,
+            //                maxRetryDelay: TimeSpan.FromSeconds(30),
+            //                errorCodesToAdd: null
+            //            )
+            //    ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //});
+            //services.AddScoped<DbContext, TContext>();
+            //return services;
             var connection = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<TContext>(options =>
-            {
-                options.UseNpgsql(connection,
-                    conOption => conOption.EnableRetryOnFailure(
-                            maxRetryCount: 15,
-                            maxRetryDelay: TimeSpan.FromSeconds(30),
-                            errorCodesToAdd: null
-                        )
-                ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
-            services.AddScoped<DbContext, TContext>();
+            services.AddDbContext<TContext>(options => { options.UseNpgsql(connection); });
+            services.AddTransient<DbContext, TContext>();
             return services;
         }
         public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,

@@ -14,9 +14,9 @@ namespace Maggsoft.Npgsql.AOP
         {
             if (context.ServiceProvider.GetService(typeof(DbContext)) is DbContext dbContext && dbContext.Database.CurrentTransaction == null)
             {
-                if (!dbContext.ChangeTracker.Entries().Any(p => p.State == EntityState.Added || p.State == EntityState.Modified || p.State == EntityState.Deleted
-                 || p.State == EntityState.Unchanged))
-                    await next(context);
+                //if (!dbContext.ChangeTracker.Entries().Any(p => p.State == EntityState.Added || p.State == EntityState.Modified || p.State == EntityState.Deleted
+                // || p.State == EntityState.Unchanged))
+                //    await next(context);
 
                 using var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
                 {

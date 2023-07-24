@@ -2,6 +2,7 @@ using FluentMigrator.Runner;
 using Maggsoft.ExampleTest.Context;
 using Maggsoft.Npgsql.Extensions;
 using Maggsoft.Npgsql.Repository;
+using Maggsoft.Npgsql.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,8 @@ namespace Maggsoft.ExampleTest
             services
                 .AddNpgsqlConfig<NpgsqlContext>(Configuration)
                 .AddFluentMigratorConfig(Configuration);
+
+            services.AddTransient<IUnitOfWork,UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

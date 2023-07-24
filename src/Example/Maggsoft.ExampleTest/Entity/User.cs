@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Maggsoft.Data.Npgsql;
 using System.Collections.Generic;
 
 namespace Maggsoft.ExampleTest.Entity
 {
-    public class User
+    public class User: BaseEntity
     {
-        public int Id { get; set; }
         public string Text { get; set; }
 
         public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
