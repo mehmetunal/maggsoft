@@ -85,6 +85,7 @@ namespace Elearning.Api
                 {
                     webBuilder.ConfigureKestrel(options => options.AddServerHeader = false);
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http://*:6536");
                 })
                 .UseServiceProviderFactory(new DynamicProxyServiceProviderFactory())
                 .UseSerilog((hostContext, loggerConfig) =>
