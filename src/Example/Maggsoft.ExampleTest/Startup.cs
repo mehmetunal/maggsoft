@@ -1,6 +1,7 @@
 using FluentMigrator.Runner;
 using Maggsoft.ExampleTest.Context;
 using Maggsoft.Npgsql.Extensions;
+using Maggsoft.Npgsql.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;

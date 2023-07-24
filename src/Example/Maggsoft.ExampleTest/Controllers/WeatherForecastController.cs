@@ -1,5 +1,6 @@
 ﻿using Maggsoft.ExampleTest.Entity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -29,10 +30,23 @@ namespace Maggsoft.ExampleTest.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             //var users = _npgsqlContext.Users.ToList();
-            var user = new Entity.User { Text = "t" };
+            var user = new Entity.User { Text = "tt" };
             user.Logs.Add(new Log() { Text = "tt", UserId = user.Id });
+            _npgsqlContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
 
             _npgsqlContext.Users.Add(user);
+            //var userDb = _npgsqlContext.Users.FirstOrDefault(p => p.Id == 1);
+            //userDb.Text = "t3";
+            var entries = _npgsqlContext.ChangeTracker.Entries();
+
+            foreach (var entry in entries)
+            {
+                //Console.WriteLine($"Entity: {entry.Entity.GetType().Name},
+
+
+                //                     State: { entry.State.ToString()}
+                //");
+            }
             _npgsqlContext.SaveChanges();
 
 

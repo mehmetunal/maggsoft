@@ -293,6 +293,18 @@ namespace Maggsoft.Npgsql.Repository
 
         #endregion
 
+        #region SaveChange
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
         #region CustomMethod
 
         public IQueryable<T> FromSqlRaw(string sql, params object[] par)

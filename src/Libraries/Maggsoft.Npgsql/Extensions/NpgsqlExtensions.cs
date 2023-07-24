@@ -36,7 +36,7 @@ namespace Maggsoft.Npgsql.Extensions
                             maxRetryDelay: TimeSpan.FromSeconds(30),
                             errorCodesToAdd: null
                         )
-                );
+                ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
             services.AddScoped<DbContext, TContext>();
             return services;

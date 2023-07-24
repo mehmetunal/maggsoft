@@ -31,7 +31,7 @@ namespace Maggsoft.Core.IoC
                     if (implementedInterfacesService == null)
                         throw new ArgumentNullException(nameof(implementedInterfacesService));
                     //Log Alınacak
-                    services.AddScoped(implementedInterfacesService, serviceType);
+                    services.AddTransient(implementedInterfacesService, serviceType);
                 }
             }
             catch (Exception ex)

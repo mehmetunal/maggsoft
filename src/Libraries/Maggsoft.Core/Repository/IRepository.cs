@@ -80,5 +80,10 @@ namespace Maggsoft.Core.Repository
         Task<T> DeleteAsync(object id);
 
         #endregion
+
+        #region SaveChange
+        void SaveChanges();
+        Task SaveChangesAsync();
+        #endregion
     }
 }

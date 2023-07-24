@@ -13,8 +13,8 @@ namespace Maggsoft.ExampleTest.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-               .HasQueryFilter(m => EF.Property<string>(m, nameof(m.Text)) == "mehmet");
+            //modelBuilder.Entity<User>()
+            //   .HasQueryFilter(m => EF.Property<string>(m, nameof(m.Text)) == "mehmet");
 
             //modelBuilder.Entity<Table>()
             //    .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsPublish)) == true);

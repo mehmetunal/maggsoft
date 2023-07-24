@@ -70,10 +70,11 @@ namespace Elearning.Api
 
             services.RegisterAll<IService>();
 
+            // Her zaman methodlarda girdiði için kaldýrýyorum
             services.ConfigureDynamicProxy(config =>
             {
                 //Add AOP configuration
-                config.Interceptors.AddTyped<TransactionalAttribute>();
+                config.Interceptors.AddTyped<TransactionScopeAttribute>();
             });
 
             services.AddAuthentication();
