@@ -75,6 +75,7 @@ namespace Elearning.Api
             {
                 //Add AOP configuration
                 config.Interceptors.AddTyped<TransactionScopeAttribute>();
+                config.NonAspectPredicates.AddNamespace("FluentMigrator.Runner");
             });
 
             services.AddAuthentication();
