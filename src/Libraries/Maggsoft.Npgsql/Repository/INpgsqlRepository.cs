@@ -15,5 +15,10 @@ namespace Maggsoft.Npgsql.Repository
         Task<int> ExecuteAsync(string sql, params object[] par);
         IQueryable<T> Table { get; }
         #endregion
+
+        #region SaveChange
+        int SaveChanges();
+        Task<int> SaveChangesAsync();
+        #endregion
     }
 }
