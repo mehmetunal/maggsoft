@@ -42,6 +42,7 @@ namespace Maggsoft.Npgsql.AOP
         {
             if (context.ServiceProvider.GetService(typeof(DbContext)) is DbContext dbContext && dbContext.Database.CurrentTransaction == null)
             {
+                //https://learn.microsoft.com/en-us/ef/core/saving/transactions#using-systemtransactions
                 //var executionStrategy = dbContext.Database.CreateExecutionStrategy();
 
                 //_ = executionStrategy.Execute(async () =>
@@ -49,7 +50,18 @@ namespace Maggsoft.Npgsql.AOP
                 //if (!dbContext.ChangeTracker.Entries().Any(p => p.State == EntityState.Added || p.State == EntityState.Modified || p.State == EntityState.Deleted
                 // || p.State == EntityState.Unchanged))
                 //    await next(context);
-
+                //using (var scope = new TransactionScope(TransactionScopeOption.Required,new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+                //{
+                //try
+                //{
+                // Commit transaction if all commands succeed, transaction will auto-rollback
+                // when disposed if either commands fails
+                // scope.Complete();
+                //catch (Exception)
+                //{
+                //scope.Dispose();
+                // TODO: Handle failure
+                //}
                 using var scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled);
                 {
                     try
