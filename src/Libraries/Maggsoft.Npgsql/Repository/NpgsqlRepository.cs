@@ -294,14 +294,14 @@ namespace Maggsoft.Npgsql.Repository
         #endregion
 
         #region SaveChange
-        public void SaveChanges()
+        public int SaveChanges()
         {
-            _context.SaveChanges();
+            return _context.SaveChanges();
         }
 
-        public async Task SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
         #endregion
 

@@ -82,8 +82,8 @@ namespace Maggsoft.Core.Repository
         #endregion
 
         #region SaveChange
-        void SaveChanges();
-        Task SaveChangesAsync();
+        int SaveChanges();
+        Task<int> SaveChangesAsync();
         #endregion
     }
 }
