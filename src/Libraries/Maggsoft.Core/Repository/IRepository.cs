@@ -7,8 +7,11 @@ using System.Collections.Generic;
 
 namespace Maggsoft.Core.Repository
 {
+    //@TODO: Repository Write,Read Repository olarak parçalanması gerekecek.
     public interface IRepository<T> where T : IEntity
     {
+        #region READ
+
         #region GET
 
         IQueryable<T> Get();
@@ -46,6 +49,9 @@ namespace Maggsoft.Core.Repository
         Task<bool> AnyAsync(Expression<Func<T, bool>> @where);
         #endregion
 
+        #endregion
+
+        #region WRITE
 
         #region ADD
 
@@ -85,5 +91,8 @@ namespace Maggsoft.Core.Repository
         int SaveChanges();
         Task<int> SaveChangesAsync();
         #endregion
+
+        #endregion
+
     }
 }
