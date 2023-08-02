@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MailKit" Version="3.1.0" />
+		<PackageReference Include="MailKit" Version="4.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
@@ -18,10 +18,10 @@
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="MailKit" Version="2.15.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-		<PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="MailKit" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.20.0" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Mapper\" />

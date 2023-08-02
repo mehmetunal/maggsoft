@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
@@ -14,14 +14,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AspectCore.Abstractions" Version="2.2.0" />
+		<PackageReference Include="AspectCore.Abstractions" Version="2.4.0" />
 		<PackageReference Include="FluentMigrator" Version="3.3.2" />
 		<PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
 		<PackageReference Include="FluentMigrator.Runner.Postgres" Version="3.3.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.9" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.9" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,9 +1,11 @@
-﻿using Maggsoft.Core.IoC;
-using Maggsoft.Framework.Exceptions;
+﻿using Maggsoft.Core.Exceptions;
+using Maggsoft.Core.IoC;
 using Maggsoft.Framework.Extensions;
 using Maggsoft.Framework.Helper.ModelStateResponseFactory;
 using Maggsoft.Framework.Middleware;
+using Maggsoft.Framework.Security.Model;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading.Tasks;
-using Maggsoft.Framework.Security.Model;
-using Microsoft.AspNetCore.Diagnostics;
-using Maggsoft.Core.Exceptions;
 
 namespace Maggsoft.Framework.Systems
 {
