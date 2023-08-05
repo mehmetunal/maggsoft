@@ -6,11 +6,14 @@
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
 		<Version>1.0.0</Version>
-		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
+		<Description>The Maggsoft.Npgsql.</Description>
+		<PackageId>Maggsoft.Npgsql</PackageId>
+		<PackageTags>Maggsoft,Maggsoft.Npgsql</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
+		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -31,6 +34,13 @@
 
 	<ItemGroup>
 	  <Folder Include="Migrations\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\content\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>

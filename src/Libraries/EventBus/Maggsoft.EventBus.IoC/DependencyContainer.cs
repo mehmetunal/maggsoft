@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Maggsoft.EventBus.Abstractions;
+using Maggsoft.EventBus.AzureServiceBus;
 using Maggsoft.EventBus.RabbitMQ;
-using Maggsoft.EventBus.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

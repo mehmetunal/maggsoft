@@ -6,9 +6,9 @@
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
 		<Version>1.0.0</Version>
-		<Description>The Maggsoft.Services.</Description>
-		<PackageId>Maggsoft.Services</PackageId>
-		<PackageTags>Maggsoft,Maggsoft.Services</PackageTags>
+		<Description>The Maggsoft.EventBus.AzureServiceBus.</Description>
+		<PackageId>Maggsoft.EventBus.AzureServiceBus</PackageId>
+		<PackageTags>Maggsoft,Maggsoft.EventBus.AzureServiceBus</PackageTags>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
@@ -17,19 +17,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\content\icon.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\..\content\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="RazorEngineCore" Version="2022.8.1" />
+		<PackageReference Include="Autofac" Version="6.3.0" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.5.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-		<ProjectReference Include="..\..\Data\Maggsoft.Data\Maggsoft.Data.csproj" />
-		<ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
+		<ProjectReference Include="..\Maggsoft.EventBus\Maggsoft.EventBus.csproj" />
 	</ItemGroup>
 
 </Project>

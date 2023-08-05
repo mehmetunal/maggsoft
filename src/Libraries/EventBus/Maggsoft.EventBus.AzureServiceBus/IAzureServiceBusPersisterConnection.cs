@@ -1,8 +1,8 @@
-﻿using Azure.Messaging.ServiceBus;
+﻿using System;
+using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
-using System;
 
-namespace Maggsoft.EventBus.ServiceBus
+namespace Maggsoft.EventBus.AzureServiceBus
 {
     public interface IAzureServiceBusPersisterConnection : IDisposable
     {

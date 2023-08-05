@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Maggsoft.EventBus.ServiceBus
+namespace Maggsoft.EventBus.AzureServiceBus
 {
     public class AzureEventBusServiceBus : IEventBus, IDisposable
     {
