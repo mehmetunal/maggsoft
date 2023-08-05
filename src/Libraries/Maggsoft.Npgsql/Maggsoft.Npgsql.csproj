@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<PackageIcon>icon.png</PackageIcon>
+		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -28,19 +28,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Aspect\Maggsoft.Aspect.Core\Maggsoft.Aspect.Core.csproj" />
 		<ProjectReference Include="..\Data\Maggsoft.Data.Npgsql\Maggsoft.Data.Npgsql.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="FluentMigrations\" />
 	  <Folder Include="Migrations\" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="..\..\content\icon.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	</ItemGroup>
-
 </Project>

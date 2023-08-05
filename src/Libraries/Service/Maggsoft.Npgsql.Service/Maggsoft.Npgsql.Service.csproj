@@ -13,7 +13,7 @@
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
-		<PackageIcon>icon.png</PackageIcon>
+		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,17 +23,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Maggsoft.Npgsql\Maggsoft.Npgsql.csproj" />
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Mapper\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="..\..\..\content\icon.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
 	</ItemGroup>
 
 </Project>
