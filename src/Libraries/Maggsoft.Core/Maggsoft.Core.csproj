@@ -9,11 +9,11 @@
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
 		<PackageId>Maggsoft.Core</PackageId>
 		<PackageTags>Maggsoft,Maggsoft.Core,Caching</PackageTags>
-		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
+		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,6 +23,13 @@
 	  <EmbeddedResource Remove="JsonConverters\**" />
 	  <None Remove="Events\**" />
 	  <None Remove="JsonConverters\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\content\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
