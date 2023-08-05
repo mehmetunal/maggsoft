@@ -29,6 +29,7 @@
 	  <None Include="..\..\content\icon.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 

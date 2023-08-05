@@ -31,7 +31,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Maggsoft.EventBus.AzureServiceBus\Maggsoft.EventBus.AzureServiceBus.csproj" />
 		<ProjectReference Include="..\Maggsoft.EventBus.RabbitMQ\Maggsoft.EventBus.RabbitMQ.csproj" />
-		<ProjectReference Include="..\Maggsoft.EventBus.ServiceBus\Maggsoft.EventBus.AzureServiceBus.csproj" />
 	</ItemGroup>
 
 </Project>
