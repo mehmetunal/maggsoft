@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Systems
 {
-    public static class BaseProgramExtensions
+    public static class ServiceCollectionExtension
     {
         static ApiTokenOptions TokenOptions;
 
@@ -110,108 +110,8 @@ namespace Maggsoft.Framework.Systems
             });
 
             app.ConfigureRequestPipeline();
-            
-            app.Run();
 
             return app;
         }
-        /*
-        public BaseStartup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-            SwaggerTitle = Configuration.GetSection("SwaggerTitle")?.Value;
-            SwaggerVersion = $"v{Configuration.GetSection("ApiVersion:MajorVersion")?.Value}";
-        }
-
-        protected IConfiguration Configuration { get; set; }
-
-        public virtual void ConfigureServices(IServiceCollection services)
-        {
-            var tokenOptionsConfiguration = Configuration.GetSection("TokenOptions");
-
-            services.Configure<ApiTokenOptions>(tokenOptionsConfiguration);
-
-            TokenOptions = tokenOptionsConfiguration.Get<ApiTokenOptions>();
-
-            services.AddControllers().AddJsonOptionsConfig();
-
-            services.AddAdminApiCors(TokenOptions);
-
-            services.AddApiVersioningConfig(Configuration);
-
-            services.AddHttpContextAccessor();
-
-            services.AddSwaggerGenConfig(TokenOptions);
-
-            services.RegisterAll<IService>();
-
-            //TODO: WepApi de eklenmesi gerek
-            //services.AddSingleton<IEventPublisher, EventPublisher>();
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter(); });
-        }
-
-        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.Use(async (context, next) =>
-                {
-                    if (context.Request.IsLocal())
-                    {
-                        // Forbidden http status code
-                        context.Response.StatusCode = 403;
-                        return;
-                    }
-
-                    await next.Invoke();
-                });
-            }
-
-            app.UseStaticFiles();
-
-            app.UseSwaggerUIConfig(TokenOptions);
-
-            app.UseRouting();
-
-            app.UseCorsConfig();
-
-            app.UseMiddleware<ResponseRewindMiddleware>();
-
-            app.UseExceptionHandler(c => c.Run(async context =>
-            {
-                var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-                throw exception;
-                //var response = new { error = exception.Message };
-                //await context.Response.WriteAsJsonAsync(response);
-            }));
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
-            app.UseStatusCodePages(new StatusCodePagesOptions()
-            {
-                HandleAsync = (ctx) =>
-                {
-                    if (ctx.HttpContext.Response.StatusCode == 404)
-                    {
-                        throw new NotFoundException($"Not Found Page");
-                    }
-
-                    return Task.FromResult(0);
-                }
-            });
-
-            app.ConfigureRequestPipeline();
-        }*/
     }
 }
