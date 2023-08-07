@@ -19,7 +19,7 @@ namespace Maggsoft.Framework.Systems
     {
         static ApiTokenOptions TokenOptions;
 
-        public static IServiceCollection AddBaseService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             var tokenOptionsConfiguration = configuration.GetSection("TokenOptions");
 
@@ -51,7 +51,7 @@ namespace Maggsoft.Framework.Systems
             return services;
         }
 
-        public static WebApplication AddBaseConfigure(this WebApplication app)
+        public static WebApplication AddInfrastructure(this WebApplication app)
         {
             if (app.Environment.IsDevelopment())
             {
