@@ -1,7 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace Maggsoft.EventBus.ServiceBus
+namespace Maggsoft.EventBus.AzureServiceBus
 {
     public class DefaultAzureServiceBusPersisterConnection : IAzureServiceBusPersisterConnection
     {

@@ -1,9 +1,6 @@
 ﻿using AspectCore.DynamicProxy;
-using Maggsoft.Aspect.Core.Aspects;
-using Maggsoft.Npgsql.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 
