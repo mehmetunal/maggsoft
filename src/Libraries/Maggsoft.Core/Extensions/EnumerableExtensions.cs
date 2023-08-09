@@ -15,6 +15,20 @@ namespace Maggsoft.Core.Extensions
         public static TSource PreviousOrDefault<TSource>(this IEnumerable<TSource> source, TSource indexData)
             => source.TakeWhile(x => !x.Equals(indexData)).LastOrDefault();
 
+        public static IEnumerable<TSource> ToBetween<TSource>(this IEnumerable<TSource> source, dynamic s, dynamic e)
+        {
+            bool f = true;
+            var result = source.SkipWhile(p => p != s).TakeWhile(p => { bool b = true; f = p != e; return b; });
+            return result;
+        }
+
+        public static IEnumerable<TSource> ToBetween<TSource>(this IEnumerable<TSource> source, TSource s, TSource e)
+        {
+            bool f = true;
+            var result = source.SkipWhile(x => !x.Equals(s)).TakeWhile(p => { bool b = true; f = !p.Equals(e); return b; });
+            return result;
+        }
+
         public static IQueryable<TSource> AddFilterQuery<TSource>(this IQueryable<TSource> q, List<Filter> args)
         {
             if (args.HasNotFilter())
