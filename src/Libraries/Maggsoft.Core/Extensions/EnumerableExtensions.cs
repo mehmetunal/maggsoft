@@ -30,6 +30,31 @@ namespace Maggsoft.Core.Extensions
             return result;
         }
 
+        public static IEnumerable<string> ToBetween(this List<string> sender, string startValue, string endValue)
+        {
+            var startIndex = sender.IndexOf(startValue);
+            var endIndex = sender.IndexOf(endValue) - startIndex + 1;
+
+            return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
+        }
+
+        public static IEnumerable<object> ToBetween(this List<object> sender, object startValue, object endValue)
+        {
+            var startIndex = sender.IndexOf(startValue);
+            var endIndex = sender.IndexOf(endValue) - startIndex + 1;
+
+            return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
+        }
+
+        public static IEnumerable<T> ToBetween<T>(this List<T> sender, T startValue, T endValue)
+        {
+            var startIndex = sender.IndexOf(startValue);
+            var endIndex = sender.IndexOf(endValue) - startIndex + 1;
+
+            return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
+        }
+
+
         public static IQueryable<TSource> AddFilterQuery<TSource>(this IQueryable<TSource> q, List<Filter> args)
         {
             if (args.HasNotFilter())
