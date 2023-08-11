@@ -16,21 +16,21 @@ namespace Maggsoft.Core.Extensions
         public static TSource PreviousOrDefault<TSource>(this IEnumerable<TSource> source, TSource indexData)
             => source.TakeWhile(x => !x.Equals(indexData)).LastOrDefault();
 
-        public static IEnumerable<TSource> ToBetween<TSource>(this IEnumerable<TSource> source, dynamic s, dynamic e)
+        public static IEnumerable<object> Between(this IEnumerable<object> source, object s, object e)
         {
             bool f = true;
             var result = source.SkipWhile(p => p != s).TakeWhile(p => { bool b = true; f = p != e; return b; });
             return result;
         }
 
-        public static IEnumerable<TSource> ToBetween<TSource>(this IEnumerable<TSource> source, TSource s, TSource e)
+        public static IEnumerable<TSource> Between<TSource>(this IEnumerable<TSource> source, TSource s, TSource e)
         {
             bool f = true;
             var result = source.SkipWhile(x => !x.Equals(s)).TakeWhile(p => { bool b = true; f = !p.Equals(e); return b; });
             return result;
         }
 
-        public static IEnumerable<string> ToBetween(this List<string> sender, string startValue, string endValue)
+        public static IEnumerable<string> Between(this List<string> sender, string startValue, string endValue)
         {
             var startIndex = sender.IndexOf(startValue);
             var endIndex = sender.IndexOf(endValue) - startIndex + 1;
@@ -38,7 +38,7 @@ namespace Maggsoft.Core.Extensions
             return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
         }
 
-        public static IEnumerable<object> ToBetween(this List<object> sender, object startValue, object endValue)
+        public static IEnumerable<object> Between(this List<object> sender, object startValue, object endValue)
         {
             var startIndex = sender.IndexOf(startValue);
             var endIndex = sender.IndexOf(endValue) - startIndex + 1;
@@ -46,14 +46,13 @@ namespace Maggsoft.Core.Extensions
             return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
         }
 
-        public static IEnumerable<T> ToBetween<T>(this List<T> sender, T startValue, T endValue)
+        public static IEnumerable<T> Between<T>(this List<T> sender, T startValue, T endValue)
         {
             var startIndex = sender.IndexOf(startValue);
             var endIndex = sender.IndexOf(endValue) - startIndex + 1;
 
             return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
         }
-
 
         public static IQueryable<TSource> AddFilterQuery<TSource>(this IQueryable<TSource> q, List<Filter> args)
         {
