@@ -1,14 +1,13 @@
 ﻿using Maggsoft.Core.Exceptions;
 using Maggsoft.Core.Helper;
-using Maggsoft.Data.Mongo.Messages;
-using Maggsoft.Mongo.Repository;
-using Maggsoft.Mongo.Services.Messages;
+using Maggsoft.Data.Npgsql.Messages;
+using Maggsoft.Npgsql.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Mongo.Service.Messages
+namespace Maggsoft.Npgsql.Services.Messages
 {
     /// <summary>
     /// Email account service
@@ -16,13 +15,13 @@ namespace Maggsoft.Mongo.Service.Messages
     public partial class EmailAccountService : IEmailAccountService
     {
         #region Fields
-        private readonly IMongoRepository<EmailAccount> _emailAccountRepository;
+        private readonly INpgsqlRepository<EmailAccount> _emailAccountRepository;
 
         #endregion
 
         #region Ctor
 
-        public EmailAccountService(IMongoRepository<EmailAccount> emailAccountRepository)
+        public EmailAccountService(INpgsqlRepository<EmailAccount> emailAccountRepository)
         {
             _emailAccountRepository = emailAccountRepository;
         }

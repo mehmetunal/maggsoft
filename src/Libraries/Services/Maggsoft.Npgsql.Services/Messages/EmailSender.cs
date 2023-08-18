@@ -1,6 +1,5 @@
 ﻿using Maggsoft.Core.IO;
-using Maggsoft.Data.Mongo.Messages;
-using Maggsoft.Mongo.Services.Messages;
+using Maggsoft.Data.Npgsql.Messages;
 using MimeKit;
 using MimeKit.Text;
 using System;
@@ -9,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Mongo.Messages
+namespace Maggsoft.Npgsql.Services.Messages
 {
     /// <summary>
     /// Email sender
