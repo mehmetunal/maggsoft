@@ -16,7 +16,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Npgsql.Service
+namespace Maggsoft.Npgsql.Services
 {
     public abstract class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
         new()
