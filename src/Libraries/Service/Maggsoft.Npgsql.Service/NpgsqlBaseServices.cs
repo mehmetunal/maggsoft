@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Npgsql.Service
 {
-    public partial class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
+    public abstract class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
         new()
         where TResultDto : BaseDtoModel,
         new()
