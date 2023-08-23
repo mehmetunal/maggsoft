@@ -1,5 +1,6 @@
 using FluentMigrator.Runner;
 using Maggsoft.ExampleTest.Context;
+using Maggsoft.ExampleTest.Services;
 using Maggsoft.Npgsql.Extensions;
 using Maggsoft.Npgsql.Repository;
 using Maggsoft.Npgsql.UnitOfWork;
@@ -9,6 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Maggsoft.Services.Extensions;
+using Maggsoft.Framework.Extensions;
+using Maggsoft.ExampleTest.Entity;
+using Maggsoft.Core.IoC;
 
 namespace Maggsoft.ExampleTest
 {
@@ -25,11 +30,17 @@ namespace Maggsoft.ExampleTest
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHttpContextAccessor();
             services
                 .AddNpgsqlConfig<NpgsqlContext>(Configuration)
                 .AddFluentMigratorConfig(Configuration);
 
+            services.AddAutoMapperConfig(p => p.AddProfile<AutoMapping>(), typeof(Startup));
+
+            services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
+            services.RegisterAll<IService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +64,7 @@ namespace Maggsoft.ExampleTest
 
             app.AddUpMigrate();
             //app.AddDownMigrate();
+            app.ConfigureRequestPipeline();
         }
     }
 }

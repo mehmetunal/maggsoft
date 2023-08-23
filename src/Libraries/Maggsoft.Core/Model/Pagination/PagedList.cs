@@ -1,4 +1,6 @@
-﻿using Maggsoft.Core.Extensions;
+﻿using AutoMapper.QueryableExtensions;
+using Maggsoft.Core.Extensions;
+using Maggsoft.Core.Mapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

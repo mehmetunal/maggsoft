@@ -66,7 +66,7 @@ namespace Maggsoft.Npgsql.Services
 
             query = query.Where(p => !p.IsDeleted);
 
-            if (@order == null)
+            if (@order != null)
                 query = query.OrderBy(@order);
             else
                 query = query.OrderBy(v => v.DisplayOrder);
@@ -86,7 +86,7 @@ namespace Maggsoft.Npgsql.Services
 
             query = query.Where(p => !p.IsDeleted);
 
-            if (@order == null)
+            if (@order != null)
                 query = query.OrderBy(@order);
             else
                 query = query.OrderBy(v => v.DisplayOrder);

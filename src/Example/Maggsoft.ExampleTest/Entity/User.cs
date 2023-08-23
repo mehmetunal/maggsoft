@@ -1,9 +1,10 @@
-﻿using Maggsoft.Data.Npgsql;
+﻿using Maggsoft.Core.Entities;
+using Maggsoft.Data.Npgsql;
 using System.Collections.Generic;
 
 namespace Maggsoft.ExampleTest.Entity
 {
-    public class User: BaseEntity
+    public class User: Maggsoft.Data.Npgsql.BaseEntity
     {
         public string Text { get; set; }
 

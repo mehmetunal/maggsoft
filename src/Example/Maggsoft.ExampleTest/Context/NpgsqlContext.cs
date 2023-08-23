@@ -1,6 +1,7 @@
 ﻿using Maggsoft.ExampleTest.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 
 namespace Maggsoft.ExampleTest.Context
 {
@@ -10,6 +11,10 @@ namespace Maggsoft.ExampleTest.Context
             : base(options)
         {
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
