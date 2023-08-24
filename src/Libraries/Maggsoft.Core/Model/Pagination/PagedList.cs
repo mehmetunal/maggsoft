@@ -157,6 +157,11 @@ namespace Maggsoft.Core.Model.Pagination
         /// </summary>
         public List<Sort> Sorts { get; set; }
 
+        /// <summary>
+        /// IPagedList Mapping
+        /// </summary>
+        /// <typeparam name="TDestination"></typeparam>
+        /// <returns></returns>
         public IPagedList<TDestination> ToMap<TDestination>()
         {
             return Mapper.AutoMapperConfiguration.Mapper.Map<IPagedList<T>, IPagedList<TDestination>>(this);

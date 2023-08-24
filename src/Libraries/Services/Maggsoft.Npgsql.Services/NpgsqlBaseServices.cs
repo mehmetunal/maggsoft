@@ -9,6 +9,7 @@ using Maggsoft.Core.Model.Pagination;
 using Maggsoft.Data.Npgsql;
 using Maggsoft.Npgsql.Repository;
 using Maggsoft.Services.Events;
+using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -57,7 +58,7 @@ namespace Maggsoft.Npgsql.Services
             return await Repository.Table.CountAsync();
         }
 
-        public virtual async Task<PagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, object>> @order = null)
+        public virtual async Task<IPagedList<TResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<TTable, object>> @order = null)
         {
             var query = Repository.Table;
 
@@ -71,13 +72,13 @@ namespace Maggsoft.Npgsql.Services
             else
                 query = query.OrderBy(v => v.DisplayOrder);
 
-            var result = query.ProjectTo<TResultDto>(AutoMapperConfiguration.MapperConfiguration).ToPagedListAsync(pageIndex, pageSize);
+            var result = (await query.ToPagedListAsync(pageIndex, pageSize)).Map<TTable, TResultDto>();
 
-            return await result;
+            return result;
         }
 
 
-        public virtual async Task<PagedList<TResultDto>> GetAsync(PaginationFilter paginationFilter, Expression<Func<TTable, object>> @order = null, bool showHidden = false)
+        public virtual async Task<IPagedList<TResultDto>> GetAsync(PaginationFilter paginationFilter, Expression<Func<TTable, object>> @order = null, bool showHidden = false)
         {
             var query = Repository.Table;
 
@@ -91,9 +92,9 @@ namespace Maggsoft.Npgsql.Services
             else
                 query = query.OrderBy(v => v.DisplayOrder);
 
-            var result = query.ProjectTo<TResultDto>(AutoMapperConfiguration.MapperConfiguration).ToPagedListAsync(paginationFilter);
+            var result = (await query.ToPagedListAsync(paginationFilter)).ToMap<TResultDto>();
 
-            return await result;
+            return result;
         }
 
         public virtual async Task<TResultDto> GetByIdAsync(Guid id)
