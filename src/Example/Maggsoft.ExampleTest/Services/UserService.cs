@@ -27,7 +27,7 @@ namespace Maggsoft.ExampleTest.Services
             Repository = EngineContext.Current.Resolve<INpgsqlRepository<User>>()
                      ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<Maggsoft.ExampleTest.Entity.User>)} is null");
         }
-        public Task<PagedList<UserResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<User, object>> @order = null,
+        public async Task<IPagedList<UserResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<User, object>> @order = null,
             Func<IIncludable<User>, IIncludable> @includes = null)
         {
             var query = Repository.Table;
@@ -45,11 +45,11 @@ namespace Maggsoft.ExampleTest.Services
             else
                 query = query.OrderBy(v => v.DisplayOrder);
 
-            var q = query.ToPagedListAsync(pageIndex, pageSize);
+            var asd = (await query.ToPagedListAsync(pageIndex, pageSize)).Map<User, UserResultDto>();
 
-            var result = query.ProjectTo<UserResultDto>(AutoMapperConfiguration.MapperConfiguration).ToPagedListAsync(pageIndex, pageSize);
+            var bb = (await query.ToPagedListAsync(pageIndex, pageSize)).ToMap<UserResultDto>();
 
-            return result;
+            return asd;
         }
     }
 }

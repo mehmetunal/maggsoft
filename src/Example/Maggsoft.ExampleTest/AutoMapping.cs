@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Maggsoft.Core.Model.Pagination;
 using Maggsoft.ExampleTest.Dto;
 using Maggsoft.ExampleTest.Entity;
 
@@ -9,6 +10,7 @@ namespace Maggsoft.ExampleTest
         public AutoMapping()
         {
             CreateMap<User, UserResultDto>().ReverseMap();
+            CreateMap<IPagedList<User>, IPagedList<UserResultDto>>().ReverseMap();
             CreateMap<Log, LogResultDto>().ReverseMap();
         }
     }

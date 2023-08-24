@@ -1,4 +1,5 @@
-﻿using Maggsoft.ExampleTest.Entity;
+﻿using DocumentFormat.OpenXml.Office2021.DocumentTasks;
+using Maggsoft.ExampleTest.Entity;
 using Maggsoft.ExampleTest.Services;
 using Maggsoft.Npgsql.UnitOfWork;
 using Maggsoft.Services.Extensions;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace Maggsoft.ExampleTest.Controllers
@@ -35,10 +37,12 @@ namespace Maggsoft.ExampleTest.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<ActionResult> Get()
         {
 
-            var asd = this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));
+            var asd = await this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));
+
+            return Ok(asd);
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt", CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() };
             //user.Logs.Add(new Log() { Text = "MENU 1", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
@@ -92,14 +96,14 @@ namespace Maggsoft.ExampleTest.Controllers
             ////_uow.GetRepository<Log>().Add(log);
             //_uow.SaveChanges();
 
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            //var rng = new Random();
+            //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            //{
+            //    Date = DateTime.Now.AddDays(index),
+            //    TemperatureC = rng.Next(-20, 55),
+            //    Summary = Summaries[rng.Next(Summaries.Length)]
+            //})
+            //.ToArray();
         }
     }
 }

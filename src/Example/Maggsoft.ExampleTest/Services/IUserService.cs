@@ -11,7 +11,7 @@ namespace Maggsoft.ExampleTest.Services
 {
     public interface IUserService : IService
     {
-        Task<PagedList<UserResultDto>> GetAsync(int pageIndex = 0,
+        Task<IPagedList<UserResultDto>> GetAsync(int pageIndex = 0,
             int pageSize = int.MaxValue,
             bool showHidden = false,
             Expression<Func<User, object>> @order = null,

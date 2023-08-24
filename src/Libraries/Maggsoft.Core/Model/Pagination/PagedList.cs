@@ -14,6 +14,10 @@ namespace Maggsoft.Core.Model.Pagination
     [Serializable]
     public class PagedList<T> : IPagedList<T>
     {
+        public PagedList()
+        {
+
+        }
         /// <summary>
         /// Ctor
         /// </summary>
@@ -152,5 +156,10 @@ namespace Maggsoft.Core.Model.Pagination
         /// Data Sort OrderBy and OrderBy Desc
         /// </summary>
         public List<Sort> Sorts { get; set; }
+
+        public IPagedList<TDestination> ToMap<TDestination>()
+        {
+            return Mapper.AutoMapperConfiguration.Mapper.Map<IPagedList<T>, IPagedList<TDestination>>(this);
+        }
     }
 }
