@@ -16,5 +16,10 @@ namespace Maggsoft.ExampleTest.Services
             bool showHidden = false,
             Expression<Func<User, object>> @order = null,
             Func<IIncludable<User>, IIncludable> @includes = null);
+
+        Task<UserResultDto> AddAsync(UserAddDto addDto, bool publishEvent = true);
+        Task<UserResultDto> UpdateAsync(UserEditDto editDto, bool publishEvent = true);
+        Task<UserResultDto> DeleteAsync(Guid id, bool publishEvent = true);
+
     }
 }

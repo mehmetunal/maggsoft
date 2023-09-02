@@ -51,5 +51,20 @@ namespace Maggsoft.ExampleTest.Services
 
             return asd;
         }
+
+        public Task<UserResultDto> AddAsync(UserAddDto addDto, bool publishEvent = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserResultDto> UpdateAsync(UserEditDto editDto, bool publishEvent = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<UserResultDto> DeleteAsync(Guid id, bool publishEvent = true)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
