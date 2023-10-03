@@ -63,6 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.RabbitMQ"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}"
 	ProjectSection(SolutionItems) = preProject
+		Net7ProgramExample.txt = Net7ProgramExample.txt
 		Note.txt = Note.txt
 		ProgramExample.txt = ProgramExample.txt
 		StartExample.txt = StartExample.txt
