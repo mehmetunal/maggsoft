@@ -75,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.IoC", "Li
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.Example.Subscribe", "Example\Maggsoft.EventBus.Example.Subscribe\Maggsoft.EventBus.Example.Subscribe.csproj", "{B152066D-68BA-406B-9EE4-A84F4D8AF731}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.AzureServiceBus", "Libraries\EventBus\Maggsoft.EventBus.ServiceBus\Maggsoft.EventBus.AzureServiceBus.csproj", "{C4D0F483-EA89-459C-8469-4CE1B4A89935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.AzureServiceBus", "Libraries\EventBus\Maggsoft.EventBus.AzureServiceBus\Maggsoft.EventBus.AzureServiceBus.csproj", "{C4D0F483-EA89-459C-8469-4CE1B4A89935}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logging", "Logging", "{B96670A8-20A1-41F1-96F8-644EA1462EF4}"
 EndProject
