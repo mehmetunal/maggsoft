@@ -86,8 +86,11 @@ namespace Maggsoft.Framework.Systems
             {
                 var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
                 throw exception;
-                //var response = new { error = exception.Message };
-                //await context.Response.WriteAsJsonAsync(response);
+                /*
+                  var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                  var response = new { error = exception.InnerException == null ? exception.Message : exception.InnerException.Message };
+                  await context.Response.WriteAsJsonAsync(response);
+                 */
             }));
 
             app.UseAuthentication();
