@@ -62,7 +62,8 @@ namespace Maggsoft.Ocelot.Core.Middleware
 
             //This will get the required authorization claims of the route
             Dictionary<string, string> requiredAuthorizationClaims = downStreamRoute.RouteClaimsRequirement;
-
+            if (requiredAuthorizationClaims.Count == 0) return true;
+            
             //Getting the required claims for the route
             foreach (KeyValuePair<string, string> requiredAuthorizationClaim in requiredAuthorizationClaims)
             {
