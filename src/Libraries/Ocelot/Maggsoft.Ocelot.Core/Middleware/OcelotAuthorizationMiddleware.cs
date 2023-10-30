@@ -9,6 +9,24 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Ocelot.Core.Middleware
 {
+
+    /// <summary>
+    /// 
+    /// var configuration = new OcelotPipelineConfiguration
+    /// {
+    ///     AuthorizationMiddleware = async (httpContext, next) =>
+    ///     {
+    ///         await OcelotAuthorizationMiddleware.Authorize(httpContext, next);
+    ///     }
+    /// };
+    /// 
+    /// app.UseOcelot(configuration).Wait();
+    /// /// 
+    /// 
+    /// 
+    /// 
+    /// 
+    /// </summary>
     public class OcelotAuthorizationMiddleware
     {
         public static async Task Authorize(HttpContext httpContext, Func<Task> next)
