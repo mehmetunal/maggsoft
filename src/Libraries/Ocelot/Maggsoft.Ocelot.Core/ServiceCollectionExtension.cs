@@ -1,0 +1,30 @@
+﻿using Maggsoft.Ocelot.Core.Middleware;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
+using Ocelot.Cache.CacheManager;
+
+namespace Maggsoft.Ocelot.Core
+{
+    public static class ServiceCollectionExtension
+    {
+        public static IServiceCollection AddOcelotConfig(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddOcelot(Configuration).AddCacheManager(option => option.WithDictionaryHandle()); 
+            return services;
+        }
+
+        public static void UseOcelotConfig(this IApplicationBuilder app)
+        {
+            app.UseOcelot(new OcelotPipelineConfiguration
+            {
+                AuthorizationMiddleware = async (httpContext, next) =>
+                {
+                    await OcelotAuthorizationMiddleware.Authorize(httpContext, next);
+                }
+            }).Wait();
+        }
+    }
+}
