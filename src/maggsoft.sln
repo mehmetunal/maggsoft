@@ -55,6 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.EventBus.RabbitMQ"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{AFE3D338-C78B-40AA-9FDF-AAA170A98FAE}"
 	ProjectSection(SolutionItems) = preProject
+		Net7ProgramExample.txt = Net7ProgramExample.txt
 		Note.txt = Note.txt
 		ProgramExample.txt = ProgramExample.txt
 		StartExample.txt = StartExample.txt
@@ -87,6 +88,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Mongo.Services", "Libraries\Services\Maggsoft.Mongo.Services\Maggsoft.Mongo.Services.csproj", "{1D92A40F-9592-4439-92AD-C5790773B934}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Npgsql.Services", "Libraries\Services\Maggsoft.Npgsql.Services\Maggsoft.Npgsql.Services.csproj", "{49DEFAF9-EB9A-41D3-B151-CEFCAF850E49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ocelot", "Ocelot", "{311A3130-E6CE-49A4-B45C-9A841AD65314}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelot.Core", "Libraries\Ocelot\Maggsoft.Ocelot.Core\Maggsoft.Ocelot.Core.csproj", "{22C23AF2-A347-4222-B74D-1BDFD37220AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -206,6 +211,10 @@ Global
 		{49DEFAF9-EB9A-41D3-B151-CEFCAF850E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49DEFAF9-EB9A-41D3-B151-CEFCAF850E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49DEFAF9-EB9A-41D3-B151-CEFCAF850E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22C23AF2-A347-4222-B74D-1BDFD37220AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22C23AF2-A347-4222-B74D-1BDFD37220AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22C23AF2-A347-4222-B74D-1BDFD37220AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22C23AF2-A347-4222-B74D-1BDFD37220AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -250,6 +259,8 @@ Global
 		{F1914829-9A9F-45DF-9B24-7AEC77768A00} = {AA6D3110-B340-4EAD-9DE6-4A4138EFC36F}
 		{1D92A40F-9592-4439-92AD-C5790773B934} = {AA6D3110-B340-4EAD-9DE6-4A4138EFC36F}
 		{49DEFAF9-EB9A-41D3-B151-CEFCAF850E49} = {AA6D3110-B340-4EAD-9DE6-4A4138EFC36F}
+		{311A3130-E6CE-49A4-B45C-9A841AD65314} = {69FA5BF1-2C7B-4289-B482-0E7F25D41748}
+		{22C23AF2-A347-4222-B74D-1BDFD37220AA} = {311A3130-E6CE-49A4-B45C-9A841AD65314}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}
