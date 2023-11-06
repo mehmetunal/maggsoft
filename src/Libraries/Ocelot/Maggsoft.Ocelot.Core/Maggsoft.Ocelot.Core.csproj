@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
+		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
+		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<Version>1.0.3</Version>
+		<Description>The Maggsoft.Ocelot.Core.</Description>
+		<PackageId>Maggsoft.Ocelot.Core</PackageId>
+		<PackageTags>Maggsoft,Maggsoft.Ocelot.Core</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Ocelot" Version="17.0.1" />
+		<PackageReference Include="Ocelot.Cache.CacheManager" Version="17.0.1" />
+		<PackageReference Include="MMLib.Ocelot.Provider.AppConfiguration" Version="2.0.0" />
+		<PackageReference Include="MMLib.SwaggerForOcelot" Version="4.4.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+	</ItemGroup>
+
+</Project>
