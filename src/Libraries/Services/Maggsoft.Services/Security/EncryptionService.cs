@@ -51,6 +51,26 @@ namespace Maggsoft.Services.Security
             return sr.ReadToEnd();
         }
 
+        /// <summary>
+        /// Gets encryption algorithm
+        /// </summary>
+        /// <param name="encryptionKey">Encryption key</param>
+        /// <returns>Encryption algorithm</returns>
+        protected virtual SymmetricAlgorithm GetEncryptionAlgorithm(string encryptionKey)
+        {
+            if (string.IsNullOrEmpty(encryptionKey))
+                throw new ArgumentNullException(nameof(encryptionKey));
+
+            SymmetricAlgorithm provider = TripleDES.Create();
+
+            var vectorBlockSize = provider.BlockSize / 8;
+
+            provider.Key = Encoding.ASCII.GetBytes(encryptionKey[0..16]);
+            provider.IV = Encoding.ASCII.GetBytes(encryptionKey[^vectorBlockSize..]);
+
+            return provider;
+        }
+
         #endregion
 
         #region Methods
@@ -97,13 +117,9 @@ namespace Maggsoft.Services.Security
             if (string.IsNullOrEmpty(encryptionPrivateKey))
                 encryptionPrivateKey = _configuration["EncryptionKey"];
 
-            using var provider = new TripleDESCryptoServiceProvider
-            {
-                Key = Encoding.ASCII.GetBytes(encryptionPrivateKey[0..16]),
-                IV = Encoding.ASCII.GetBytes(encryptionPrivateKey[8..16])
-            };
-
+            using var provider = GetEncryptionAlgorithm(encryptionPrivateKey);
             var encryptedBinary = EncryptTextToMemory(plainText, provider.Key, provider.IV);
+
             return Convert.ToBase64String(encryptedBinary);
         }
 
@@ -121,13 +137,9 @@ namespace Maggsoft.Services.Security
             if (string.IsNullOrEmpty(encryptionPrivateKey))
                 encryptionPrivateKey = _configuration["EncryptionKey"];
 
-            using var provider = new TripleDESCryptoServiceProvider
-            {
-                Key = Encoding.ASCII.GetBytes(encryptionPrivateKey[0..16]),
-                IV = Encoding.ASCII.GetBytes(encryptionPrivateKey[8..16])
-            };
-
+            using var provider = GetEncryptionAlgorithm(encryptionPrivateKey);
             var buffer = Convert.FromBase64String(cipherText);
+            
             return DecryptTextFromMemory(buffer, provider.Key, provider.IV);
         }
 
