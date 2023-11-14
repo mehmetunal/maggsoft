@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Maggsoft.Framework.Middleware
 
         public virtual async Task Invoke(HttpContext context)
         {
-            if(IgnoreResponse(context))
+            if (IgnoreResponse(context))
             {
                 await _next(context);
                 return;
@@ -63,6 +64,10 @@ namespace Maggsoft.Framework.Middleware
                 await new ApiVersioningExceptionHelper(context).Bind(originalBody, response, ex);
             }
             catch (NotFoundException ex)
+            {
+                await new NotFoundExceptionHelper(context).Bind(originalBody, response, ex);
+            }
+            catch (KeyNotFoundException ex)
             {
                 await new NotFoundExceptionHelper(context).Bind(originalBody, response, ex);
             }
