@@ -225,23 +225,65 @@ namespace Maggsoft.Core.Extensions
             return !string.IsNullOrWhiteSpace(value);
         }
 
-
-
-
         /// <summary>
         /// Mask by replacing characters with asterisks.
         /// </summary>
         /// <param name="value">The string</param>
         /// <param name="length">Number of characters to leave untouched.</param>
+        /// <param name="symbol">symbol char default(*)param>
         /// <returns>The mask string</returns>
         [DebuggerStepThrough]
-        public static string Mask(this string value, int length)
+        public static string Mask(this string value, int length, char symbol = '*')
         {
             if (value.HasValue())
-                return value.Substring(0, length) + new String('*', value.Length - length);
+                return value.Substring(0, length) + new String(symbol, value.Length - length);
 
             return value;
         }
+
+        /// <summary>
+        /// MaskRight
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="start">start</param>
+        /// <param name="symbol">symbol</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static string MaskRight(this string value, int start, char symbol = '*')
+        {
+            if (!value.HasValue())
+                return value;
+
+            return string.Concat(new string(symbol, start), value.AsSpan(start));
+        }
+        /// <summary>
+        /// Mask
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <param name="symbol">*</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static string Mask(this string value, int start, int end, string symbol = "*")
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            var result = value;
+
+            if (value.Length < start) return result;
+
+            for (int i = 0; i < end; i++)
+            {
+                result = result.Insert((i + start), symbol);
+            }
+
+            result = result.Length >= (start + (end * 2)) ? result.Remove(start + end, end) : result.Remove(start + end, result.Length - (start + end));
+
+            return result;
+        }
+
 
         private static bool IsWebUrlInternal(string value, bool schemeIsOptional)
         {
