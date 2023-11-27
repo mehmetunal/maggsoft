@@ -12,12 +12,6 @@ using System.Web;
 
 namespace Maggsoft.Core.Extensions
 {
-    public enum StringMaskedPosition
-    {
-        LEFT,
-        RIGHT
-    }
-
     public static class StringExtensions
     {
         public const string CarriageReturnLineFeed = "\r\n";
@@ -231,9 +225,6 @@ namespace Maggsoft.Core.Extensions
             return !string.IsNullOrWhiteSpace(value);
         }
 
-
-
-
         /// <summary>
         /// Mask by replacing characters with asterisks.
         /// </summary>
@@ -289,31 +280,6 @@ namespace Maggsoft.Core.Extensions
             }
 
             result = result.Length >= (start + (end * 2)) ? result.Remove(start + end, end) : result.Remove(start + end, result.Length - (start + end));
-
-            return result;
-        }
-
-        /// <summary>
-        /// Mask Örnek "319393".Mask(1,****); Sonuc = 3****3
-        /// </summary>
-        /// <param name="value">value</param>
-        /// <param name="start">start</param>
-        /// <param name="symbol">symbol *</param>
-        /// <returns></returns>
-        [DebuggerStepThrough]
-        public static string Mask(this string value, int start, string symbol = "*")
-        {
-            if (string.IsNullOrEmpty(value))
-                return string.Empty;
-
-            var result = value;
-            var starLength = symbol.Length;
-
-            if (value.Length < start) return result;
-
-            result = value.Insert(start, symbol);
-
-            result = result.Length >= (start + (starLength * 2)) ? result.Remove(start + starLength, starLength) : result.Remove(start + starLength, result.Length - (start + starLength));
 
             return result;
         }
