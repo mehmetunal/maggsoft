@@ -12,6 +12,12 @@ using System.Web;
 
 namespace Maggsoft.Core.Extensions
 {
+    public enum StringMaskedPosition
+    {
+        LEFT,
+        RIGHT
+    }
+
     public static class StringExtensions
     {
         public const string CarriageReturnLineFeed = "\r\n";
@@ -233,14 +239,83 @@ namespace Maggsoft.Core.Extensions
         /// </summary>
         /// <param name="value">The string</param>
         /// <param name="length">Number of characters to leave untouched.</param>
+        /// <param name="symbol">symbol char default(*)param>
         /// <returns>The mask string</returns>
         [DebuggerStepThrough]
-        public static string Mask(this string value, int length)
+        public static string Mask(this string value, int length, char symbol = '*')
         {
             if (value.HasValue())
-                return value.Substring(0, length) + new String('*', value.Length - length);
+                return value.Substring(0, length) + new String(symbol, value.Length - length);
 
             return value;
+        }
+
+        /// <summary>
+        /// MaskRight
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="start">start</param>
+        /// <param name="symbol">symbol</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static string MaskRight(this string value, int start, char symbol = '*')
+        {
+            if (!value.HasValue())
+                return value;
+
+            return string.Concat(new string(symbol, start), value.AsSpan(start));
+        }
+        /// <summary>
+        /// Mask
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="start">start</param>
+        /// <param name="end">end</param>
+        /// <param name="symbol">*</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static string Mask(this string value, int start, int end, string symbol = "*")
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            var result = value;
+
+            if (value.Length < start) return result;
+
+            for (int i = 0; i < end; i++)
+            {
+                result = result.Insert((i + start), symbol);
+            }
+
+            result = result.Length >= (start + (end * 2)) ? result.Remove(start + end, end) : result.Remove(start + end, result.Length - (start + end));
+
+            return result;
+        }
+
+        /// <summary>
+        /// Mask Örnek "319393".Mask(1,****); Sonuc = 3****3
+        /// </summary>
+        /// <param name="value">value</param>
+        /// <param name="start">start</param>
+        /// <param name="symbol">symbol *</param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        public static string Mask(this string value, int start, string symbol = "*")
+        {
+            if (string.IsNullOrEmpty(value))
+                return string.Empty;
+
+            var result = value;
+            var starLength = symbol.Length;
+
+            if (value.Length < start) return result;
+
+            result = value.Insert(start, symbol);
+
+            result = result.Length >= (start + (starLength * 2)) ? result.Remove(start + starLength, starLength) : result.Remove(start + starLength, result.Length - (start + starLength));
+
+            return result;
         }
 
         private static bool IsWebUrlInternal(string value, bool schemeIsOptional)
@@ -779,7 +854,7 @@ namespace Maggsoft.Core.Extensions
             str = str.Replace(".", "-");
             return str;
         }
-       
+
         private static string RemoveAccent(string text)
         {
             byte[] bytes = Encoding.GetEncoding("Cyrillic").GetBytes(text);

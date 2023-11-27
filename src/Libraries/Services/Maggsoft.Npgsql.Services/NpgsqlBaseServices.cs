@@ -13,6 +13,7 @@ using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -100,6 +101,7 @@ namespace Maggsoft.Npgsql.Services
         public virtual async Task<TResultDto> GetByIdAsync(Guid id)
         {
             var result = await Repository.FindByIdAsync(id);
+            if (result == null) throw new KeyNotFoundException($"Not Fount data");
             return Mapper.Map<TResultDto>(result);
         }
 
