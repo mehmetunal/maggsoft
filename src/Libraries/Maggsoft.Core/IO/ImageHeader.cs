@@ -195,10 +195,8 @@ namespace Maggsoft.Core.IO
 
         private static Size GetDimensionsByGdip(Stream input)
         {
-            using (var b = Image.FromStream(input, false, false))
-            {
-                return new Size(b.Width, b.Height);
-            }
+            using var b = Image.FromStream(input, false, false);
+            return new Size(b.Width, b.Height);
         }
 
         private static Size GetDimensionsFromSvg(Stream input)
