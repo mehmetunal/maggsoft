@@ -17,8 +17,8 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
             response.AddMessage(ex.Message);
-            response.IsError = true;
             response.StatusCode = StatusCodes.Status404NotFound;
+            _context.Response.StatusCode = response.StatusCode;
             await base.Bind(body, response);
         }
     }

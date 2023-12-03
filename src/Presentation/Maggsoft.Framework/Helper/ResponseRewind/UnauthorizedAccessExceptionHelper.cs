@@ -19,7 +19,6 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
             response.AddMessage(ex.Message);
-            response.IsError = true;
             response.StatusCode = StatusCodes.Status401Unauthorized;
             _context.Response.StatusCode = response.StatusCode;
             await base.Bind(body, response);
@@ -37,7 +36,6 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
             response.AddMessage(ex.Message);
-            response.IsError = true;
             response.StatusCode = StatusCodes.Status403Forbidden;
             _context.Response.StatusCode = response.StatusCode;
             await base.Bind(body, response);

@@ -18,6 +18,7 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
             response.SystemError = ex.InnerException == null ? ex.Message : ex.InnerException.Message;
             response.IsError = true;
             response.StatusCode = StatusCodes.Status500InternalServerError;
+            _context.Response.StatusCode = response.StatusCode;
             await base.Bind(body, response);
         }
     }
