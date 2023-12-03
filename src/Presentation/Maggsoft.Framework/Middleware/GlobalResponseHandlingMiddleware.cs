@@ -57,7 +57,7 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
         await output.CopyToAsync(originalBody);
 
         Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("[{0}]:{1}-{2}", DateTime.Now.ToLongTimeString(), context.Request.Method, context.Request.Path);
+        Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}]:{context.Request.Method}-{context.Request.Path}-size limit violation : {context.Request.ContentLength}");
         Console.ForegroundColor = ConsoleColor.White;
 
         context.Response.Body = originalBody;
