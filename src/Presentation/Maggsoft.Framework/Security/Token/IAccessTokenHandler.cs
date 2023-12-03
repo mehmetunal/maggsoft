@@ -3,19 +3,18 @@ using Maggsoft.Framework.Security.Model;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Maggsoft.Framework.Security.Token
+namespace Maggsoft.Framework.Security.Token;
+
+public interface IAccessTokenHandler : IService
 {
-    public interface IAccessTokenHandler : IService
-    {
-        /// <summary>
-        /// Token Almak İçin
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-        AccessTokenDto CreateAccessToken(object user);
+    /// <summary>
+    /// Token Almak İçin
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    AccessTokenDto CreateAccessToken(object user);
 
-        object GetAccessToken();
+    object GetAccessToken();
 
-        IEnumerable<Claim> GetUserClaims();
-    }
+    IEnumerable<Claim> GetUserClaims();
 }

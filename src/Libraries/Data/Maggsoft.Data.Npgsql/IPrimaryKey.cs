@@ -1,10 +1,9 @@
-﻿namespace Maggsoft.Data.Npgsql
-{
-    public interface IPrimaryKey
-    {
-    }
+﻿namespace Maggsoft.Data.Npgsql;
 
-    public interface IPrimaryKey<TKey> : IPrimaryKey
-    {
-    }
+public interface IPrimaryKey
+{
+}
+
+public interface IPrimaryKey<TKey> : IPrimaryKey
+{
 }

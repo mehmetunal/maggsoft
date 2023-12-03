@@ -1,27 +1,26 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Maggsoft.EventBus.Events
+namespace Maggsoft.EventBus.Events;
+
+public class IntegrationEvent
 {
-    public class IntegrationEvent
+    public IntegrationEvent()
     {
-        public IntegrationEvent()
-        {
-            Id = Guid.NewGuid();
-            CreationDate = DateTime.UtcNow;
-        }
-
-        [JsonConstructor]
-        public IntegrationEvent(Guid id, DateTime createDate)
-        {
-            Id = id;
-            CreationDate = createDate;
-        }
-
-        [JsonProperty]
-        public Guid Id { get; private set; }
-
-        [JsonProperty]
-        public DateTime CreationDate { get; private set; }
+        Id = Guid.NewGuid();
+        CreationDate = DateTime.UtcNow;
     }
+
+    [JsonConstructor]
+    public IntegrationEvent(Guid id, DateTime createDate)
+    {
+        Id = id;
+        CreationDate = createDate;
+    }
+
+    [JsonProperty]
+    public Guid Id { get; private set; }
+
+    [JsonProperty]
+    public DateTime CreationDate { get; private set; }
 }

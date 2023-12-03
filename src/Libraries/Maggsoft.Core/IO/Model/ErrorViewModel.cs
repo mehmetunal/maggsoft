@@ -1,8 +1,7 @@
-﻿namespace Maggsoft.Core.IO.Model
+﻿namespace Maggsoft.Core.IO.Model;
+
+public class ErrorViewModel
 {
-    public class ErrorViewModel
-    {
-        public string RequestId { get; set; }
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-    }
+    public string RequestId { get; set; }
+    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 }

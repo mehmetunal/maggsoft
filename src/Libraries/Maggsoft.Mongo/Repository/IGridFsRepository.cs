@@ -10,66 +10,65 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using MongoDB.Driver.Linq;
 
-namespace Maggsoft.Mongo.Repository
+namespace Maggsoft.Mongo.Repository;
+
+public interface IGridFsRepository
 {
-    public interface IGridFsRepository
-    {
-        #region Collection
+    #region Collection
 
-        public IGridFSBucket GridFsBucket { get; }
-        IMongoDatabase Database { get; }
+    public IGridFSBucket GridFsBucket { get; }
+    IMongoDatabase Database { get; }
 
-        #endregion
+    #endregion
 
-        #region CustomProperty
+    #region CustomProperty
 
-        #endregion
+    #endregion
 
-        #region GET
+    #region GET
 
-        Task<List<GridFSFileInfo>> GetAllAsync();
-        List<GridFSFileInfo<ObjectId>> GetAllFiles();
-        List<GridFSFileInfo<ObjectId>> GetAllFiles(int skip, int take);
-        IEnumerable<GridFSFileInfo> GetAllFilesByContentType(string contentType, int skip, int take);
-        Task<IAsyncCursor<GridFSFileInfo>> GetFileById(ObjectId id);
-        #endregion
+    Task<List<GridFSFileInfo>> GetAllAsync();
+    List<GridFSFileInfo<ObjectId>> GetAllFiles();
+    List<GridFSFileInfo<ObjectId>> GetAllFiles(int skip, int take);
+    IEnumerable<GridFSFileInfo> GetAllFilesByContentType(string contentType, int skip, int take);
+    Task<IAsyncCursor<GridFSFileInfo>> GetFileById(ObjectId id);
+    #endregion
 
-        #region ANY
+    #region ANY
 
-        Task<bool> AnyAsync(ObjectId id);
-        Task<bool> AnyAsync(string fileName);
+    Task<bool> AnyAsync(ObjectId id);
+    Task<bool> AnyAsync(string fileName);
 
-        #endregion
+    #endregion
 
-        #region DOWNLOAD
+    #region DOWNLOAD
 
-        Task<GridFSDownloadStream<ObjectId>> DownloadAsync(string fileName);
-        Task<GridFSDownloadStream<ObjectId>> DownloadAsync(ObjectId id);
-        Task DownloadToStreamByNameAsync(string filename, Stream destination);
-        Task DownloadToStreamAsync(ObjectId id, Stream destination);
-        Task DownloadFromStreamAsync(ObjectId id, Stream destination);
-        Task<byte[]> DownloadAsBytesAsync(ObjectId id);
-        Task<byte[]> DownloadAsBytesByNameAsync(string filename);
+    Task<GridFSDownloadStream<ObjectId>> DownloadAsync(string fileName);
+    Task<GridFSDownloadStream<ObjectId>> DownloadAsync(ObjectId id);
+    Task DownloadToStreamByNameAsync(string filename, Stream destination);
+    Task DownloadToStreamAsync(ObjectId id, Stream destination);
+    Task DownloadFromStreamAsync(ObjectId id, Stream destination);
+    Task<byte[]> DownloadAsBytesAsync(ObjectId id);
+    Task<byte[]> DownloadAsBytesByNameAsync(string filename);
 
-        #endregion
+    #endregion
 
-        #region UPLOAD
+    #region UPLOAD
 
-        Task<string> UploadFileAsync(byte[] source, string filename);
-        Task<string>  UploadFileAsync(Stream source, string filename);
-        Task<string> UploadAsync(IFormFile file);
-        Task RenameAsync(string oldFilename, string newFilename);
-        Task RenameAsync(ObjectId id, string newFilename);
+    Task<string> UploadFileAsync(byte[] source, string filename);
+    Task<string>  UploadFileAsync(Stream source, string filename);
+    Task<string> UploadAsync(IFormFile file);
+    Task RenameAsync(string oldFilename, string newFilename);
+    Task RenameAsync(ObjectId id, string newFilename);
 
-        #endregion
+    #endregion
 
-        #region DELETE
+    #region DELETE
 
-        Task DeleteAsync(string fileName);
-        Task DeleteAsync(ObjectId id);
-        void Drop();
-        Task DropAsync();
+    Task DeleteAsync(string fileName);
+    Task DeleteAsync(ObjectId id);
+    void Drop();
+    Task DropAsync();
 
-        #endregion
-    }
+    #endregion
 }

@@ -1,16 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Maggsoft.Core.Base;
+using Maggsoft.Core.Extensions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Net.Mime;
 using System.Text;
-using System.Threading.Tasks;
-using Maggsoft.Core.Extensions;
-using Maggsoft.Core.Base;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
-using System;
-using Azure.Core;
+using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Middleware;
+
+[AttributeUsage(AttributeTargets.All)]
+public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
+
 internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConfiguration configuration)
 {
     private readonly RequestDelegate _next = next;
@@ -18,6 +21,12 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
     private readonly JsonSerializerOptions jsonSettings = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
     public async Task InvokeAsync(HttpContext context)
     {
+        if (IgnoreResponse(context))
+        {
+            await _next(context);
+            return;
+        }
+
         var originalBody = context.Response.Body;
         context.Response.ContentType = MediaTypeNames.Application.Json;
 
@@ -46,7 +55,11 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
 
         await using var output = new MemoryStream(Encoding.UTF8.GetBytes(json));
         await output.CopyToAsync(originalBody);
-        
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("[{0}]:{1}-{2}", DateTime.Now.ToLongTimeString(), context.Request.Method, context.Request.Path);
+        Console.ForegroundColor = ConsoleColor.White;
+
         context.Response.Body = originalBody;
     }
 
@@ -62,5 +75,16 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
         }
 
         return responseBody;
+    }
+
+
+    /// <summary>
+    /// IgnoreResponseRewindMiddlewareAttribute
+    /// </summary>
+    /// <param name="context"></param>
+    /// <returns></returns>
+    private static bool IgnoreResponse(HttpContext context)
+    {
+        return context.GetEndpoint() != null && context.GetEndpoint().Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0;
     }
 }

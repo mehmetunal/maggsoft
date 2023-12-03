@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Maggsoft.EventBus.Abstractions
+namespace Maggsoft.EventBus.Abstractions;
+
+public interface IDynamicIntegrationEventHandler
 {
-    public interface IDynamicIntegrationEventHandler
-    {
-        Task Handle(dynamic eventData);
-    }
+    Task Handle(dynamic eventData);
 }

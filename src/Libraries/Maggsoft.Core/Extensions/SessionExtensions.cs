@@ -2,39 +2,38 @@
 using Newtonsoft.Json;
 using System.Text;
 
-namespace Maggsoft.Core.Extensions
+namespace Maggsoft.Core.Extensions;
+
+/// <summary>
+/// Represents extensions of ISession
+/// </summary>
+public static class SessionExtensions
 {
     /// <summary>
-    /// Represents extensions of ISession
+    /// Set value to Session
     /// </summary>
-    public static class SessionExtensions
+    /// <typeparam name="T">Type of value</typeparam>
+    /// <param name="session">Session</param>
+    /// <param name="key">Key</param>
+    /// <param name="value">Value</param>
+    public static void Set<T>(this ISession session, string key, T value)
     {
-        /// <summary>
-        /// Set value to Session
-        /// </summary>
-        /// <typeparam name="T">Type of value</typeparam>
-        /// <param name="session">Session</param>
-        /// <param name="key">Key</param>
-        /// <param name="value">Value</param>
-        public static void Set<T>(this ISession session, string key, T value)
-        {
-            session.SetString(key, JsonConvert.SerializeObject(value));
-        }
+        session.SetString(key, JsonConvert.SerializeObject(value));
+    }
 
-        /// <summary>
-        /// Get value from session
-        /// </summary>
-        /// <typeparam name="T">Type of value</typeparam>
-        /// <param name="session">Session</param>
-        /// <param name="key">Key</param>
-        /// <returns>Value</returns>
-        public static T Get<T>(this ISession session, string key)
-        {
-            var value = session.GetString(key);
-            if (value == null)
-                return default;
+    /// <summary>
+    /// Get value from session
+    /// </summary>
+    /// <typeparam name="T">Type of value</typeparam>
+    /// <param name="session">Session</param>
+    /// <param name="key">Key</param>
+    /// <returns>Value</returns>
+    public static T Get<T>(this ISession session, string key)
+    {
+        var value = session.GetString(key);
+        if (value == null)
+            return default;
 
-            return JsonConvert.DeserializeObject<T>(value);
-        }
+        return JsonConvert.DeserializeObject<T>(value);
     }
 }

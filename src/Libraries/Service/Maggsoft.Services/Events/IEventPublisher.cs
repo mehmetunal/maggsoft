@@ -1,24 +1,23 @@
 ﻿using System.Threading.Tasks;
 
-namespace Maggsoft.Services.Events
+namespace Maggsoft.Services.Events;
+
+/// <summary>
+/// Represents an event publisher
+/// </summary>
+public partial interface IEventPublisher
 {
     /// <summary>
-    /// Represents an event publisher
+    /// Publish event to consumers
     /// </summary>
-    public partial interface IEventPublisher
-    {
-        /// <summary>
-        /// Publish event to consumers
-        /// </summary>
-        /// <typeparam name="TEvent">Type of event</typeparam>
-        /// <param name="event">Event object</param>
-        void Publish<TEvent>(TEvent @event);
+    /// <typeparam name="TEvent">Type of event</typeparam>
+    /// <param name="event">Event object</param>
+    void Publish<TEvent>(TEvent @event);
 
-        /// <summary>
-        /// Publish event to consumers
-        /// </summary>
-        /// <typeparam name="TEvent">Type of event</typeparam>
-        /// <param name="event">Event object</param>
-        Task PublishAsync<TEvent>(TEvent @event);
-    }
+    /// <summary>
+    /// Publish event to consumers
+    /// </summary>
+    /// <typeparam name="TEvent">Type of event</typeparam>
+    /// <param name="event">Event object</param>
+    Task PublishAsync<TEvent>(TEvent @event);
 }

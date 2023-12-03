@@ -1,27 +1,26 @@
-﻿using System;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
+﻿using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using System;
 
-namespace Maggsoft.Cache.Redis
+namespace Maggsoft.Cache.Redis;
+
+public static class ServiceCollectionExtension
 {
-    public static class ServiceCollectionExtension
+    public static IServiceCollection AddDevDistributedRedisCache(
+        this IServiceCollection services, 
+        Action<RedisCacheOptions> options, 
+        params Type[] assemblyPointerTypes)
     {
-        public static IServiceCollection AddDevDistributedRedisCache(
-            this IServiceCollection services, 
-            Action<RedisCacheOptions> options, 
-            params Type[] assemblyPointerTypes)
-        {
-            var redisOptions = new RedisCacheOptions();
-            options.Invoke(redisOptions);
+        var redisOptions = new RedisCacheOptions();
+        options.Invoke(redisOptions);
 
-            var multiplexer = ConnectionMultiplexer.Connect(redisOptions.Configuration);
-            services.AddStackExchangeRedisCache(options);
-            services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-            services.AddSingleton<IMaggsoftDistributedCache, RedisDistributedCache>();
-            services.DecorateAllInterfacesUsingAspect(assemblyPointerTypes);
-            
-            return services;
-        }
+        var multiplexer = ConnectionMultiplexer.Connect(redisOptions.Configuration);
+        services.AddStackExchangeRedisCache(options);
+        services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+        services.AddSingleton<IMaggsoftDistributedCache, RedisDistributedCache>();
+        services.DecorateAllInterfacesUsingAspect(assemblyPointerTypes);
+        
+        return services;
     }
 }

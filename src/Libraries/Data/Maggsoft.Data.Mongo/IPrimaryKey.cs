@@ -1,11 +1,10 @@
-﻿namespace Maggsoft.Data.Mongo
+﻿namespace Maggsoft.Data.Mongo;
+
+public interface IPrimaryKey
 {
-    public interface IPrimaryKey
-    {
-    }
+}
 
-    public interface IPrimaryKey<TKey> : IPrimaryKey
-    {
+public interface IPrimaryKey<TKey> : IPrimaryKey
+{
 
-    }
 }

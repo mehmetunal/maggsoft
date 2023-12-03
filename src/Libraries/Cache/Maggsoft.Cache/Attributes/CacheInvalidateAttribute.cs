@@ -6,88 +6,87 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Cache.Attributes
+namespace Maggsoft.Cache.Attributes;
+
+[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true)]
+public class CacheInvalidateAttribute: AspectAttribute
 {
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true)]
-    public class CacheInvalidateAttribute: AspectAttribute
+    private readonly string _cacheKey;
+    private readonly Type _targetType;
+    private readonly string _targetMethodName;
+    
+    private ILogger<CacheInvalidateAttribute> _logger;
+    private IMaggsoftDistributedCache _distributedCache;
+
+    #region Ctors
+
+    public CacheInvalidateAttribute()
     {
-        private readonly string _cacheKey;
-        private readonly Type _targetType;
-        private readonly string _targetMethodName;
         
-        private ILogger<CacheInvalidateAttribute> _logger;
-        private IMaggsoftDistributedCache _distributedCache;
+    }
+    
+    public CacheInvalidateAttribute(string cacheKey)
+    {
+        if (string.IsNullOrEmpty(cacheKey))
+            throw new ArgumentNullException(nameof(cacheKey));
 
-        #region Ctors
+        _cacheKey = cacheKey;
+    }
+    
+    public CacheInvalidateAttribute(Type targetType)
+    {
+        if (targetType == null)
+            throw new ArgumentNullException(nameof(targetType));
 
-        public CacheInvalidateAttribute()
-        {
-            
-        }
+        _targetType = targetType;
+    }
+
+    public CacheInvalidateAttribute(Type targetType, string targetMethodName)
+        : this(targetType)
+    {
+        if (string.IsNullOrEmpty(targetMethodName))
+            throw new ArgumentNullException(nameof(targetMethodName));
+
+        _targetMethodName = targetMethodName;
+    }
+
+    #endregion
+    
+    public override void OnSuccess(MethodExecutionArgs args)
+    {
+        string cacheKey = GetCacheName(args);
+        _distributedCache.RemoveByPattern(cacheKey);
         
-        public CacheInvalidateAttribute(string cacheKey)
-        {
-            if (string.IsNullOrEmpty(cacheKey))
-                throw new ArgumentNullException(nameof(cacheKey));
+        _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
+    }
 
-            _cacheKey = cacheKey;
-        }
+    public override async Task OnSuccessAsync(MethodExecutionArgs args)
+    {
+        string cacheKey = GetCacheName(args);
+        await _distributedCache.RemoveByPatternAsync(cacheKey);
         
-        public CacheInvalidateAttribute(Type targetType)
-        {
-            if (targetType == null)
-                throw new ArgumentNullException(nameof(targetType));
+        _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
+    }
 
-            _targetType = targetType;
-        }
-
-        public CacheInvalidateAttribute(Type targetType, string targetMethodName)
-            : this(targetType)
-        {
-            if (string.IsNullOrEmpty(targetMethodName))
-                throw new ArgumentNullException(nameof(targetMethodName));
-
-            _targetMethodName = targetMethodName;
-        }
-
-        #endregion
+    public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
+    {
+        _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
+        if (_distributedCache == null)
+            throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
         
-        public override void OnSuccess(MethodExecutionArgs args)
-        {
-            string cacheKey = GetCacheName(args);
-            _distributedCache.RemoveByPattern(cacheKey);
-            
-            _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
-        }
+        _logger ??= serviceProvider.GetRequiredService<ILogger<CacheInvalidateAttribute>>();
+      
+        return base.LoadDependencies(serviceProvider);
+    }
 
-        public override async Task OnSuccessAsync(MethodExecutionArgs args)
-        {
-            string cacheKey = GetCacheName(args);
-            await _distributedCache.RemoveByPatternAsync(cacheKey);
-            
-            _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
-        }
+    private string GetCacheName(MethodExecutionArgs args)
+    {
+        if (!string.IsNullOrEmpty(_cacheKey))
+            return CacheHelper.GetCacheKey(_cacheKey);
 
-        public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
-        {
-            _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
-            if (_distributedCache == null)
-                throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
-            
-            _logger ??= serviceProvider.GetRequiredService<ILogger<CacheInvalidateAttribute>>();
-          
-            return base.LoadDependencies(serviceProvider);
-        }
+        if (_targetType != null)
+            return CacheHelper.GetCacheKey(_targetType, _targetMethodName);
 
-        private string GetCacheName(MethodExecutionArgs args)
-        {
-            if (!string.IsNullOrEmpty(_cacheKey))
-                return CacheHelper.GetCacheKey(_cacheKey);
-
-            if (_targetType != null)
-                return CacheHelper.GetCacheKey(_targetType, _targetMethodName);
-
-            return CacheHelper.GetCacheKey(args.Method.DeclaringType);
-        }
+        return CacheHelper.GetCacheKey(args.Method.DeclaringType);
     }
 }

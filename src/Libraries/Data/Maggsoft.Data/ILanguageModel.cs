@@ -1,15 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Maggsoft.Data
+namespace Maggsoft.Data;
+
+public interface ILanguageModel<T>
 {
-    public interface ILanguageModel<T>
-    {
-        [Required]
-        T LanguageId { get; set; }
+    [Required]
+    T LanguageId { get; set; }
 
-        [Required]
-        [StringLength(200)]
-        string Content { get; set; }
-    }
+    [Required]
+    [StringLength(200)]
+    string Content { get; set; }
 }

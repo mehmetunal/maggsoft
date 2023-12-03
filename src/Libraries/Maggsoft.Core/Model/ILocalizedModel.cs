@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
 
-namespace Maggsoft.Core.Model
+namespace Maggsoft.Core.Model;
+
+/// <summary>
+/// Represents localized model
+/// </summary>
+public interface ILocalizedModel
+{
+}
+
+/// <summary>
+/// Represents generic localized model
+/// </summary>
+/// <typeparam name="TLocalizedModel">Localized model type</typeparam>
+public interface ILocalizedModel<TLocalizedModel> : ILocalizedModel
 {
     /// <summary>
-    /// Represents localized model
+    /// Gets or sets localized locale models
     /// </summary>
-    public interface ILocalizedModel
-    {
-    }
-
-    /// <summary>
-    /// Represents generic localized model
-    /// </summary>
-    /// <typeparam name="TLocalizedModel">Localized model type</typeparam>
-    public interface ILocalizedModel<TLocalizedModel> : ILocalizedModel
-    {
-        /// <summary>
-        /// Gets or sets localized locale models
-        /// </summary>
-        IList<TLocalizedModel> Locales { get; set; }
-    }
+    IList<TLocalizedModel> Locales { get; set; }
 }

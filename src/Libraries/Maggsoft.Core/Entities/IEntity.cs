@@ -1,6 +1,5 @@
-﻿namespace Maggsoft.Core.Entities
+﻿namespace Maggsoft.Core.Entities;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-    }
 }

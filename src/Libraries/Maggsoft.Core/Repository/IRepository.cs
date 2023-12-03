@@ -5,89 +5,87 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace Maggsoft.Core.Repository
+namespace Maggsoft.Core.Repository;
+
+//@TODO: Repository Write,Read Repository olarak parçalanması gerekecek.
+public interface IRepository<T> where T : IEntity
 {
-    //@TODO: Repository Write,Read Repository olarak parçalanması gerekecek.
-    public interface IRepository<T> where T : IEntity
-    {
-        #region READ
+    #region READ
 
-        #region GET
+    #region GET
 
-        IQueryable<T> Get();
-        Task<IEnumerable<T>> GetAsync();
+    IQueryable<T> Get();
+    Task<IEnumerable<T>> GetAsync();
 
-        IEnumerable<T> FindAll(Expression<Func<T, bool>> where);
-        IList<T> FindAll(Func<IQueryable<T>, IQueryable<T>> func = null);
-        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> where);
-        Task<IList<T>> FindAllAsync(Func<IQueryable<T>, IQueryable<T>> func = null);
+    IEnumerable<T> FindAll(Expression<Func<T, bool>> where);
+    IList<T> FindAll(Func<IQueryable<T>, IQueryable<T>> func = null);
+    Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> where);
+    Task<IList<T>> FindAllAsync(Func<IQueryable<T>, IQueryable<T>> func = null);
 
-        T Find(Expression<Func<T, bool>> where);
-        Task<T> FindAsync(Expression<Func<T, bool>> where);
-        T FindById(object id);
-        Task<T> FindByIdAsync(object id);
+    T Find(Expression<Func<T, bool>> where);
+    Task<T> FindAsync(Expression<Func<T, bool>> where);
+    T FindById(object id);
+    Task<T> FindByIdAsync(object id);
 
 
-        T SingleOrDefault(Expression<Func<T, bool>> @where);
-        Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> @where);
-        T SingleById(object id);
-        Task<T> SingleByIdAsync(object id);
+    T SingleOrDefault(Expression<Func<T, bool>> @where);
+    Task<T> SingleOrDefaultAsync(Expression<Func<T, bool>> @where);
+    T SingleById(object id);
+    Task<T> SingleByIdAsync(object id);
 
-        #endregion
+    #endregion
 
-        #region Count
-        int Count();
-        int Count(Expression<Func<T, bool>> @where);
-        Task<int> CountAsync();
-        Task<int> CountAsync(Expression<Func<T, bool>> @where);
-        #endregion
+    #region Count
+    int Count();
+    int Count(Expression<Func<T, bool>> @where);
+    Task<int> CountAsync();
+    Task<int> CountAsync(Expression<Func<T, bool>> @where);
+    #endregion
 
-        #region Any
-        bool Any();
-        bool Any(Expression<Func<T, bool>> @where);
-        Task<bool> AnyAsync();
-        Task<bool> AnyAsync(Expression<Func<T, bool>> @where);
-        #endregion
+    #region Any
+    bool Any();
+    bool Any(Expression<Func<T, bool>> @where);
+    Task<bool> AnyAsync();
+    Task<bool> AnyAsync(Expression<Func<T, bool>> @where);
+    #endregion
 
-        #endregion
+    #endregion
 
-        #region WRITE
+    #region WRITE
 
-        #region ADD
+    #region ADD
 
-        T Add(T entity);
-        Task<T> AddAsync(T entity);
-        void AddRange(IEnumerable<T> entities);
-        Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
+    T Add(T entity);
+    Task<T> AddAsync(T entity);
+    void AddRange(IEnumerable<T> entities);
+    Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
 
-        #endregion
+    #endregion
 
-        #region UPDATE
+    #region UPDATE
 
-        T Update(T entity);
-        Task<T> UpdateAsync(T entity);
-        IEnumerable<T> UpdateRange(IEnumerable<T> entities);
-        Task<IEnumerable<T>> UpdateRangeAsync(IEnumerable<T> entities);
+    T Update(T entity);
+    Task<T> UpdateAsync(T entity);
+    IEnumerable<T> UpdateRange(IEnumerable<T> entities);
+    Task<IEnumerable<T>> UpdateRangeAsync(IEnumerable<T> entities);
 
-        #endregion
+    #endregion
 
-        #region DELETE
+    #region DELETE
 
-        T Delete(T entity);
-        Task<T> DeleteAsync(T entity);
+    T Delete(T entity);
+    Task<T> DeleteAsync(T entity);
 
-        void Delete(Expression<Func<T, bool>> where);
-        Task DeleteAsync(Expression<Func<T, bool>> where);
+    void Delete(Expression<Func<T, bool>> where);
+    Task DeleteAsync(Expression<Func<T, bool>> where);
 
-        void Delete(IEnumerable<T> entities);
-        Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities);
+    void Delete(IEnumerable<T> entities);
+    Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities);
 
-        T Delete(object id);
-        Task<T> DeleteAsync(object id);
+    T Delete(object id);
+    Task<T> DeleteAsync(object id);
 
-        #endregion
+    #endregion
 
-        #endregion
-
-    }
+    #endregion
 }

@@ -1,8 +1,7 @@
-﻿namespace Maggsoft.Core.IO.Model
+﻿namespace Maggsoft.Core.IO.Model;
+
+public class ImageSize
 {
-    public class ImageSize
-    {
-        public int Height { get; set; }
-        public int Width { get; set; }
-    }
+    public int Height { get; set; }
+    public int Width { get; set; }
 }

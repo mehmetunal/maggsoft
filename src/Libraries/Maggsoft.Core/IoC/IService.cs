@@ -1,6 +1,5 @@
-﻿namespace Maggsoft.Core.IoC
+﻿namespace Maggsoft.Core.IoC;
+
+public interface IService
 {
-    public interface IService
-    {
-    }
 }

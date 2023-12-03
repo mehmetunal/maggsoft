@@ -1,15 +1,14 @@
-﻿using System.Threading;
-using Serilog.Core;
+﻿using Serilog.Core;
 using Serilog.Events;
+using System.Threading;
 
-namespace Maggsoft.Logging.Logging
+namespace Maggsoft.Logging.Logging;
+
+public class ThreadIdEnricher : ILogEventEnricher
 {
-    public class ThreadIdEnricher : ILogEventEnricher
+    public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {
-        public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
-        {
-            logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
-                "ThreadId", Thread.CurrentThread.ManagedThreadId));
-        }
+        logEvent.AddPropertyIfAbsent(propertyFactory.CreateProperty(
+            "ThreadId", Thread.CurrentThread.ManagedThreadId));
     }
 }

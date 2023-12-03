@@ -4,86 +4,85 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Services.Events
+namespace Maggsoft.Services.Events;
+
+/// <summary>
+/// Represents the event publisher implementation
+/// </summary>
+public partial class EventPublisher : IEventPublisher
 {
+    #region Methods
+
     /// <summary>
-    /// Represents the event publisher implementation
+    /// Publish event to consumers
     /// </summary>
-    public partial class EventPublisher : IEventPublisher
+    /// <typeparam name="TEvent">Type of event</typeparam>
+    /// <param name="event">Event object</param>
+    public virtual void Publish<TEvent>(TEvent @event)
     {
-        #region Methods
+        //get all event consumers
+        var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
 
-        /// <summary>
-        /// Publish event to consumers
-        /// </summary>
-        /// <typeparam name="TEvent">Type of event</typeparam>
-        /// <param name="event">Event object</param>
-        public virtual void Publish<TEvent>(TEvent @event)
+        foreach (var consumer in consumers)
         {
-            //get all event consumers
-            var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
-
-            foreach (var consumer in consumers)
+            try
             {
+                //try to handle published event
+                consumer.HandleEvent(@event);
+            }
+            catch (Exception exception)
+            {
+                //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
                 try
                 {
-                    //try to handle published event
-                    consumer.HandleEvent(@event);
+                    EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
                 }
-                catch (Exception exception)
+                catch
                 {
-                    //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
-                    try
-                    {
-                        EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
+                    // ignored
                 }
             }
         }
-
-
-        /// <summary>
-        /// Publish event to consumers
-        /// </summary>
-        /// <typeparam name="TEvent">Type of event</typeparam>
-        /// <param name="event">Event object</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task PublishAsync<TEvent>(TEvent @event)
-        {
-            //get all event consumers
-            var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
-
-            foreach (var consumer in consumers)
-            {
-                try
-                {
-                    //try to handle published event
-                    await consumer.HandleEventAsync(@event);
-                }
-                catch (Exception exception)
-                {
-                    //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
-                    try
-                    {
-                        var logger = EngineContext.Current.Resolve<ILogger>();
-                        if (logger == null)
-                            return;
-
-                        EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
-                    }
-                    catch
-                    {
-                        // ignored
-                    }
-                }
-            }
-        }
-
-
-        #endregion
     }
+
+
+    /// <summary>
+    /// Publish event to consumers
+    /// </summary>
+    /// <typeparam name="TEvent">Type of event</typeparam>
+    /// <param name="event">Event object</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
+    public virtual async Task PublishAsync<TEvent>(TEvent @event)
+    {
+        //get all event consumers
+        var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
+
+        foreach (var consumer in consumers)
+        {
+            try
+            {
+                //try to handle published event
+                await consumer.HandleEventAsync(@event);
+            }
+            catch (Exception exception)
+            {
+                //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
+                try
+                {
+                    var logger = EngineContext.Current.Resolve<ILogger>();
+                    if (logger == null)
+                        return;
+
+                    EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
+                }
+                catch
+                {
+                    // ignored
+                }
+            }
+        }
+    }
+
+
+    #endregion
 }

@@ -1,7 +1,6 @@
-﻿namespace Maggsoft.Data
-{
-    public interface ILocalizedEntity
-    {
+﻿namespace Maggsoft.Data;
 
-    }
+public interface ILocalizedEntity
+{
+
 }

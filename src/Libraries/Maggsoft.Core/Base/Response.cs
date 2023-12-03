@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Maggsoft.Core.Base
+namespace Maggsoft.Core.Base;
+
+public partial class Response<T> : Response where T : class
 {
-    public partial class Response<T> : Response where T : class
+    private T _result;
+
+    public Response()
     {
-        private T _result;
-
-        public Response()
-        {
-            Result = Activator.CreateInstance<T>();
-        }
-
-        public T Result
-        {
-            get => _result;
-            set => _result = value;
-        }
+        Result = Activator.CreateInstance<T>();
     }
 
-    public class Response : IResponse
+    public T Result
     {
-        public Response()
-        {
-            ValidationMessages = new List<string>();
-        }
-
-        public string Messages { get; set; }
-        public string SystemError { get; set; }
-        public List<string> ValidationMessages { get; set; }
-        public int StatusCode { get; set; }
-        public DateTime TimeStamp { get; } = DateTime.UtcNow;
-        public bool Success { get; set; }
-        public bool IsError => !string.IsNullOrEmpty(SystemError);
-        public string ApiVersion { get; set; }
+        get => _result;
+        set => _result = value;
     }
+}
+
+public class Response : IResponse
+{
+    public Response()
+    {
+        ValidationMessages = new List<string>();
+    }
+
+    public string Messages { get; set; }
+    public string SystemError { get; set; }
+    public List<string> ValidationMessages { get; set; }
+    public int StatusCode { get; set; }
+    public DateTime TimeStamp { get; } = DateTime.UtcNow;
+    public bool Success { get; set; }
+    public bool IsError => !string.IsNullOrEmpty(SystemError);
+    public string ApiVersion { get; set; }
 }

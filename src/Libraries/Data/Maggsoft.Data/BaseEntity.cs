@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Maggsoft.Data;
 
-namespace Maggsoft.Data
+public partial class BaseEntity : IBaseEntity
 {
-    public partial class BaseEntity : IBaseEntity
-    {
-    }
 }

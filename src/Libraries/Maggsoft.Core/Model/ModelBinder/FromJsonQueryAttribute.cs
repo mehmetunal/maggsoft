@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Maggsoft.Core.Model.ModelBinder
+namespace Maggsoft.Core.Model.ModelBinder;
+
+public class FromJsonQueryAttribute : ModelBinderAttribute
 {
-    public class FromJsonQueryAttribute : ModelBinderAttribute
+    public FromJsonQueryAttribute()
     {
-        public FromJsonQueryAttribute()
-        {
-            BinderType = typeof(JsonQueryBinder);
-        }
+        BinderType = typeof(JsonQueryBinder);
     }
 }

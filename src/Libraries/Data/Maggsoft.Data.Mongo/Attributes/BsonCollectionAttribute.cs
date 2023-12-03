@@ -1,15 +1,11 @@
 ﻿using System;
 
-namespace Maggsoft.Data.Mongo.Attributes
+namespace Maggsoft.Data.Mongo.Attributes;
+
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class BsonCollectionAttribute(string collectionName) : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public class BsonCollectionAttribute : Attribute
-    {
-        private string _collectionName;
-        public BsonCollectionAttribute(string collectionName)
-        {
-            _collectionName = collectionName;
-        }
-        public string CollectionName => _collectionName;
-    }
+    private readonly string _collectionName = collectionName;
+
+    public string CollectionName => _collectionName;
 }
