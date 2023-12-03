@@ -3,6 +3,7 @@ using System.IO;
 using Maggsoft.Core.Base;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Maggsoft.Core.Extensions;
 
 namespace Maggsoft.Framework.Helper.ResponseRewind
 {
@@ -17,7 +18,7 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
 
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
-            response.SystemError = ex.Message;
+            response.AddMessage(ex.Message);
             response.IsError = true;
             response.StatusCode = StatusCodes.Status401Unauthorized;
             _context.Response.StatusCode = response.StatusCode;
@@ -35,7 +36,7 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
 
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
-            response.SystemError = ex.Message;
+            response.AddMessage(ex.Message);
             response.IsError = true;
             response.StatusCode = StatusCodes.Status403Forbidden;
             _context.Response.StatusCode = response.StatusCode;

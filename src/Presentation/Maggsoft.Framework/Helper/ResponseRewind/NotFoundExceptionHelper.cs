@@ -1,4 +1,5 @@
 ﻿using Maggsoft.Core.Base;
+using Maggsoft.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
@@ -15,7 +16,7 @@ namespace Maggsoft.Framework.Helper.ResponseRewind
         }
         public async Task Bind(Stream body, Response<object> response, Exception ex)
         {
-            response.SystemError = ex.Message;
+            response.AddMessage(ex.Message);
             response.IsError = true;
             response.StatusCode = StatusCodes.Status404NotFound;
             await base.Bind(body, response);
