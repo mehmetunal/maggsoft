@@ -23,17 +23,16 @@ namespace Maggsoft.Core.Base
     {
         public Response()
         {
-            Messages = new List<string>();
             ValidationMessages = new List<string>();
         }
 
-        public List<string> Messages { get; set; }
+        public string Messages { get; set; }
         public string SystemError { get; set; }
         public List<string> ValidationMessages { get; set; }
         public int StatusCode { get; set; }
         public DateTime TimeStamp { get; } = DateTime.UtcNow;
         public bool Success { get; set; }
-        public bool IsError { get; set; }
+        public bool IsError => !string.IsNullOrEmpty(SystemError);
         public string ApiVersion { get; set; }
     }
 }

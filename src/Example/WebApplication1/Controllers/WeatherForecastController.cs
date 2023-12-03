@@ -1,4 +1,6 @@
+using Maggsoft.Framework.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace WebApplication1.Controllers
 {
@@ -20,14 +22,24 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            => Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
-        }
+
+        [HttpGet]
+        [Route("mesaj")]
+        public void Mesaj() => throw new ArgumentNullException($"{nameof(Get)} is not null");
+
+        [HttpGet]
+        [Route("smesaj")]
+        public void SMesaj() => throw new Exception($"{nameof(Get)} is not null");
+
+        [HttpGet]
+        [Route("vmesaj")]
+        public void VMesaj() => throw new ModelStateException($"{nameof(Get)} is not null");
     }
 }

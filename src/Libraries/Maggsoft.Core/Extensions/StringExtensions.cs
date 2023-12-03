@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -806,6 +807,22 @@ namespace Maggsoft.Core.Extensions
             return input;
         }
 
+
+        [DebuggerStepThrough]
+        public static bool TryParseJson<T>(this string obj, out T result)
+        {
+            try
+            {
+                JsonSerializerOptions jsonSettings = new () { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
+                result = JsonSerializer.Deserialize<T>(obj, jsonSettings);
+                return true;
+            }
+            catch (Exception)
+            {
+                result = default(T);
+                return false;
+            }
+        }
         #endregion
 
     }

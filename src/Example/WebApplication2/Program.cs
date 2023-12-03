@@ -1,9 +1,18 @@
+
+using Microsoft.Extensions.DependencyInjection;
+using WebApplication2.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 
 var app = builder.Build();
 
@@ -14,12 +23,26 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<GlobalResponseHandlingMiddleware>();
+
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
+
+
+app.MapGet("/text", () =>
+{
+    throw new KeyNotFoundException("NotFound");
+})
+.WithName("GetTest")
+.WithOpenApi();
+
+
 
 app.MapGet("/weatherforecast", () =>
 {
@@ -38,6 +61,9 @@ app.MapGet("/weatherforecast", () =>
 
 app.MapGet("/weatherforecast1", () =>
 {
+
+    throw new Exception("asdad");
+
     var forecast = Enumerable.Range(1, 5).Select(index =>
        new WeatherForecast
        (

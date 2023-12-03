@@ -48,6 +48,12 @@ namespace Maggsoft.Framework.Systems
 
             services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter(); });
 
+            services.AddLogging();
+
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+
+            services.AddProblemDetails();
+
             return services;
         }
 
@@ -80,7 +86,7 @@ namespace Maggsoft.Framework.Systems
 
             app.UseCorsConfig();
 
-            app.UseMiddleware<ResponseRewindMiddleware>();
+            app.UseMiddleware<GlobalResponseHandlingMiddleware>();
 
             app.UseExceptionHandler(c => c.Run(async context =>
             {

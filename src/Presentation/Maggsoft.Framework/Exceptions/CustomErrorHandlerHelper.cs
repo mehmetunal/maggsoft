@@ -55,7 +55,6 @@ namespace Maggsoft.Framework.Exceptions
 
                 response.ApiVersion = $"{majorVersionConfig}.{minorVersionConfig}";
                 response.SystemError = details;
-                response.IsError = true;
                 response.StatusCode = StatusCodes.Status500InternalServerError;
 
                 var stream = httpContext.Response.Body;
