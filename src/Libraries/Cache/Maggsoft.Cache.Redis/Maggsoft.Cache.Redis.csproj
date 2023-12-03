@@ -1,26 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-	  <Copyright>Copyright © Maggsoft, Ltd</Copyright>
-	  <Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-	  <Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
-	  <Version>0.1.1.0</Version>
-	  <Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-	  <PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
-	  <PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-	  <RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-	  <RepositoryType>Git</RepositoryType>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
+		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
+		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<Version>1.0.0.0</Version>
+		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
+		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
+		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
+		<RepositoryType>Git</RepositoryType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.5.124" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.9" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MessagePack" Version="2.5.124" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.9" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Maggsoft.Cache\Maggsoft.Cache.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Maggsoft.Cache\Maggsoft.Cache.csproj" />
+	</ItemGroup>
 
 </Project>
