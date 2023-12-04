@@ -26,7 +26,7 @@ public class Result : IResult
     {
         ValidationMessages = [];
     }
-    private Result(bool isSuccess, Error error)
+    protected internal Result(bool isSuccess, Error error)
     {
         if (isSuccess && error != Error.None ||
             !isSuccess && error == Error.None)
@@ -38,9 +38,6 @@ public class Result : IResult
         ErrorMessage = error;
     }
 
-    public static Result Success() => new(true, Error.None);
-    public static Result Failure(Error error) => new(false, error);
-
     public object ErrorMessage { get; set; }
     public List<string> ValidationMessages { get; set; }
     public int StatusCode { get; set; }
@@ -48,4 +45,9 @@ public class Result : IResult
     public bool IsSuccess { get; set; }
     public bool IsFailure => !IsSuccess;
     public string ApiVersion { get; set; }
+
+
+
+    public static Result Success() => new(true, Error.None);
+    public static Result Failure(Error error) => new(false, error);
 }
