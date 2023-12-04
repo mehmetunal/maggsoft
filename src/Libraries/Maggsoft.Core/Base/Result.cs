@@ -46,8 +46,6 @@ public class Result : IResult
     public bool IsFailure => !IsSuccess;
     public string ApiVersion { get; set; }
 
-
-
     public static Result Success() => new(true, Error.None);
     public static Result Failure(Error error) => new(false, error);
 }
