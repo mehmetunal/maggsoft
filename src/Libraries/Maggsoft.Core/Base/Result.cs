@@ -37,8 +37,8 @@ public class Result : IResult
         IsSuccess = isSuccess;
         ErrorMessage = error;
     }
-    public static Result Success() => new(true, Error.None);
 
+    public static Result Success() => new(true, Error.None);
     public static Result Failure(Error error) => new(false, error);
 
     public object ErrorMessage { get; set; }
