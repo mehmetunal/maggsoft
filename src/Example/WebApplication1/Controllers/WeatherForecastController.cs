@@ -1,3 +1,5 @@
+using Maggsoft.Core.Base;
+using Maggsoft.Core.Model;
 using Maggsoft.Framework.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -41,5 +43,23 @@ namespace WebApplication1.Controllers
         [HttpGet]
         [Route("vmesaj")]
         public void VMesaj() => throw new ModelStateException($"{nameof(Get)} is not null");
+
+        [HttpGet]
+        [Route("emesaj")]
+        public Result EMesaj() => Result.Failure(FollowerErrors.SameUser);
+    }
+    public static class FollowerErrors
+    {
+        public static Error NotFound(Guid id) => new Error(
+       "Followers.NotFound", $"The follower with Id '{id}' was not found");
+
+        public static readonly Error SameUser = new Error(
+            "Followers.SameUser", "Can't follow yourself");
+
+        public static readonly Error NonPublicProfile = new Error(
+            "Followers.NonPublicProfile", "Can't follow non-public profiles");
+
+        public static readonly Error AlreadyFollowing = new Error(
+            "Followers.AlreadyFollowing", "Already following");
     }
 }

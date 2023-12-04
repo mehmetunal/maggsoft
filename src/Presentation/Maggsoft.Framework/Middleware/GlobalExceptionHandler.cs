@@ -1,5 +1,7 @@
 ﻿using Maggsoft.Core.Base;
 using Maggsoft.Core.Exceptions;
+using Maggsoft.Core.Extensions;
+using Maggsoft.Core.Model;
 using Maggsoft.Framework.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +31,7 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
             exception.InnerException,
             exception.InnerException?.Message);
 
-        Response<object> response = new();
+        Result<object> response = new();
 
         if (exception is ArgumentException || exception is ArgumentNullException)
             httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -50,7 +53,7 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
         }
         else if (exception is ApiVersioningException)
             httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        else if (exception is NotFoundException || exception is KeyNotFoundException ||exception is NotFoundException)
+        else if (exception is NotFoundException || exception is KeyNotFoundException || exception is NotFoundException)
             httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
         else if (exception is Exception || exception is FileLoadException || exception is MaggsoftException)
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -59,19 +62,27 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
         else if (exception is UnauthorizedAccessException)
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
 
-        var isError = httpContext.Response.StatusCode == StatusCodes.Status500InternalServerError;
+        if (response.ValidationMessages.Count == 0)
+        {
+            var errorMessage = _environment.IsDevelopment()
+                ? exception.InnerException != null ? exception.InnerException.Message
+                : exception.Message : exception.Message;
 
-        var errorMessage = _environment.IsDevelopment()
-            ? exception.InnerException != null ? exception.InnerException.Message
-            : exception.Message : exception.Message;
+            if (errorMessage.TryParseJson(out Error error))
+            {
+                response.ErrorMessage = error; 
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            }
+            else
+                response.ErrorMessage = errorMessage;
+        }
 
         var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;
         var minorVersionConfig = _configuration.GetSection("ApiVersion:MinorVersion")?.Value;
 
         response.ApiVersion = $"{majorVersionConfig}.{minorVersionConfig}";
         response.StatusCode = httpContext.Response.StatusCode;
-        response.Messages = isError == false ? errorMessage : null;
-        response.SystemError = isError ? errorMessage : null;
+        response.IsSuccess = false;
 
         await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
 

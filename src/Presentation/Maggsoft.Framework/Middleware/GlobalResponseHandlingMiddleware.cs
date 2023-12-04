@@ -32,7 +32,7 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
 
         var json = await FormatResponse(context);
 
-        _ = json.TryParseJson(out Response<object> response);
+        _ = json.TryParseJson(out Result<object> response);
         if (response == null)
         {
             var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;
@@ -40,9 +40,9 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
 
             response = new()
             {
-                Success = true,
+                IsSuccess = true,
                 StatusCode = StatusCodes.Status200OK,
-                Result = JsonSerializer.Deserialize<object>(json, jsonSettings),
+                Data = JsonSerializer.Deserialize<object>(json, jsonSettings),
                 ApiVersion = $"{majorVersionConfig}.{minorVersionConfig}"
             };
 
