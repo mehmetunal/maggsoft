@@ -46,8 +46,13 @@ internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, ICo
                 ApiVersion = $"{majorVersionConfig}.{minorVersionConfig}"
             };
 
-            context.Response.StatusCode = response.StatusCode;
         }
+        if (response.StatusCode == default)
+        {
+            response.StatusCode = StatusCodes.Status200OK;
+        }
+
+        context.Response.StatusCode = response.StatusCode;
 
         json = JsonSerializer.Serialize(response, jsonSettings);
 

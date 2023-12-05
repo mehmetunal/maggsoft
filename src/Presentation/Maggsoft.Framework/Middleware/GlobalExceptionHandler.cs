@@ -70,11 +70,11 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
 
             if (errorMessage.TryParseJson(out Error error))
             {
-                response.ErrorMessage = error; 
+                response.Message = error; 
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
             else
-                response.ErrorMessage = errorMessage;
+                response.Message = errorMessage;
         }
 
         var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;

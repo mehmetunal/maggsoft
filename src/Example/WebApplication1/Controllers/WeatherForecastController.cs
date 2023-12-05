@@ -1,4 +1,4 @@
-using Maggsoft.Core.Base;
+﻿using Maggsoft.Core.Base;
 using Maggsoft.Core.Model;
 using Maggsoft.Framework.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -23,17 +23,23 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public Result Get()
         {
-            Result.Success();
             var model = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
-            .ToArray();
-            return model;
+            .ToList();
+
+            //return Result.Success();
+            //return Result.Success(FollowerMessage.OK);
+
+            //return Result<IList<WeatherForecast>>.Success(model,SuccessMessage.None);
+            return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);
+
+            //return model;
         }
 
         [HttpGet]
@@ -54,16 +60,17 @@ namespace WebApplication1.Controllers
     }
     public static class FollowerErrors
     {
-        public static Error NotFound(Guid id) => new Error(
-       "Followers.NotFound", $"The follower with Id '{id}' was not found");
+        public static Error NotFound(Guid id) => new("Followers.NotFound", $"The follower with Id '{id}' was not found");
 
-        public static readonly Error SameUser = new Error(
-            "Followers.SameUser", "Can't follow yourself");
+        public static readonly Error SameUser = new ("Followers.SameUser", "Can't follow yourself");
 
-        public static readonly Error NonPublicProfile = new Error(
-            "Followers.NonPublicProfile", "Can't follow non-public profiles");
+        public static readonly Error NonPublicProfile = new("Followers.NonPublicProfile", "Can't follow non-public profiles");
 
-        public static readonly Error AlreadyFollowing = new Error(
-            "Followers.AlreadyFollowing", "Already following");
+        public static readonly Error AlreadyFollowing = new("Followers.AlreadyFollowing", "Already following");
+    }
+
+    public static class FollowerMessage
+    {
+        public static readonly SuccessMessage OK = new("Ok", "İşlem Başarılı");
     }
 }
