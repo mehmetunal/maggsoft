@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public Result Get()
+        public IReadOnlyList<WeatherForecast> Get()
         {
             var model = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -35,11 +35,11 @@ namespace WebApplication1.Controllers
 
             //return Result.Success();
             //return Result.Success(FollowerMessage.OK);
-            return Result.Success(StatusCodes.Status200OK, FollowerMessage.OK);
+           // return Result<IReadOnlyList<WeatherForecast>>.Success(model,StatusCodes.Status226IMUsed, FollowerMessage.OK);
             //return Result<IList<WeatherForecast>>.Success(model,SuccessMessage.None);
-            return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);
+            //return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);
 
-            //return model;
+            return model;
         }
 
         [HttpGet]
