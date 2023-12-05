@@ -35,7 +35,7 @@ namespace WebApplication1.Controllers
 
             //return Result.Success();
             //return Result.Success(FollowerMessage.OK);
-
+            return Result.Success(StatusCodes.Status200OK, FollowerMessage.OK);
             //return Result<IList<WeatherForecast>>.Success(model,SuccessMessage.None);
             return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);
 
