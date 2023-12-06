@@ -263,10 +263,10 @@ public sealed class NpgsqlRepository<T> : INpgsqlRepository<T> where T : BaseEnt
         });
 
     public void Delete(Expression<Func<T, bool>> @where)
-        => Delete(Find(where));
+        => _dbSet.Where(@where).ExecuteDelete();
 
     public async Task DeleteAsync(Expression<Func<T, bool>> @where)
-        => await DeleteAsync(await FindAsync(where));
+        => await _dbSet.Where(@where).ExecuteDeleteAsync();
 
     public void Delete(IEnumerable<T> entities)
         => _dbSet.RemoveRange(entities);
