@@ -73,9 +73,9 @@ namespace Maggsoft.Framework.HttpClientApi
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            var jObject = JObject.Parse(JsonConvert.DeserializeObject<Response<object>>(responseBody).Result.ToString())["Data"];
-            if (jObject.Count() == 0)
-                return await Task.FromResult(Activator.CreateInstance<List<T>>());
+            var jObject = JsonConvert.DeserializeObject<Response<object>>(responseBody).Result.ToString();
+            if (string.IsNullOrEmpty(jObject))
+                return Activator.CreateInstance<List<T>>();
 
             var result = JsonConvert.DeserializeObject<List<T>>(jObject.ToString());
 
@@ -88,8 +88,8 @@ namespace Maggsoft.Framework.HttpClientApi
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            var jObject = JObject.Parse(JsonConvert.DeserializeObject<Response<object>>(responseBody).Result.ToString())["Data"];
-            if (jObject.Count() == 0)
+            var jObject = JsonConvert.DeserializeObject<Response<object>>(responseBody).Result.ToString();
+            if (string.IsNullOrEmpty(jObject))
                 return Activator.CreateInstance<T>();
 
             var result = JsonConvert.DeserializeObject<T>(jObject.ToString());
@@ -116,7 +116,7 @@ namespace Maggsoft.Framework.HttpClientApi
 
         public async Task<Response<T>> PostAsJsonAsync<T>(string url, T body) where T : class
         {
-            HttpResponseMessage obj = await this._httpClient.PostAsJsonAsync(url, body);
+            HttpResponseMessage obj = await _httpClient.PostAsJsonAsync(url, body);
             obj.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<Response<T>>(await obj.Content.ReadAsStringAsync());
@@ -127,7 +127,7 @@ namespace Maggsoft.Framework.HttpClientApi
             var bodyJson = JsonConvert.SerializeObject(body);
             var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage obj = await this._httpClient.PostAsync(url, stringContent);
+            HttpResponseMessage obj = await _httpClient.PostAsync(url, stringContent);
             obj.EnsureSuccessStatusCode();
 
             return JsonConvert.DeserializeObject<Response<T>>(await obj.Content.ReadAsStringAsync());
@@ -135,7 +135,7 @@ namespace Maggsoft.Framework.HttpClientApi
 
         public async Task<Response<object>> PostAsync(string url, HttpContent content)
         {
-            HttpResponseMessage obj = await this._httpClient.PostAsync(url, content);
+            HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
             obj.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<Response<object>>(await obj.Content.ReadAsStringAsync());
         }
