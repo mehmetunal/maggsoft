@@ -37,7 +37,7 @@ namespace Maggsoft.Framework.HttpClientApi
                     _httpClient.DefaultRequestHeaders.Add("X-LanguageID", _languageId.ToString());
 
                 var token = GetToken();
-                if (token != null)
+                if (!string.IsNullOrEmpty(token))
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var baseAddress = _configuration["HttpClientBaseAddress"];
