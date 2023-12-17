@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.HttpClientApi
@@ -20,7 +22,7 @@ namespace Maggsoft.Framework.HttpClientApi
         private readonly HttpClient _httpClient;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
-        private decimal _languageId = 0;
+        private decimal? _languageId = 0;
 
         #endregion
 
@@ -39,7 +41,9 @@ namespace Maggsoft.Framework.HttpClientApi
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var baseAddress = _configuration["HttpClientBaseAddress"];
-                if (string.IsNullOrEmpty(baseAddress)) throw new ArgumentNullException("HttpClientBaseAddress");
+                if (string.IsNullOrEmpty(baseAddress)) 
+                    throw new ArgumentNullException("HttpClientBaseAddress");
+
                 _httpClient.BaseAddress = new Uri(baseAddress);
             }
 
@@ -61,17 +65,6 @@ namespace Maggsoft.Framework.HttpClientApi
         public virtual async Task PingAsync()
         {
             await _httpClient.GetStringAsync("/");
-        }
-
-        public virtual async Task<string> GetResource(string resourceKey)
-        {
-            var uri = $"{_languageId}/locale-string/{resourceKey}";
-
-            var responseString = await _httpClient.GetStringAsync(uri);
-
-            var response = JsonConvert.DeserializeObject<Task<string>>(responseString).Result;
-
-            return response;
         }
 
         public virtual async Task<List<T>> GetAllAsync<T>(string url)
@@ -121,6 +114,33 @@ namespace Maggsoft.Framework.HttpClientApi
             }
         }
 
+        public async Task<Response<T>> PostAsJsonAsync<T>(string url, T body) where T : class
+        {
+            HttpResponseMessage obj = await this._httpClient.PostAsJsonAsync(url, body);
+            obj.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<Response<T>>(await obj.Content.ReadAsStringAsync());
+        }
+
+        public async Task<Response<T>> PostAsync<T>(string url, T body) where T : class
+        {
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage obj = await this._httpClient.PostAsync(url, stringContent);
+            obj.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<Response<T>>(await obj.Content.ReadAsStringAsync());
+        }
+
+        public async Task<Response<object>> PostAsync(string url, HttpContent content)
+        {
+            HttpResponseMessage obj = await this._httpClient.PostAsync(url, content);
+            obj.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Response<object>>(await obj.Content.ReadAsStringAsync());
+        }
+
+
         private string GetToken()
         {
             var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
@@ -131,12 +151,12 @@ namespace Maggsoft.Framework.HttpClientApi
             return token;
         }
 
-        public decimal GetLang()
+        public decimal? GetLang()
         {
             var languageId = _httpContextAccessor.HttpContext.Request.Headers["X-LanguageID"].FirstOrDefault();
 
             if (string.IsNullOrEmpty(languageId))
-                throw new ArgumentNullException("X-LanguageID");
+                return null;
 
             return decimal.Parse(languageId);
         }
