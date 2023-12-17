@@ -41,7 +41,7 @@ namespace Maggsoft.Framework.HttpClientApi
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var baseAddress = _configuration["HttpClientBaseAddress"];
-                if (string.IsNullOrEmpty(baseAddress)) 
+                if (string.IsNullOrEmpty(baseAddress))
                     throw new ArgumentNullException("HttpClientBaseAddress");
 
                 _httpClient.BaseAddress = new Uri(baseAddress);
@@ -141,15 +141,7 @@ namespace Maggsoft.Framework.HttpClientApi
         }
 
 
-        private string GetToken()
-        {
-            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
-
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentNullException("Authorization");
-
-            return token;
-        }
+        private string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
 
         public decimal? GetLang()
         {
