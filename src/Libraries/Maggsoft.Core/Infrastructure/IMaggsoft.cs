@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace Maggsoft.Core.Infrastructure
 {
-    public interface IEngine
+    public interface IMaggsoft
     {
         /// <summary>
         /// Configure HTTP request pipeline
