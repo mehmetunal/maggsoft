@@ -21,10 +21,10 @@ namespace Maggsoft.ExampleTest.Services
         public readonly INpgsqlRepository<User> Repository;
         public UserService()
         {
-            Mapper = EngineContext.Current.Resolve<IMapper>()
+            Mapper = MaggsoftContext.Current.Resolve<IMapper>()
                     ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
 
-            Repository = EngineContext.Current.Resolve<INpgsqlRepository<User>>()
+            Repository = MaggsoftContext.Current.Resolve<INpgsqlRepository<User>>()
                      ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<Maggsoft.ExampleTest.Entity.User>)} is null");
         }
         public async Task<IPagedList<UserResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<User, object>> @order = null,

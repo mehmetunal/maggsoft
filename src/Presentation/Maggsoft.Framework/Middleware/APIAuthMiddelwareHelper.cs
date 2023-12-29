@@ -23,7 +23,7 @@ namespace Maggsoft.Framework.Middleware
 
         private void InitializeClient()
         {
-            string api = EngineContext.Current.Resolve<IConfiguration>().GetSection("ApiUrl").Value;
+            string api = MaggsoftContext.Current.Resolve<IConfiguration>().GetSection("ApiUrl").Value;
 
             ApiMiddelwareClient = new HttpClient();
             ApiMiddelwareClient.BaseAddress = new Uri(api);

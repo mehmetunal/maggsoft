@@ -40,13 +40,13 @@ namespace Maggsoft.Npgsql.Services
 
         protected NpgsqlBaseServices()
         {
-            Mapper = EngineContext.Current.Resolve<IMapper>()
+            Mapper = MaggsoftContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
 
-            EventPublisher = EngineContext.Current.Resolve<IEventPublisher>()
+            EventPublisher = MaggsoftContext.Current.Resolve<IEventPublisher>()
                      ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
 
-            Repository = EngineContext.Current.Resolve<INpgsqlRepository<TTable>>()
+            Repository = MaggsoftContext.Current.Resolve<INpgsqlRepository<TTable>>()
                      ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<TTable>)} is null");
         }
 
@@ -199,7 +199,7 @@ namespace Maggsoft.Npgsql.Services
 
         #region Prop
 
-        protected virtual string RemoteIp => EngineContext.Current.Resolve<IHttpContextAccessor>().HttpContext.Connection.RemoteIpAddress.ToString();
+        protected virtual string RemoteIp => MaggsoftContext.Current.Resolve<IHttpContextAccessor>().HttpContext.Connection.RemoteIpAddress.ToString();
 
         #endregion
     }

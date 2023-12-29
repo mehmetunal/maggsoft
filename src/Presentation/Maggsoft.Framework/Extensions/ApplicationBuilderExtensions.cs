@@ -14,7 +14,7 @@ namespace Maggsoft.Framework.Extensions
         /// <param name="application">Builder for configuring an application's request pipeline</param>
         public static void ConfigureRequestPipeline(this IApplicationBuilder application)
         {
-            EngineContext.Current.ConfigureRequestPipeline(application);
+            MaggsoftContext.Current.ConfigureRequestPipeline(application);
         }
     }
 }

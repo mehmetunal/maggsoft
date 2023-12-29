@@ -5,7 +5,7 @@ namespace Maggsoft.Core.Infrastructure
     /// <summary>
     /// Provides access to the singleton instance of the Nop engine.
     /// </summary>
-    public class EngineContext
+    public class MaggsoftContext
     {
         #region Methods
 

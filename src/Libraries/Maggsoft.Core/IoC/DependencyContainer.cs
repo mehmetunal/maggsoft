@@ -36,7 +36,7 @@ namespace Maggsoft.Core.IoC
             }
             catch (Exception ex)
             {
-                var logger = EngineContext.Current.Resolve<ILogger<Exception>>();
+                var logger = MaggsoftContext.Current.Resolve<ILogger<Exception>>();
                 logger.LogError($"RegisterAll => {ex.Message}");
                 throw ex;
             }
