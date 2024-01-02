@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Maggsoft.Core.Infrastructure
 {
-    public class MaggsoftEngine : IEngine
+    public class MaggsoftEngine : IMaggsoft
     {
 
         #region Utilities

@@ -13,10 +13,10 @@ namespace Maggsoft.Core.Infrastructure
         /// Create a static instance of the Nop engine.
         /// </summary>
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static IEngine Create()
+        public static IMaggsoft Create()
         {
             //create NopEngine as engine
-            return Singleton<IEngine>.Instance ?? (Singleton<IEngine>.Instance = new MaggsoftEngine());
+            return Singleton<IMaggsoft>.Instance ?? (Singleton<IMaggsoft>.Instance = new MaggsoftEngine());
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace Maggsoft.Core.Infrastructure
         /// </summary>
         /// <param name="engine">The engine to use.</param>
         /// <remarks>Only use this method if you know what you're doing.</remarks>
-        public static void Replace(IEngine engine)
+        public static void Replace(IMaggsoft engine)
         {
-            Singleton<IEngine>.Instance = engine;
+            Singleton<IMaggsoft>.Instance = engine;
         }
 
         #endregion
@@ -36,16 +36,16 @@ namespace Maggsoft.Core.Infrastructure
         /// <summary>
         /// Gets the singleton Nop engine used to access Nop services.
         /// </summary>
-        public static IEngine Current
+        public static IMaggsoft Current
         {
             get
             {
-                if (Singleton<IEngine>.Instance == null)
+                if (Singleton<IMaggsoft>.Instance == null)
                 {
                     Create();
                 }
 
-                return Singleton<IEngine>.Instance;
+                return Singleton<IMaggsoft>.Instance;
             }
         }
 
