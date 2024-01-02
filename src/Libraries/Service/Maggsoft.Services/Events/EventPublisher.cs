@@ -21,7 +21,7 @@ public partial class EventPublisher : IEventPublisher
     public virtual void Publish<TEvent>(TEvent @event)
     {
         //get all event consumers
-        var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
+        var consumers = MaggsoftContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
 
         foreach (var consumer in consumers)
         {
@@ -35,7 +35,7 @@ public partial class EventPublisher : IEventPublisher
                 //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
                 try
                 {
-                    EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
+                    MaggsoftContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
                 }
                 catch
                 {
@@ -55,7 +55,7 @@ public partial class EventPublisher : IEventPublisher
     public virtual async Task PublishAsync<TEvent>(TEvent @event)
     {
         //get all event consumers
-        var consumers = EngineContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
+        var consumers = MaggsoftContext.Current.ResolveAll<IConsumer<TEvent>>().ToList();
 
         foreach (var consumer in consumers)
         {
@@ -69,11 +69,11 @@ public partial class EventPublisher : IEventPublisher
                 //log error, we put in to nested try-catch to prevent possible cyclic (if some error occurs)
                 try
                 {
-                    var logger = EngineContext.Current.Resolve<ILogger>();
+                    var logger = MaggsoftContext.Current.Resolve<ILogger>();
                     if (logger == null)
                         return;
 
-                    EngineContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
+                    MaggsoftContext.Current.Resolve<ILogger>()?.LogError(exception.Message, exception);
                 }
                 catch
                 {
