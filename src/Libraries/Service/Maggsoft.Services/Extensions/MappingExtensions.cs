@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
+using Maggsoft.Core.Model.Pagination;
 using Maggsoft.Data;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -38,6 +39,19 @@ public static class MappingExtensions
         //use AutoMapper for mapping objects
         return AutoMapperConfiguration.Mapper.Map<TDestination>(source);
     }
+
+    /// <summary>
+    /// IPagedList Map
+    /// </summary>
+    /// <typeparam name="TSource">Table Entity</typeparam>
+    /// <typeparam name="TDestination">Dto Entity</typeparam>
+    /// <param name="source">this</param>
+    /// <returns></returns>
+    public static IPagedList<TDestination> Map<TSource, TDestination>(this IPagedList<TSource> source)
+    {
+        return AutoMapperConfiguration.Mapper.Map<IPagedList<TSource>, IPagedList<TDestination>>(source);
+    }
+
 
     /// <summary>
     /// Execute a mapping from the source object to the existing destination object

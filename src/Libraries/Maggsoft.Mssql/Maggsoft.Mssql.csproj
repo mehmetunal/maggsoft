@@ -14,20 +14,17 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspectCore.Abstractions" Version="2.2.0" />
-		<PackageReference Include="FluentMigrator" Version="3.3.2" />
-		<PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
-		<PackageReference Include="FluentMigrator.Runner.SqlServer" Version="3.3.2" />
+		<PackageReference Include="FluentMigrator" Version="5.0.0" />
+		<PackageReference Include="FluentMigrator.Runner" Version="5.0.0" />
+		<PackageReference Include="FluentMigrator.Runner.SqlServer" Version="5.0.0" />
 
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
-		
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Data\Maggsoft.Data.Mssql\Maggsoft.Data.Mssql.csproj" />
-		<ProjectReference Include="..\Data\Maggsoft.Data.Npgsql\Maggsoft.Data.Npgsql.csproj" />
 	</ItemGroup>
 </Project>

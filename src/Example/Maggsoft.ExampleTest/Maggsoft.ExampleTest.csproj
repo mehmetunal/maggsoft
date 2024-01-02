@@ -3,7 +3,6 @@
   <PropertyGroup>
 	  <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data.Mssql\Maggsoft.Data.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data\Maggsoft.Data.csproj" />
