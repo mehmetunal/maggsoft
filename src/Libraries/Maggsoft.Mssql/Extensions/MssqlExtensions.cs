@@ -2,6 +2,8 @@
 using FluentMigrator.Runner;
 using Maggsoft.Data.DataProviders;
 using Maggsoft.Data.Migration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -9,40 +11,25 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Npgsql;
 using System;
 using System.Data.Common;
 using System.Linq;
 using System.Threading;
 
-namespace Maggsoft.Npgsql.Extensions
+namespace Maggsoft.Mssql.Extensions
 {
-    public static class NpgsqlExtensions
+    public static class MssqlExtensions
     {
-        public static IServiceCollection AddNpgsqlConfig<TContext>(this IServiceCollection services,
+        public static IServiceCollection AddMssqlConfig<TContext>(this IServiceCollection services,
             IConfiguration configuration) where TContext : DbContext
         {
-            //var connection = configuration.GetConnectionString("DefaultConnection");
-            //services.AddDbContext<TContext>(options =>
-            //{
-            //    options.UseNpgsql(connection,
-            //        conOption => conOption.EnableRetryOnFailure(
-            //                maxRetryCount: 15,
-            //                maxRetryDelay: TimeSpan.FromSeconds(30),
-            //                errorCodesToAdd: null
-            //            )
-            //    ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //});
-            //services.AddScoped<DbContext, TContext>();
-            //return services;
             var connection = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<TContext>(options => { options.UseNpgsql(connection); });
+            services.AddDbContext<TContext>(options => { options.UseSqlServer(connection); });
             services.AddScoped<DbContext, TContext>();
             return services;
         }
-
         public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
-          IConfiguration configuration)
+            IConfiguration configuration)
         {
             var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
@@ -57,7 +44,7 @@ namespace Maggsoft.Npgsql.Extensions
                 .AddFluentMigratorCore()
                 .ConfigureRunner(builder =>
                 {
-                    builder.AddPostgres11_0();
+                    builder.AddSqlServer2016();
                     builder.WithGlobalConnectionString(connection);
                     builder.ScanIn(mAssemblies).For.Migrations();
                 })
@@ -67,6 +54,23 @@ namespace Maggsoft.Npgsql.Extensions
             services.AddScoped<IMigrationManager, MigrationManager>();
 
             return services;
+        }
+        // <summary>
+        // 
+        // </summary>
+        // <param name = "app" ></ param >
+        // < typeparam name="TContext"></typeparam>
+        // <returns></returns>
+        public static IApplicationBuilder AddMigrateConfigure<TContext>(this IApplicationBuilder app) where TContext : DbContext
+        {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
+                context.Database.EnsureCreated();
+                //context.Database.Migrate();
+            }
+
+            return app;
         }
 
         /// <summary>  
@@ -115,14 +119,14 @@ namespace Maggsoft.Npgsql.Extensions
             var builder = GetConnectionStringBuilder(host);
 
             //gets database name
-            var databaseName = builder.Database;
+            var databaseName = builder.InitialCatalog;
 
-            //now create connection string to 'postgres' - default administrative connection database.
-            builder.Database = "postgres";
+            //now create connection string to 'master' dabatase. It always exists.
+            builder.InitialCatalog = "master";
 
             using (var connection = GetInternalDbConnection(builder.ConnectionString))
             {
-                var query = $"CREATE DATABASE \"{databaseName}\" WITH OWNER = '{builder.Username}'";
+                var query = $"CREATE DATABASE [{databaseName}]";
 
                 var command = connection.CreateCommand();
                 command.CommandText = query;
@@ -145,21 +149,9 @@ namespace Maggsoft.Npgsql.Extensions
                     throw new Exception("Unable to connect to the new database. Please try one more time");
 
                 if (!DatabaseExists(host))
-                {
                     Thread.Sleep(1000);
-                }
                 else
-                {
-                    builder.Database = databaseName;
-                    using var connection = GetInternalDbConnection(builder.ConnectionString) as NpgsqlConnection;
-                    var command = connection.CreateCommand();
-                    command.CommandText = "CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS pgcrypto; CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";";
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.ReloadTypes();
-
                     break;
-                }
             }
 
             return host;
@@ -183,15 +175,14 @@ namespace Maggsoft.Npgsql.Extensions
             }
         }
 
-        private static NpgsqlConnectionStringBuilder GetConnectionStringBuilder(IHost host)
+        private static SqlConnectionStringBuilder GetConnectionStringBuilder(IHost host)
         {
-
-            return new NpgsqlConnectionStringBuilder(DataProviderExtensions.GetCurrentConnectionString(host));
+            return new SqlConnectionStringBuilder(DataProviderExtensions.GetCurrentConnectionString(host));
         }
 
         private static DbConnection GetInternalDbConnection(string connectionString)
         {
-            return new NpgsqlConnection(connectionString);
+            return new SqlConnection(connectionString);
         }
     }
 }

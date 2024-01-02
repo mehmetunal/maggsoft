@@ -1,12 +1,11 @@
 ﻿using Maggsoft.ExampleTest.Entity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Maggsoft.ExampleTest.Context
 {
-    public class NpgsqlContext : DbContext
+    public class AppContext : DbContext
     {
-        public NpgsqlContext(DbContextOptions<NpgsqlContext> options)
+        public AppContext(DbContextOptions<AppContext> options)
             : base(options)
         {
         }

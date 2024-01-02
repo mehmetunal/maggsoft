@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Npgsql.Repository;
 
-public sealed class NpgsqlRepository<T> : INpgsqlRepository<T> where T : BaseEntity, IEntity
+public sealed class Repository<T> : INpgsqlRepository<T> where T : BaseEntity, IEntity
 {
     #region Variables
 
@@ -20,7 +20,7 @@ public sealed class NpgsqlRepository<T> : INpgsqlRepository<T> where T : BaseEnt
 
     #region Constructor
 
-    public NpgsqlRepository(DbContext context)
+    public Repository(DbContext context)
     {
         _context = context;
         _dbSet = _context.Set<T>();

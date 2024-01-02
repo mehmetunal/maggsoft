@@ -25,7 +25,7 @@ public class UnitOfWork(DbContext context) : IUnitOfWork
     #region BusinessSection
 
     public INpgsqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity
-        => new NpgsqlRepository<T>(_context);
+        => new Repository<T>(_context);
 
     public bool BeginNewTransaction()
     {

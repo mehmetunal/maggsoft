@@ -1,11 +1,10 @@
-﻿using Maggsoft.ExampleTest.Entity;
-using Maggsoft.Npgsql.UnitOfWork;
+﻿using Maggsoft.Mssql.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Transactions;
 
 namespace Maggsoft.ExampleTest.Controllers
@@ -18,11 +17,11 @@ namespace Maggsoft.ExampleTest.Controllers
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
-        private readonly Context.NpgsqlContext _npgsqlContext;
+        private readonly Context.AppContext _npgsqlContext;
         private readonly IUnitOfWork _uow;
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.NpgsqlContext npgsqlContext, IUnitOfWork uow)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService)
         {
             _uow = uow;
             _logger = logger;
@@ -30,8 +29,11 @@ namespace Maggsoft.ExampleTest.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
+
+            return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
+
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt" };
             //user.Logs.Add(new Log() { Text = "tt", UserId = user.Id });

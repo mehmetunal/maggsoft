@@ -1,14 +1,15 @@
-using FluentMigrator.Runner;
-using Maggsoft.ExampleTest.Context;
-using Maggsoft.Npgsql.Extensions;
-using Maggsoft.Npgsql.Repository;
-using Maggsoft.Npgsql.UnitOfWork;
+using Maggsoft.Core.IoC;
+using Maggsoft.Data.Extensions;
+using Maggsoft.ExampleTest.Entity;
+using Maggsoft.Mssql.Extensions;
+using Maggsoft.Mssql.Repository;
+using Maggsoft.Mssql.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using AppContext = Maggsoft.ExampleTest.Context.AppContext;
 
 namespace Maggsoft.ExampleTest
 {
@@ -26,10 +27,18 @@ namespace Maggsoft.ExampleTest
         {
             services.AddControllers();
             services
-                .AddNpgsqlConfig<NpgsqlContext>(Configuration)
+                .AddMssqlConfig<AppContext>(Configuration)
                 .AddFluentMigratorConfig(Configuration);
 
-            services.AddScoped<IUnitOfWork,UnitOfWork>();
+            //services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
+            //services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+
+
+            services.AddScoped<IMssqlRepository<User>, Repository<User>>();
+            services.AddScoped<IMssqlRepository<Log>, Repository<Log>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.RegisterAll<IService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
