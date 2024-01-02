@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Maggsoft.Data.Npgsql;
+using Maggsoft.Data.Mssql;
 using Maggsoft.Core.Entities;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Maggsoft.Npgsql.Repository
+namespace Maggsoft.Mssql.Repository
 {
-    public sealed class NpgsqlRepository<T> : INpgsqlRepository<T> where T : BaseEntity, IEntity
+    public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IEntity
     {
         #region Variables
 
@@ -20,7 +20,7 @@ namespace Maggsoft.Npgsql.Repository
 
         #region Constructor
 
-        public NpgsqlRepository(DbContext context)
+        public Repository(DbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();

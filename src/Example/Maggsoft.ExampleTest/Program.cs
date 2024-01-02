@@ -1,5 +1,5 @@
 using Maggsoft.ExampleTest.Context;
-using Maggsoft.Npgsql.Extensions;
+using Maggsoft.Mssql.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 

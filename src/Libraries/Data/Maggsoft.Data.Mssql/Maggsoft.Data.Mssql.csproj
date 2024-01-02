@@ -14,4 +14,8 @@
 		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Maggsoft.Data\Maggsoft.Data.csproj" />
+	</ItemGroup>
+
 </Project>

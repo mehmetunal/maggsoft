@@ -1,19 +1,17 @@
-using FluentMigrator.Runner;
-using Maggsoft.ExampleTest.Context;
-using Maggsoft.ExampleTest.Services;
-using Maggsoft.Npgsql.Extensions;
-using Maggsoft.Npgsql.Repository;
-using Maggsoft.Npgsql.UnitOfWork;
+using Maggsoft.Core.IoC;
+using Maggsoft.Framework.Extensions;
+using Maggsoft.Mssql.Extensions;
+using Maggsoft.Data.Extensions;
+using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using Maggsoft.Services.Extensions;
-using Maggsoft.Framework.Extensions;
+using AppContext = Maggsoft.ExampleTest.Context.AppContext;
+using Maggsoft.Mssql.Repository;
 using Maggsoft.ExampleTest.Entity;
-using Maggsoft.Core.IoC;
+using Maggsoft.Mssql.UnitOfWork;
 
 namespace Maggsoft.ExampleTest
 {
@@ -32,12 +30,18 @@ namespace Maggsoft.ExampleTest
             services.AddControllers();
             services.AddHttpContextAccessor();
             services
-                .AddNpgsqlConfig<NpgsqlContext>(Configuration)
+                .AddMssqlConfig<AppContext>(Configuration)
                 .AddFluentMigratorConfig(Configuration);
 
             services.AddAutoMapperConfig(p => p.AddProfile<AutoMapping>(), typeof(Startup));
 
-            services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
+            //services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
+            //services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+
+
+            services.AddScoped<IMssqlRepository<User>,Repository<User>>();
+            services.AddScoped<IMssqlRepository<Log>,Repository<Log>>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.RegisterAll<IService>();
 

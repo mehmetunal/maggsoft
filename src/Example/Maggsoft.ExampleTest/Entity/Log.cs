@@ -1,10 +1,8 @@
-﻿using Maggsoft.Core.Entities;
-using Maggsoft.Data.Npgsql;
-using System;
+﻿using System;
 
 namespace Maggsoft.ExampleTest.Entity
 {
-    public class Log : Maggsoft.Data.Npgsql.BaseEntity
+    public class Log : Data.Mssql.BaseEntity
     {
         public string Text { get; set; }
         public Guid UserId { get; set; }

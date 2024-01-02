@@ -2,12 +2,12 @@
 using AutoMapper.QueryableExtensions;
 using Maggsoft.Core.Extensions;
 using Maggsoft.Core.Infrastructure;
-using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model.Pagination;
 using Maggsoft.ExampleTest.Dto;
 using Maggsoft.ExampleTest.Entity;
-using Maggsoft.Npgsql.Repository;
+using Maggsoft.Mssql.Repository;
 using Maggsoft.Services.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,14 +18,22 @@ namespace Maggsoft.ExampleTest.Services
     public class UserService : IUserService
     {
         protected readonly IMapper Mapper;
-        public readonly INpgsqlRepository<User> Repository;
+        public readonly IMssqlRepository<User> Repository;
+        public readonly IMssqlRepository<Log> LogRepository;
+        public readonly DbContext DBContext;
         public UserService()
         {
             Mapper = MaggsoftContext.Current.Resolve<IMapper>()
                     ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
 
-            Repository = MaggsoftContext.Current.Resolve<INpgsqlRepository<User>>()
-                     ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<Maggsoft.ExampleTest.Entity.User>)} is null");
+            Repository = MaggsoftContext.Current.Resolve<IMssqlRepository<User>>()
+                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<User>)} is null");
+
+            LogRepository = MaggsoftContext.Current.Resolve<IMssqlRepository<Log>>()
+                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<Log>)} is null");
+
+            DBContext = MaggsoftContext.Current.Resolve<DbContext>()
+                     ?? throw new ArgumentNullException($"{nameof(DbContext)} is null");
         }
         public async Task<IPagedList<UserResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<User, object>> @order = null,
             Func<IIncludable<User>, IIncludable> @includes = null)
@@ -52,9 +60,21 @@ namespace Maggsoft.ExampleTest.Services
             return asd;
         }
 
-        public Task<UserResultDto> AddAsync(UserAddDto addDto, bool publishEvent = true)
+        public async Task<UserResultDto> AddAsync(UserAddDto addDto, bool publishEvent = true)
         {
-            throw new NotImplementedException();
+            var user = addDto.ToEntity<User>();
+            user.CreatorIP = "asdasdasd";
+            user.CreatorUserId = Guid.NewGuid();
+            user.CreatedDate = DateTime.UtcNow;
+            var result = await Repository.AddAsync(user);
+
+            var logEntity = new Log { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
+            await LogRepository.AddAsync(logEntity);
+
+            // await LogRepository.SaveChangesAsync();
+            // await DBContext.SaveChangesAsync();
+
+            return result.ToModel<UserResultDto>();
         }
 
         public Task<UserResultDto> UpdateAsync(UserEditDto editDto, bool publishEvent = true)

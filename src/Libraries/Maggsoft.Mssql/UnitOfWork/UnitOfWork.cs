@@ -1,13 +1,13 @@
 ﻿using System;
-using Maggsoft.Data.Npgsql;
+using Maggsoft.Data.Mssql;
 using Maggsoft.Core.Entities;
-using Maggsoft.Npgsql.Repository;
+using Maggsoft.Mssql.Repository;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading;
 
-namespace Maggsoft.Npgsql.UnitOfWork
+namespace Maggsoft.Mssql.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -30,7 +30,7 @@ namespace Maggsoft.Npgsql.UnitOfWork
 
         #region BusinessSection
 
-        public INpgsqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity
+        public IMssqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity
             => new Repository<T>(_context);
 
         public bool BeginNewTransaction()

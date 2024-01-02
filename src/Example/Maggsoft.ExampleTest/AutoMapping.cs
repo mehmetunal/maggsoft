@@ -9,6 +9,7 @@ namespace Maggsoft.ExampleTest
     {
         public AutoMapping()
         {
+            CreateMap<User, UserAddDto>().ReverseMap();
             CreateMap<User, UserResultDto>().ReverseMap();
             CreateMap<IPagedList<User>, IPagedList<UserResultDto>>().ReverseMap();
             CreateMap<Log, LogResultDto>().ReverseMap();

@@ -1,16 +1,11 @@
-﻿using DocumentFormat.OpenXml.Office2021.DocumentTasks;
-using Maggsoft.ExampleTest.Entity;
-using Maggsoft.ExampleTest.Services;
-using Maggsoft.Npgsql.UnitOfWork;
+﻿using Maggsoft.ExampleTest.Services;
+using Maggsoft.Mssql.UnitOfWork;
 using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Maggsoft.ExampleTest.Controllers
 {
@@ -22,13 +17,13 @@ namespace Maggsoft.ExampleTest.Controllers
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
-        private readonly Context.NpgsqlContext _npgsqlContext;
+        private readonly Context.AppContext _npgsqlContext;
         private readonly IUnitOfWork _uow;
         private readonly ILogger<WeatherForecastController> _logger;
 
         private readonly IUserService userService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.NpgsqlContext npgsqlContext, IUnitOfWork uow, IUserService userService)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService)
         {
             _uow = uow;
             _logger = logger;
@@ -39,10 +34,11 @@ namespace Maggsoft.ExampleTest.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
 
-            var asd = await this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));
+            //var asd = await this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));
 
-            return Ok(asd);
+            //return Ok(asd);
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt", CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() };
             //user.Logs.Add(new Log() { Text = "MENU 1", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });

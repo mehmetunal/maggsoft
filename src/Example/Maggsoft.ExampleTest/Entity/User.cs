@@ -1,4 +1,4 @@
-﻿using Maggsoft.Data.Npgsql;
+﻿using Maggsoft.Data.Mssql;
 using System.Collections.Generic;
 
 namespace Maggsoft.ExampleTest.Entity
