@@ -1,4 +1,5 @@
-﻿using Maggsoft.Mssql.UnitOfWork;
+﻿using Maggsoft.ExampleTest.Services;
+using Maggsoft.Npgsql.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -20,6 +21,7 @@ namespace Maggsoft.ExampleTest.Controllers
         private readonly Context.AppContext _npgsqlContext;
         private readonly IUnitOfWork _uow;
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IUserService userService;
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService)
         {
@@ -32,7 +34,7 @@ namespace Maggsoft.ExampleTest.Controllers
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
 
-            return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
+             await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" });
 
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt" };

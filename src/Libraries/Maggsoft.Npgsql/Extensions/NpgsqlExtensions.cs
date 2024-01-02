@@ -1,7 +1,7 @@
 ﻿using FluentMigrator;
 using FluentMigrator.Runner;
+using Maggsoft.Data.DataProviders;
 using Maggsoft.Data.Migration;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -14,7 +14,6 @@ using System;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 
 namespace Maggsoft.Npgsql.Extensions;
@@ -42,8 +41,9 @@ public static class NpgsqlExtensions
         services.AddScoped<DbContext, TContext>();
         return services;
     }
+
     public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
-        IConfiguration configuration)
+      IConfiguration configuration)
     {
         var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
@@ -68,57 +68,6 @@ public static class NpgsqlExtensions
         services.AddScoped<IMigrationManager, MigrationManager>();
 
         return services;
-    }
-
-    // <summary>
-    // 
-    // </summary>
-    // <param name = "app" ></ param >
-    // < typeparam name="TContext"></typeparam>
-    // <returns></returns>
-    public static IApplicationBuilder AddMigrateConfigure<TContext>(this IApplicationBuilder app) where TContext : DbContext
-    {
-        using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-        {
-            var context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
-            context.Database.EnsureCreated();
-            //context.Database.Migrate();
-        }
-
-        return app;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="app"></param>
-    /// <returns></returns>
-    public static IApplicationBuilder AddUpMigrate(this IApplicationBuilder app)
-    {
-        return RunMigration(app, (runner, assembly) => runner.ApplyUpMigrations(assembly));
-    }
-
-
-    public static IApplicationBuilder AddDownMigrate(this IApplicationBuilder app)
-    {
-        return RunMigration(app, (runner, assembly) => runner.ApplyDownMigrations(assembly));
-    }
-
-    private static IApplicationBuilder RunMigration(IApplicationBuilder app, Action<IMigrationManager, Assembly> call)
-    {
-        using var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
-        var runner = serviceScope.ServiceProvider.GetRequiredService<IMigrationManager>();
-
-        var mAssemblies = AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes())
-            .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true).Select(t => t.Assembly)
-            .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner")).Distinct().ToArray();
-
-        foreach (var assembly in mAssemblies)
-        {
-            call(runner, assembly);
-        }
-
-        return app;
     }
 
     /// <summary>  
@@ -225,7 +174,7 @@ public static class NpgsqlExtensions
     {
         try
         {
-            using var context = GetInternalDbConnection(GetCurrentConnectionString(host));
+            using var context = GetInternalDbConnection(DataProviderExtensions.GetCurrentConnectionString(host));
             context.Open();
             return true;
         }
@@ -237,19 +186,12 @@ public static class NpgsqlExtensions
 
     private static NpgsqlConnectionStringBuilder GetConnectionStringBuilder(IHost host)
     {
-        return new NpgsqlConnectionStringBuilder(GetCurrentConnectionString(host));
+
+        return new NpgsqlConnectionStringBuilder(DataProviderExtensions.GetCurrentConnectionString(host));
     }
 
     private static DbConnection GetInternalDbConnection(string connectionString)
     {
         return new NpgsqlConnection(connectionString);
-    }
-
-    private static string GetCurrentConnectionString(IHost host)
-    {
-        using var scope = host.Services.CreateScope();
-        var services = scope.ServiceProvider;
-        var configuration = services.GetRequiredService<IConfiguration>();
-        return configuration.GetConnectionString("DefaultConnection");
     }
 }

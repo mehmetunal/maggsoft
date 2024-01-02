@@ -13,4 +13,9 @@
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
+	  <ProjectReference Include="..\Maggsoft.Data\Maggsoft.Data.csproj" />
+	</ItemGroup>
+
 </Project>

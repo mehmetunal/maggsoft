@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data.Mssql\Maggsoft.Data.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data\Maggsoft.Data.csproj" />
+    <ProjectReference Include="..\..\Libraries\Dto\Maggsoft.Dto.Mssql\Maggsoft.Dto.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Maggsoft.Core\Maggsoft.Core.csproj" />
+    <ProjectReference Include="..\..\Libraries\Maggsoft.Mssql\Maggsoft.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Maggsoft.Npgsql\Maggsoft.Npgsql.csproj" />
+    <ProjectReference Include="..\..\Libraries\Service\Maggsoft.Services\Maggsoft.Services.csproj" />
     <ProjectReference Include="..\..\Presentation\Maggsoft.Framework\Maggsoft.Framework.csproj" />
   </ItemGroup>
 

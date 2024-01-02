@@ -1,197 +1,148 @@
-﻿using FluentMigrator;
-using FluentMigrator.Runner;
-using Maggsoft.Data.DataProviders;
-using Maggsoft.Data.Migration;
+﻿using Maggsoft.Data.Npgsql;
+using Maggsoft.Core.DbType.Npgsql;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Npgsql;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using System;
-using System.Data.Common;
 using System.Linq;
-using System.Threading;
 
-namespace Maggsoft.Npgsql.Extensions
+namespace Maggsoft.Npgsql.Extensions;
+
+public static class ModelBuilderExtensions
 {
-    public static class NpgsqlExtensions
+    public static ModelBuilder BaseModelBuilder<Table>(this ModelBuilder builder) where Table : BaseEntity
     {
-        public static IServiceCollection AddNpgsqlConfig<TContext>(this IServiceCollection services,
-            IConfiguration configuration) where TContext : DbContext
+        builder.Entity<Table>().HasKey(p => p.Id);
+
+        /*
+         HasDefaultValue(true);
+         modelBuilder.Entity<Company>()
+                     .HasMany(c => c.Employees)
+                     .WithOne(e => e.Company)
+                     .HasConstraintName("MyFKConstraint");
+
+         */
+        //IsUnique  => Benzersiz değerse indexde bunu ekleyebiliriz.
+        //builder.Entity<Table>()
+        //   .HasIndex(p => new { p.CreatedDate, p.ModifiedDate }, name: $"IX_{nameof(Table)}_CreatedDate");
+
+        builder.Entity<Table>()
+            .HasIndex(p => p.CreatedDate, name: $"IX_{nameof(Table)}_CreatedDate");
+        builder.Entity<Table>()
+            .HasIndex(p => p.IsDeleted, name: $"IX_{nameof(Table)}_IsDeleted");
+        builder.Entity<Table>()
+            .HasIndex(p => p.IsPublish, name: $"IX_{nameof(Table)}_IsPublish");
+
+
+        builder.Entity<Table>().Property(p => p.Id).HasDefaultValueSql("uuid_generate_v1()")
+            .ValueGeneratedOnAdd();
+
+        builder.Entity<Table>().Property(p => p.CreatedDate)
+            .HasColumnType(ColumnType.Timestamp)
+            .IsRequired();
+
+        builder.Entity<Table>().Property(p => p.CreatorIP)
+            .HasColumnType(ColumnType.Varchar)
+            .HasMaxLength(50)
+            .IsRequired();
+
+        builder.Entity<Table>().Property(p => p.CreatorUserId)
+            .IsRequired();
+
+        builder.Entity<Table>().Property(p => p.ModifiedDate)
+            .HasColumnType(ColumnType.Timestamp);
+
+        builder.Entity<Table>().Property(p => p.ModifierIP)
+            .HasColumnType(ColumnType.Varchar)
+            .HasMaxLength(50);
+
+        builder.Entity<Table>().Property(p => p.ModifierUserId);
+
+        builder.Entity<Table>()
+            .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsDeleted)) == false);
+
+        builder.Entity<Table>()
+            .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsPublish)) == true);
+
+        return builder;
+
+    }
+
+
+    public static async Task EnableIdentityInsertAsync<T>(this DbContext context) => await SetIdentityInsertAsync<T>(context, true);
+    public static async Task DisableIdentityInsertAsync<T>(this DbContext context) => await SetIdentityInsertAsync<T>(context, false);
+    private static async Task SetIdentityInsertAsync<T>([NotNull] DbContext context, bool enable)
+    {
+        //alter table public.category drop constraint "PK_category"
+        //ALTER TABLE public.category ADD CONSTRAINT "PK_category"  PRIMARY KEY("Id");
+
+        if (context == null) throw new ArgumentNullException(nameof(context));
+
+        var entityType = context.Model.FindEntityType(typeof(T));
+
+        var primaryKey = entityType.FindPrimaryKey();
+        var primaryKeyDefaultName = primaryKey.GetDefaultName();
+
+        var schema = entityType.GetSchema();
+        var tableName = entityType.GetTableName();
+        var storeObjectIdentifier = Microsoft.EntityFrameworkCore.Metadata.StoreObjectIdentifier.Table(tableName, schema);
+        var primaryKeyColumnName = primaryKey.Properties
+            .Select(x => x.GetColumnName(storeObjectIdentifier))
+            .FirstOrDefault();
+
+
+        var tb = $"{tableName}";
+        if (!string.IsNullOrEmpty(schema))
         {
-            //var connection = configuration.GetConnectionString("DefaultConnection");
-            //services.AddDbContext<TContext>(options =>
-            //{
-            //    options.UseNpgsql(connection,
-            //        conOption => conOption.EnableRetryOnFailure(
-            //                maxRetryCount: 15,
-            //                maxRetryDelay: TimeSpan.FromSeconds(30),
-            //                errorCodesToAdd: null
-            //            )
-            //    ).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //});
-            //services.AddScoped<DbContext, TContext>();
-            //return services;
-            var connection = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<TContext>(options => { options.UseNpgsql(connection); });
-            services.AddScoped<DbContext, TContext>();
-            return services;
+            tb = $"{schema}.{tableName}";
         }
 
-        public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
-          IConfiguration configuration)
+        if (enable == true)
         {
-            var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true)
-                .Select(t => t.Assembly)
-                .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner"))
-                .Distinct()
-                .ToArray();
+            await context.Database.ExecuteSqlRawAsync($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
+        }
+        else
+        {
+            await context.Database.ExecuteSqlRawAsync($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
+        }
+    }
 
-            var connection = configuration.GetConnectionString("DefaultConnection");
-            services
-                .AddFluentMigratorCore()
-                .ConfigureRunner(builder =>
-                {
-                    builder.AddPostgres11_0();
-                    builder.WithGlobalConnectionString(connection);
-                    builder.ScanIn(mAssemblies).For.Migrations();
-                })
-                .AddLogging(op => op.AddFluentMigratorConsole());
+    public static void EnableIdentityInsert<T>(this DbContext context) => SetIdentityInsert<T>(context, true);
+    public static void DisableIdentityInsert<T>(this DbContext context) => SetIdentityInsert<T>(context, false);
+    private static void SetIdentityInsert<T>([NotNull] DbContext context, bool enable)
+    {
+        //alter table public.category drop constraint "PK_category"
+        //ALTER TABLE public.category ADD CONSTRAINT "PK_category"  PRIMARY KEY("Id");
 
-            services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
-            services.AddScoped<IMigrationManager, MigrationManager>();
+        if (context == null) throw new ArgumentNullException(nameof(context));
 
-            return services;
+        var entityType = context.Model.FindEntityType(typeof(T));
+
+        var primaryKey = entityType.FindPrimaryKey();
+        var primaryKeyDefaultName = primaryKey.GetDefaultName();
+
+        var schema = entityType.GetSchema();
+        var tableName = entityType.GetTableName();
+        var storeObjectIdentifier = Microsoft.EntityFrameworkCore.Metadata.StoreObjectIdentifier.Table(tableName, schema);
+        var primaryKeyColumnName = primaryKey.Properties
+            .Select(x => x.GetColumnName(storeObjectIdentifier))
+            .FirstOrDefault();
+
+
+        var tb = $"{tableName}";
+        if (!string.IsNullOrEmpty(schema))
+        {
+            tb = $"{schema}.{tableName}";
         }
 
-        /// <summary>  
-        /// Migrates the database.  
-        /// </summary>  
-        /// <typeparam name="T"></typeparam>  
-        /// <param name="host">The web host.</param>  
-        /// <returns>IWebHost.</returns>  
-        public static IHost CreateDatabase<TContext>(this IHost host) where TContext : DbContext
+        if (enable == true)
         {
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var logger = services.GetRequiredService<ILogger<TContext>>();
-            try
-            {
-                var context = services.GetRequiredService<TContext>();
-                RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)context.Database.GetService<IDatabaseCreator>();
-                if (!databaseCreator.Exists())
-                {
-                    bool ensureCreated = context.Database.EnsureCreated();
-                    //databaseCreator.CreateTables();
-                    //context.Database.Migrate();
-                }
-                Console.WriteLine("Database migration completed.");
-                logger.LogInformation("Database migration completed.");
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "An error occurred migrate the DB.");
-            }
-
-            return host;
+            context.Database.ExecuteSqlRaw($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
         }
-
-        /// <summary>  
-        /// Migrates the database.  
-        /// </summary>  
-        /// <typeparam name="T"></typeparam>  
-        /// <param name="host">The web host.</param>  
-        /// <returns>IWebHost.</returns>  
-        public static IHost CreateDatabase(this IHost host, int triesToConnect = 10)
+        else
         {
-            if (DatabaseExists(host))
-                return host;
-
-            var builder = GetConnectionStringBuilder(host);
-
-            //gets database name
-            var databaseName = builder.Database;
-
-            //now create connection string to 'postgres' - default administrative connection database.
-            builder.Database = "postgres";
-
-            using (var connection = GetInternalDbConnection(builder.ConnectionString))
-            {
-                var query = $"CREATE DATABASE \"{databaseName}\" WITH OWNER = '{builder.Username}'";
-
-                var command = connection.CreateCommand();
-                command.CommandText = query;
-                command.Connection.Open();
-
-                command.ExecuteNonQuery();
-            }
-
-            //try connect
-            if (triesToConnect <= 0)
-                return host;
-
-            //sometimes on slow servers (hosting) there could be situations when database requires some time to be created.
-            //but we have already started creation of tables and sample data.
-            //as a result there is an exception thrown and the installation process cannot continue.
-            //that's why we are in a cycle of "triesToConnect" times trying to connect to a database with a delay of one second.
-            for (var i = 0; i <= triesToConnect; i++)
-            {
-                if (i == triesToConnect)
-                    throw new Exception("Unable to connect to the new database. Please try one more time");
-
-                if (!DatabaseExists(host))
-                {
-                    Thread.Sleep(1000);
-                }
-                else
-                {
-                    builder.Database = databaseName;
-                    using var connection = GetInternalDbConnection(builder.ConnectionString) as NpgsqlConnection;
-                    var command = connection.CreateCommand();
-                    command.CommandText = "CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS pgcrypto; CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";";
-                    command.Connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.ReloadTypes();
-
-                    break;
-                }
-            }
-
-            return host;
-        }
-        /// <summary>
-        /// Checks if the specified database exists, returns true if database exists
-        /// </summary>
-        /// <param name="host">IHost</param>
-        /// <returns>Returns true if the database exists.</returns>
-        private static bool DatabaseExists(IHost host)
-        {
-            try
-            {
-                using var context = GetInternalDbConnection(DataProviderExtensions.GetCurrentConnectionString(host));
-                context.Open();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private static NpgsqlConnectionStringBuilder GetConnectionStringBuilder(IHost host)
-        {
-
-            return new NpgsqlConnectionStringBuilder(DataProviderExtensions.GetCurrentConnectionString(host));
-        }
-
-        private static DbConnection GetInternalDbConnection(string connectionString)
-        {
-            return new NpgsqlConnection(connectionString);
+            context.Database.ExecuteSqlRaw($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
+            //context.Database.ExecuteSqlRaw($"alter table {tb} ALTER COLUMN \"{primaryKeyColumnName}\" SET DATA TYPE UUID USING(uuid_generate_v4())");
         }
     }
 }
