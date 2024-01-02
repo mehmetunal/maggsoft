@@ -1,5 +1,5 @@
 ﻿using Maggsoft.ExampleTest.Services;
-using Maggsoft.Npgsql.UnitOfWork;
+using Maggsoft.Mssql.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,29 +12,22 @@ namespace Maggsoft.ExampleTest.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService) : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
-        private readonly Context.AppContext _npgsqlContext;
-        private readonly IUnitOfWork _uow;
-        private readonly ILogger<WeatherForecastController> _logger;
-        private readonly IUserService userService;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService)
-        {
-            _uow = uow;
-            _logger = logger;
-            _npgsqlContext = npgsqlContext;
-        }
+        private readonly Context.AppContext _npgsqlContext = npgsqlContext;
+        private readonly IUnitOfWork _uow = uow;
+        private readonly ILogger<WeatherForecastController> _logger = logger;
+        private readonly IUserService userService = userService;
 
         [HttpGet]
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
 
-             await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" });
+            await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" });
 
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt" };

@@ -1,7 +1,10 @@
 using Maggsoft.Core.IoC;
+using Maggsoft.Data.Extensions;
+using Maggsoft.ExampleTest.Entity;
 using Maggsoft.Framework.Extensions;
 using Maggsoft.Mssql.Extensions;
-using Maggsoft.Data.Extensions;
+using Maggsoft.Mssql.Repository;
+using Maggsoft.Mssql.UnitOfWork;
 using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,9 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AppContext = Maggsoft.ExampleTest.Context.AppContext;
-using Maggsoft.Mssql.Repository;
-using Maggsoft.ExampleTest.Entity;
-using Maggsoft.Mssql.UnitOfWork;
 
 namespace Maggsoft.ExampleTest;
 
@@ -36,6 +36,7 @@ public class Startup
         //services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
         //services.AddScoped<IUnitOfWork,UnitOfWork>();
 
+        services.AddAutoMapperConfig(p => p.AddProfile<AutoMapping>(), typeof(Startup));
 
 
         services.AddScoped<IMssqlRepository<User>, Repository<User>>();

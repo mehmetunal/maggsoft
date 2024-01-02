@@ -9,22 +9,16 @@ using System.Threading;
 
 namespace Maggsoft.Mssql.UnitOfWork;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(DbContext context) : IUnitOfWork
 {
     #region Variables
 
-    private readonly DbContext _context;
+    private readonly DbContext _context = context;
     private IDbContextTransaction _transaction;
     private bool _disposed;
 
     #endregion
-
     #region Ctor
-
-    public UnitOfWork(DbContext context)
-    {
-        this._context = context;
-    }
 
     #endregion
 

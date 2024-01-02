@@ -71,8 +71,8 @@ public class UserService : IUserService
         var logEntity = new Log { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
         await LogRepository.AddAsync(logEntity);
 
-        // await LogRepository.SaveChangesAsync();
-        // await DBContext.SaveChangesAsync();
+         //await LogRepository.SaveChangesAsync();
+        //await DBContext.SaveChangesAsync();
 
         return result.ToModel<UserResultDto>();
     }
