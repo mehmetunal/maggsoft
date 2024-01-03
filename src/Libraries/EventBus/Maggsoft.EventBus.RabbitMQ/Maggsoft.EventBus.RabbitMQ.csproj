@@ -1,27 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>1.0.1</Version>
-		<Description>The Maggsoft.EventBus.RabbitMQ.</Description>
-		<PackageId>Maggsoft.EventBus.RabbitMQ</PackageId>
-		<PackageTags>Maggsoft,Maggsoft.EventBus.RabbitMQ</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-		<RepositoryType>Git</RepositoryType>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+		<Description>The $(RootNamespace).</Description>
+		<PackageId>$(RootNamespace)</PackageId>
+		<PackageTags>Maggsoft,$(RootNamespace)</PackageTags>
+		<PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
+		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-		<PackageReference Include="Polly" Version="7.2.2" />
-		<PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsDependencyInjectionAbstractionsVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(MicrosoftExtensionsLoggingAbstractionsVersion)" />
+		<PackageReference Include="Polly" Version="$(PollyVersion)" />
+		<PackageReference Include="RabbitMQ.Client" Version="$(RabbitMQClientVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>

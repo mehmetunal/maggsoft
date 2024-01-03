@@ -91,7 +91,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Npgsql.Services", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ocelot", "Ocelot", "{311A3130-E6CE-49A4-B45C-9A841AD65314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocelot.Core", "Libraries\Ocelot\Maggsoft.Ocelot.Core\Maggsoft.Ocelot.Core.csproj", "{22C23AF2-A347-4222-B74D-1BDFD37220AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Ocelot.Core", "Libraries\Ocelot\Maggsoft.Ocelot.Core\Maggsoft.Ocelot.Core.csproj", "{22C23AF2-A347-4222-B74D-1BDFD37220AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0EFEB027-59DB-4ED2-98CF-DF04CFD7DC7D}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

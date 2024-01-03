@@ -1,16 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>1.0.1</Version>
-		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-		<RepositoryType>Git</RepositoryType>
+		<PackageId>$(RootNamespace)</PackageId>
+		<Description>The $(RootNamespace) project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
+		<PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
+		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
 
 </Project>

@@ -1,19 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>1.0.1</Version>
-		<Description>The Maggsoft.Mongo.Services.</Description>
-		<PackageId>Maggsoft.Mongo.Services</PackageId>
-		<PackageTags>Maggsoft,Maggsoft.Mongo.Services</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-		<RepositoryType>Git</RepositoryType>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+		<Description>The $(RootNamespace).</Description>
+		<PackageId>$(RootNamespace)</PackageId>
+		<PackageTags>Maggsoft,$(RootNamespace)</PackageTags>
+		<PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
+		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,9 +20,9 @@
 		<ProjectReference Include="..\Maggsoft.Services\Maggsoft.Services.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
-		<PackageReference Include="MailKit" Version="2.15.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-		<PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+		<PackageReference Include="AutoMapper" Version="$(AutoMapperVersion)" />
+		<PackageReference Include="MailKit" Version="$(MailKitVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="$(MicrosoftExtensionsConfigurationAbstractionsVersion)" />
+		<PackageReference Include="MongoDB.Driver" Version="$(MongoDBDriverVersion)" />
 	</ItemGroup>
 </Project>

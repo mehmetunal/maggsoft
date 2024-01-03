@@ -1,0 +1,97 @@
+<Project>
+    <PropertyGroup>   
+        <TargetFramework>net5.0</TargetFramework>
+        <Copyright>Copyright © Maggsoft, Ltd</Copyright>
+        <Company>Maggsoft Biliþim Teknolojileri Ýthalat Ýhracat Ticaret, Ltd</Company>
+        <Authors>Maggsoft Biliþim Teknolojileri Ýthalat Ýhracat Ticaret, Ltd</Authors>
+        <PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
+	    <PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
+	    <RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
+	    <RepositoryType>Git</RepositoryType>
+        <PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!--Fluent Start-->
+        <FluentMigratorVersion>3.3.2</FluentMigratorVersion>
+        <FluentMigratorRunnerVersion>3.3.2</FluentMigratorRunnerVersion>        
+        <FluentMigratorRunnerSqlServerVersion>3.3.2</FluentMigratorRunnerSqlServerVersion>
+        <FluentMigratorRunnerPostgresVersion>3.3.2</FluentMigratorRunnerPostgresVersion>
+        <!--Fluent End-->
+        <!--Microsoft Start-->
+        <MicrosoftExtensionsDependencyInjectionAbstractionsVersion>5.0.0</MicrosoftExtensionsDependencyInjectionAbstractionsVersion>
+        <MicrosoftExtensionsLoggingAbstractionsVersion>5.0.0</MicrosoftExtensionsLoggingAbstractionsVersion>
+        <MicrosoftExtensionsCachingMemoryVersion>5.0.0</MicrosoftExtensionsCachingMemoryVersion>
+        <MicrosoftExtensionsCachingStackExchangeRedis>5.0.1</MicrosoftExtensionsCachingStackExchangeRedis>
+        <MicrosoftExtensionsConfigurationAbstractionsVersion>5.0.0</MicrosoftExtensionsConfigurationAbstractionsVersion>
+        <MicrosoftEntityFrameworkCoreVersion>5.0.10</MicrosoftEntityFrameworkCoreVersion>
+        <MicrosoftEntityFrameworkCoreSqlServerVersion>5.0.9</MicrosoftEntityFrameworkCoreSqlServerVersion>
+        <MicrosoftEntityFrameworkCoreProxiesVersion>5.0.9</MicrosoftEntityFrameworkCoreProxiesVersion>
+        <MicrosoftEntityFrameworkCoreRelationalVersion>5.0.10</MicrosoftEntityFrameworkCoreRelationalVersion>
+        <MicrosoftAspNetCoreHostingAbstractionsVersion>2.2.0</MicrosoftAspNetCoreHostingAbstractionsVersion>
+        <MicrosoftAspNetCoreHostingAbstractions>2.2.0</MicrosoftAspNetCoreHostingAbstractions>
+        <MicrosoftAspNetCoreHttpFeaturesVersion>5.0.9</MicrosoftAspNetCoreHttpFeaturesVersion>
+        <MicrosoftAspNetCoreMvcCoreVersion>2.2.5</MicrosoftAspNetCoreMvcCoreVersion>
+        <MicrosoftExtensionsFileProvidersAbstractionsVersion>5.0.0</MicrosoftExtensionsFileProvidersAbstractionsVersion>
+        <MicrosoftExtensionsFileProvidersPhysicalVersion>5.0.0</MicrosoftExtensionsFileProvidersPhysicalVersion>
+        <MicrosoftWin32RegistryVersion>5.0.0</MicrosoftWin32RegistryVersion>
+        <MicrosoftEntityFrameworkCorePostgreSQLVersion>5.0.7</MicrosoftEntityFrameworkCorePostgreSQLVersion>
+        <MicrosoftAspNetCoreAuthenticationJwtBearerVersion>5.0.9</MicrosoftAspNetCoreAuthenticationJwtBearerVersion>
+        <MicrosoftAspNetCoreMvcVersioningVersion>5.0.0</MicrosoftAspNetCoreMvcVersioningVersion>
+        <MicrosoftExtensionsConfigurationAzureKeyVaultVersion>3.1.14</MicrosoftExtensionsConfigurationAzureKeyVaultVersion>
+        <!--Microsoft End-->
+
+        <!--MongoDB Start-->
+        <MongoDBDriverVersion>2.23.1</MongoDBDriverVersion>
+        <MongoDBBsonVersion>2.23.1</MongoDBBsonVersion>
+        <MongoDBDriverGridFSVersion>2.23.1</MongoDBDriverGridFSVersion>
+        <!--MongoDB End-->
+
+        <!--Azure Start-->
+        <AzureExtensionsAspNetCoreDataProtectionKeysVersion>1.0.2</AzureExtensionsAspNetCoreDataProtectionKeysVersion>
+        <AzureIdentityVersion>1.10.4</AzureIdentityVersion>
+        <AzureSecurityKeyVaultCertificatesVersion>4.1.0</AzureSecurityKeyVaultCertificatesVersion>
+        <!--Azure End-->
+ 
+        <!--Serilog Start-->
+        <SerilogEnrichersEnvironmentVersion>2.1.3</SerilogEnrichersEnvironmentVersion>
+        <SerilogSinksSeqVersion>4.0.0</SerilogSinksSeqVersion>
+        <!--Serilog End-->
+ 
+        <!--Ocelot Start-->
+        <OcelotVersion>17.0.1</OcelotVersion>
+        <OcelotCacheCacheManagerVersion>17.0.1</OcelotCacheCacheManagerVersion>
+        <!--Ocelot End-->
+ 
+        <!--MMLib Start-->
+        <MMLibOcelotProviderAppConfigurationVersion>2.0.0</MMLibOcelotProviderAppConfigurationVersion>
+        <MMLibSwaggerForOcelotVersion>4.4.1</MMLibSwaggerForOcelotVersion>
+        <!--MMLib End-->
+ 
+        <!--AutoMapper Start-->
+        <AutoMapperVersion>10.1.1</AutoMapperVersion>
+        <AutoMapperExtensionsMicrosoftDependencyInjectionVersion>8.1.1</AutoMapperExtensionsMicrosoftDependencyInjectionVersion>
+        <!--AutoMapper End-->
+
+        <!--System Start-->
+        <SystemDrawingCommonVersion>6.0.0</SystemDrawingCommonVersion>
+        <SystemIOFileSystemAccessControlVersion>5.0.0</SystemIOFileSystemAccessControlVersion>
+        <!--System End-->
+
+        <MessagePackVersion>2.3.85</MessagePackVersion>
+        <SystemRuntimeCachingVersion>7.0.0</SystemRuntimeCachingVersion>
+        <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
+        <AutofacVersion>6.3.0</AutofacVersion>
+        <AzureMessagingServiceBusVersion>7.5.1</AzureMessagingServiceBusVersion>
+        <PollyVersion>7.2.2</PollyVersion>
+        <RabbitMQClientVersion>6.2.2</RabbitMQClientVersion>
+        <SwashbuckleAspNetCoreVersion>5.6.3</SwashbuckleAspNetCoreVersion>
+        <MailKitVersion>2.15.0</MailKitVersion>
+        <RazorEngineCoreVersion>2022.8.1</RazorEngineCoreVersion>
+        <BCryptNetNextVersion>4.0.3</BCryptNetNextVersion>
+        <AspectCoreAbstractionsVersion>2.2.0</AspectCoreAbstractionsVersion>
+        <DocumentFormatOpenXmlVersion>2.20.0</DocumentFormatOpenXmlVersion>
+        <FastMemberVersion>1.5.0</FastMemberVersion>
+    </PropertyGroup>
+</Project>
