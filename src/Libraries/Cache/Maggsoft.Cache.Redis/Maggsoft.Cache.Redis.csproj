@@ -6,9 +6,9 @@
 	  <Company>$(Company)</Company>
 	  <Authors>$(Authors)</Authors>
 	  <Version>1.0.1</Version>
-	  <Description>The $(RootNamespace) caching redis.</Description>
-	  <PackageId>$(RootNamespace)</PackageId>
-	  <PackageTags>Maggsoft,$(RootNamespace)</PackageTags>
+	  <Description>The $(MSBuildProjectName) caching redis.</Description>
+	  <PackageId>$(MSBuildProjectName)</PackageId>
+	  <PackageTags>Maggsoft,$(MSBuildProjectName)</PackageTags>
 	  <PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
 	  <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 	  <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>

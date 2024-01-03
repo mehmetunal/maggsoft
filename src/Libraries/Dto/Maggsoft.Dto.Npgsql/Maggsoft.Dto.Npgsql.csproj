@@ -6,10 +6,10 @@
 		<Company>$(Company)</Company>
 		<Authors>$(Company)</Authors>
 		<Version>1.0.1</Version>
-		<PackageId>$(RootNamespace)</PackageId>
-		<Description>The $(RootNamespace) project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
+		<PackageId>$(MSBuildProjectName)</PackageId>
+		<Description>The $(MSBuildProjectName) project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
 		<PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
-		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<!--<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>-->
 		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
 		<RepositoryType>$(RepositoryType)</RepositoryType>

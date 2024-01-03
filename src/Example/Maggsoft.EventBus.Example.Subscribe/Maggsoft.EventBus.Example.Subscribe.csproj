@@ -7,7 +7,7 @@
 	  <Authors>$(Company)</Authors>
 	  <Version>0.1.2</Version>
 	  <Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-	  <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+	  <!--<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>-->
 	  <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 	  <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
 	  <RepositoryType>$(RepositoryType)</RepositoryType>

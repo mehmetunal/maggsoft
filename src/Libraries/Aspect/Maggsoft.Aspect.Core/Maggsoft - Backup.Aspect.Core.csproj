@@ -5,17 +5,15 @@
 	  <Copyright>$(Copyright)</Copyright>
 	  <Company>$(Company)</Company>
 	  <Authors>$(Authors)</Authors>
-	  <Version>1.0.2</Version>
+	  <Version>1.0.1</Version>
 	  <Description>The $(RootNamespace) AOP caching.</Description>
 	  <PackageId>$(RootNamespace)</PackageId>
 	  <PackageTags>Maggsoft,$(RootNamespace)</PackageTags>
 	  <PackageLicenseExpression>$(PackageLicenseExpression)</PackageLicenseExpression>
-	  <!--<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>-->
 	  <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 	  <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
 	  <RepositoryType>$(RepositoryType)</RepositoryType>
 	  <PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
-	  <AssemblyName>$(RootNamespace)</AssemblyName>
   </PropertyGroup>
 
 

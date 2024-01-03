@@ -6,9 +6,9 @@
 	  <Company>$(Company)</Company>
 	  <Authors>$(Authors)</Authors>
 	  <Version>1.0.1</Version>
-	  <Description>The $(RootNamespace) base entity and fluentmigration.</Description>
-	  <PackageId>$(RootNamespace)</PackageId>
-	  <PackageTags>Maggsoft,$(RootNamespace), FluentMigration</PackageTags>
+	  <Description>The $(MSBuildProjectName) base entity and fluentmigration.</Description>
+	  <PackageId>$(MSBuildProjectName)</PackageId>
+	  <PackageTags>Maggsoft,$(MSBuildProjectName), FluentMigration</PackageTags>
 	  <PackageLicenseExpression>$(PackageLicenseExpressionVersion)</PackageLicenseExpression>
 	  <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 	  <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
