@@ -27,7 +27,7 @@ namespace Maggsoft.ExampleTest.Controllers
         public async Task<IEnumerable<WeatherForecast>> GetAsync()
         {
 
-            await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" });
+            await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd-2" });
 
             //var users = _npgsqlContext.Users.ToList();
             //var user = new Entity.User { Text = "tt" };
