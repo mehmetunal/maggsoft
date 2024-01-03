@@ -1,9 +1,9 @@
-<Project>
+ï»¿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>   
         <TargetFramework>net5.0</TargetFramework>
-        <Copyright>Copyright © Maggsoft, Ltd</Copyright>
-        <Company>Maggsoft Biliþim Teknolojileri Ýthalat Ýhracat Ticaret, Ltd</Company>
-        <Authors>Maggsoft Biliþim Teknolojileri Ýthalat Ýhracat Ticaret, Ltd</Authors>
+        <Copyright>Copyright Â© Maggsoft, Ltd</Copyright>
+        <Company>Maggsoft BiliÅŸim Teknolojileri Ä°thalat Ä°hracat Ticaret, Ltd</Company>
+        <Authors>Maggsoft BiliÅŸim Teknolojileri Ä°thalat Ä°hracat Ticaret, Ltd</Authors>
         <!--<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>-->
 	    <PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 	    <RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
