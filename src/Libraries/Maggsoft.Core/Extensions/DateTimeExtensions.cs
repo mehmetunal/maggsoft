@@ -18,5 +18,20 @@ namespace Maggsoft.Core.Extensions
 
             return from.AddDays(target - start);
         }
+
+        /// <summary>
+        /// Unix Epoch value.
+        /// </summary>
+        public static readonly DateTime Epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        /// <summary>
+        /// Converts DateTime to UnixTimestamp.
+        /// </summary>
+        /// <param name="dateTime">.</param>
+        /// <returns>UnixTimestamp</returns>
+        public static int DateTimeToUnixTimestamp(this DateTime dateTime)
+        {
+            return (int)(dateTime - Epoch).TotalSeconds;
+        }
     }
 }
