@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.MemoryCache
 {
-    public class MaggsoftDistributedCache : IMaggsoftDistributedCache
+    public class MaggsoftDistributedCache : ICache
     {
         #region Properties
         private readonly IServiceProvider _serviceProvider;
@@ -64,6 +64,19 @@ namespace Maggsoft.Cache.MemoryCache
 
         public T Get<T>(string cacheKey)
             => (T)Get(cacheKey, typeof(T));
+
+        public T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire)
+        {
+            var result = Get<T>(cacheKey);
+            if (result != null)
+            {
+                return result;
+            }
+
+            var newData = acquire();
+            Set(cacheKey, cacheTime, true, newData);
+            return newData;
+        }
 
         public async Task<T> GetAsync<T>(string cacheKey)
             => await (GetAsync(cacheKey, typeof(T)) as Task<T>);
@@ -173,7 +186,7 @@ namespace Maggsoft.Cache.MemoryCache
         #region Private
         private void Removes(List<string> keyList)
             => keyList.ForEach((key) => _distributedCache.Remove(key));
-        
+
         private List<string> GetAllKeysList()
         {
             var items = new List<string>();
@@ -202,12 +215,12 @@ namespace Maggsoft.Cache.MemoryCache
         {
             FieldInfo coherentState = typeof(MemoryDistributedCache)
                 .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
             object coherentStateValue = coherentState.GetValue(_distributedCache);
-            
+
             PropertyInfo entriesCollection = coherentStateValue.GetType()
                 .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
             if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
             {
                 foreach (dynamic cacheItem in entriesCollectionValue)

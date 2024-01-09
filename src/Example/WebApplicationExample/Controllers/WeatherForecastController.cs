@@ -12,12 +12,22 @@ namespace WebApplicationExample.Controllers
         public WeatherForecastController(ITestService testService)
             => _testService = testService;
 
+        //[HttpGet]
+        //public string Get()
+        //    => _testService.Get();
+
+        //[HttpGet("remove")]
+        //public string Remove()
+        //    => _testService.Remove();
+
+
+
         [HttpGet]
-        public string Get()
+        public WeatherForecast Get()
             => _testService.Get();
 
         [HttpGet("remove")]
-        public string Remove()
+        public WeatherForecast Remove()
             => _testService.Remove();
     }
 }

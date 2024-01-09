@@ -7,12 +7,17 @@ namespace WebApplicationExample.Service
 {
     public interface ITestService : IService
     {
-        [AOPLogging]
+       /* [AOPLogging]
         [Cache(TTL = 30 * TTLMultiplier.Day, SlidingExpiration = false)]
         string Get();
 
         [AOPLogging]
         [CacheInvalidate]
-        string Remove();
+        string Remove();*/
+
+        WeatherForecast Get();
+
+
+        WeatherForecast Remove();
     }
 }

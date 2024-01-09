@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Cache
 {
-    public interface IMaggsoftDistributedCache
+    public interface ICache
     {
         object Get(string cacheKey);
         object Get(string cacheKey, Type deserializeType);
@@ -12,6 +13,7 @@ namespace Maggsoft.Cache
         Task<object> GetAsync(string cacheKey, Type deserializeType);
         
         T Get<T>(string cacheKey);
+        T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire);
         Task<T> GetAsync<T>(string cacheKey);
         
         void Set(string cacheKey, TimeSpan duration, bool slidingExpiration, object data);

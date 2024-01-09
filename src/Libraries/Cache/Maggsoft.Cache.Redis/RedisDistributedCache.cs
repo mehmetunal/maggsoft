@@ -10,7 +10,7 @@ using StackExchange.Redis;
 
 namespace Maggsoft.Cache.Redis
 {
-      public class RedisDistributedCache : IMaggsoftDistributedCache
+      public class RedisDistributedCache : ICache
     {
         private readonly IDatabase _cache;
         private readonly IDistributedCache _distributedCache;
@@ -66,6 +66,19 @@ namespace Maggsoft.Cache.Redis
 
         public T Get<T>(string cacheKey) 
             => (T) Get(cacheKey, typeof(T));
+
+        public T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire)
+        {
+            var result = Get<T>(cacheKey);
+            if (result != null)
+            {
+                return result;
+            }
+
+            var newData = acquire();
+            Set(cacheKey, cacheTime, true, newData);
+            return newData;
+        }
 
         public async Task<T> GetAsync<T>(string cacheKey)
             => await (GetAsync(cacheKey, typeof(T)) as Task<T>);

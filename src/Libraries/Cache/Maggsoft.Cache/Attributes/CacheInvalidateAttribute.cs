@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 namespace Maggsoft.Cache.Attributes
 {
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Method, AllowMultiple = true)]
-    public class CacheInvalidateAttribute: AspectAttribute
+    public class CacheInvalidateAttribute : AspectAttribute
     {
         private readonly string _cacheKey;
         private readonly Type _targetType;
         private readonly string _targetMethodName;
-        
+
         private ILogger<CacheInvalidateAttribute> _logger;
-        private IMaggsoftDistributedCache _distributedCache;
+        private ICache _distributedCache;
 
         #region Ctors
 
         public CacheInvalidateAttribute()
         {
-            
+
         }
-        
+
         public CacheInvalidateAttribute(string cacheKey)
         {
             if (string.IsNullOrEmpty(cacheKey))
@@ -32,7 +32,7 @@ namespace Maggsoft.Cache.Attributes
 
             _cacheKey = cacheKey;
         }
-        
+
         public CacheInvalidateAttribute(Type targetType)
         {
             if (targetType == null)
@@ -51,12 +51,12 @@ namespace Maggsoft.Cache.Attributes
         }
 
         #endregion
-        
+
         public override void OnSuccess(MethodExecutionArgs args)
         {
             string cacheKey = GetCacheName(args);
             _distributedCache.RemoveByPattern(cacheKey);
-            
+
             _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
         }
 
@@ -64,18 +64,18 @@ namespace Maggsoft.Cache.Attributes
         {
             string cacheKey = GetCacheName(args);
             await _distributedCache.RemoveByPatternAsync(cacheKey);
-            
+
             _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
         }
 
         public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
         {
-            _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
+            _distributedCache ??= serviceProvider.GetRequiredService<ICache>();
             if (_distributedCache == null)
                 throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
-            
+
             _logger ??= serviceProvider.GetRequiredService<ILogger<CacheInvalidateAttribute>>();
-          
+
             return base.LoadDependencies(serviceProvider);
         }
 

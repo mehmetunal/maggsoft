@@ -16,7 +16,7 @@ namespace Maggsoft.Cache.Attributes
         
         private bool _dataReceivedFromCache;
         private ILogger<CacheAttribute> _logger;
-        private IMaggsoftDistributedCache _distributedCache;
+        private ICache _distributedCache;
         
         public CacheAttribute()
         {
@@ -85,7 +85,7 @@ namespace Maggsoft.Cache.Attributes
 
         public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
         {
-            _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
+            _distributedCache ??= serviceProvider.GetRequiredService<ICache>();
             if (_distributedCache == null)
                 throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
             
