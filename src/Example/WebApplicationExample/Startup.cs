@@ -26,6 +26,7 @@ namespace WebApplicationExample
             services.RegisterAll<IService>();
             services.DecorateWithAspect<ITestService>();
             services.AddMaggsoftDistributedMemoryCache(typeof(IService));
+            //services.AddMaggsoftDistributedRedisCache(options => Configuration.Bind("Redis", options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

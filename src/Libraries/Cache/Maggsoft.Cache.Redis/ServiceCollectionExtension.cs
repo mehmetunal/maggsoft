@@ -7,7 +7,7 @@ namespace Maggsoft.Cache.Redis
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddDevDistributedRedisCache(
+        public static IServiceCollection AddMaggsoftDistributedRedisCache(
             this IServiceCollection services, 
             Action<RedisCacheOptions> options, 
             params Type[] assemblyPointerTypes)

@@ -33,5 +33,28 @@ namespace Maggsoft.Core.Extensions
         {
             return (int)(dateTime - Epoch).TotalSeconds;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tzCode">default code Turkey Standard Time</param>
+        /// <returns>TimeZoneInfo</returns>
+        public static TimeZoneInfo GetTimeZoneInfo(string tzCode = "Turkey Standard Time")
+        {
+            try
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById(tzCode);
+            }
+            catch (Exception)
+            {
+                return TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            }
+        }
+
+        public static DateTime TimeStampToDateTime(int timeStamp)
+        {
+            return TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(timeStamp), GetTimeZoneInfo()).DateTime;
+        }
+
     }
 }
