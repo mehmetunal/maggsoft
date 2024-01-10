@@ -139,6 +139,15 @@ namespace Maggsoft.Cache.MemoryCache
             _distributedCache.Remove(cacheKey);
         }
 
+        //public ICache RemoveT(string cacheKey)
+        //{
+        //    if (string.IsNullOrEmpty(cacheKey))
+        //        throw new ArgumentNullException(nameof(cacheKey));
+
+        //    _distributedCache.Remove(cacheKey);
+        //    return this;
+        //}
+
         public async Task RemoveAsync(string cacheKey)
         {
             if (string.IsNullOrEmpty(cacheKey))

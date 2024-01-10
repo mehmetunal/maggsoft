@@ -25,6 +25,7 @@ namespace WebApplicationExample.Service
         public WeatherForecast Remove()
         {
             _cache.Remove(cacheKey);
+
             var result = _cache.Get(cacheKey, TimeSpan.FromSeconds(15), () =>
             {
                 return new WeatherForecast() { Date = DateTime.Now, Summary = "mehmet___2", TemperatureC = 5 };

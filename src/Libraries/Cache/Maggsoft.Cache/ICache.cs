@@ -23,6 +23,7 @@ namespace Maggsoft.Cache
         Task RefreshAsync(string cacheKey);
         
         void Remove(string cacheKey);
+        //ICache Remove(string cacheKey);
         Task RemoveAsync(string cacheKey);
         
         void RemoveByPattern(string cachePattern);
