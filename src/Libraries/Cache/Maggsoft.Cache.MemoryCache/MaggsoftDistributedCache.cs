@@ -14,13 +14,13 @@ namespace Maggsoft.Cache.MemoryCache
     {
         #region Properties
         private readonly IServiceProvider _serviceProvider;
-        private readonly IDistributedCache _distributedCache;
+        private readonly IDistributedCache _cache;
         #endregion
 
         #region Ctor
-        public MaggsoftDistributedCache(IDistributedCache distributedCache, IServiceProvider serviceProvider)
+        public MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider serviceProvider)
         {
-            _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));
+            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _serviceProvider = serviceProvider;
         }
         #endregion
@@ -37,7 +37,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (deserializeType == null)
                 throw new ArgumentNullException(nameof(deserializeType));
 
-            byte[] cacheData = _distributedCache.Get(cacheKey);
+            byte[] cacheData = _cache.Get(cacheKey);
             if (cacheData == null)
                 return null;
 
@@ -55,7 +55,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (deserializeType == null)
                 throw new ArgumentNullException(nameof(deserializeType));
 
-            byte[] cacheData = await _distributedCache.GetAsync(cacheKey);
+            byte[] cacheData = await _cache.GetAsync(cacheKey);
             if (cacheData == null)
                 return null;
 
@@ -91,7 +91,7 @@ namespace Maggsoft.Cache.MemoryCache
 
             byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
 
-            _distributedCache.Set(cacheKey, cacheData, new DistributedCacheEntryOptions()
+            _cache.Set(cacheKey, cacheData, new DistributedCacheEntryOptions()
             {
                 SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
                 AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
@@ -108,7 +108,7 @@ namespace Maggsoft.Cache.MemoryCache
 
             byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
 
-            await _distributedCache.SetAsync(cacheKey, cacheData, new DistributedCacheEntryOptions()
+            await _cache.SetAsync(cacheKey, cacheData, new DistributedCacheEntryOptions()
             {
                 SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
                 AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
@@ -120,7 +120,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));
 
-            _distributedCache.Refresh(cacheKey);
+            _cache.Refresh(cacheKey);
         }
 
         public async Task RefreshAsync(string cacheKey)
@@ -128,7 +128,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));
 
-            await _distributedCache.RefreshAsync(cacheKey);
+            await _cache.RefreshAsync(cacheKey);
         }
 
         public void Remove(string cacheKey)
@@ -136,7 +136,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));
 
-            _distributedCache.Remove(cacheKey);
+            _cache.Remove(cacheKey);
         }
 
         //public ICache RemoveT(string cacheKey)
@@ -153,7 +153,7 @@ namespace Maggsoft.Cache.MemoryCache
             if (string.IsNullOrEmpty(cacheKey))
                 throw new ArgumentNullException(nameof(cacheKey));
 
-            await _distributedCache.RemoveAsync(cacheKey);
+            await _cache.RemoveAsync(cacheKey);
         }
 
         public void RemoveByPattern(string cachePattern)
@@ -194,7 +194,7 @@ namespace Maggsoft.Cache.MemoryCache
 
         #region Private
         private void Removes(List<string> keyList)
-            => keyList.ForEach((key) => _distributedCache.Remove(key));
+            => keyList.ForEach((key) => _cache.Remove(key));
 
         private List<string> GetAllKeysList()
         {
@@ -225,7 +225,7 @@ namespace Maggsoft.Cache.MemoryCache
             FieldInfo coherentState = typeof(MemoryDistributedCache)
                 .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
 
-            object coherentStateValue = coherentState.GetValue(_distributedCache);
+            object coherentStateValue = coherentState.GetValue(_cache);
 
             PropertyInfo entriesCollection = coherentStateValue.GetType()
                 .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
