@@ -24,7 +24,7 @@ namespace WebApplicationExample
         {
             services.AddControllers();
             services.RegisterAll<IService>();
-            services.DecorateWithAspect<ITestService>();
+            //services.DecorateWithAspect<ITestService>();
             services.AddMaggsoftDistributedMemoryCache(typeof(IService));
             //services.AddMaggsoftDistributedRedisCache(options => Configuration.Bind("Redis", options));
         }
