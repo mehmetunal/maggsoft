@@ -6,7 +6,7 @@
 		<Copyright>$(Copyright)</Copyright>
 		<Company>$(Company)</Company>
 		<Authors>$(Authors)</Authors>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<Description>The $(MSBuildProjectName) memory cache.</Description>
 		<PackageId>$(MSBuildProjectName)</PackageId>
 		<PackageTags>Maggsoft,$(MSBuildProjectName)</PackageTags>
