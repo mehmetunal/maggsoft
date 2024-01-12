@@ -81,7 +81,13 @@ namespace Maggsoft.Cache.Redis
         }
 
         public async Task<T> GetAsync<T>(string cacheKey)
-            => await (GetAsync(cacheKey, typeof(T)) as Task<T>);
+        {
+            var cacheResult = await GetAsync(cacheKey, typeof(T));
+            if (cacheResult == null)
+                return default;
+
+            return (T)cacheResult;
+        }
 
         public async Task<T> GetAsync<T>(string cacheKey, TimeSpan cacheTime, Func<Task<T>> acquire)
         {
