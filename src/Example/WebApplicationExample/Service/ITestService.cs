@@ -2,22 +2,24 @@
 using Maggsoft.Cache.Helpers;
 using Maggsoft.Core.IoC;
 using Maggsoft.Logging.Aspect;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebApplicationExample.Service
 {
     public interface ITestService : IService
     {
-       /* [AOPLogging]
-        [Cache(TTL = 30 * TTLMultiplier.Day, SlidingExpiration = false)]
-        string Get();
+        /* [AOPLogging]
+         [Cache(TTL = 30 * TTLMultiplier.Day, SlidingExpiration = false)]
+         string Get();
 
-        [AOPLogging]
-        [CacheInvalidate]
-        string Remove();*/
+         [AOPLogging]
+         [CacheInvalidate]
+         string Remove();*/
 
-        WeatherForecast Get();
+        Task<List<WeatherForecast>> Get();
 
 
-        WeatherForecast Remove();
+        Task<List<WeatherForecast>> Remove();
     }
 }

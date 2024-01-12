@@ -15,7 +15,8 @@ namespace Maggsoft.Cache
         T Get<T>(string cacheKey);
         T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire);
         Task<T> GetAsync<T>(string cacheKey);
-        
+        Task<T> GetAsync<T>(string cacheKey, TimeSpan cacheTime, Func<Task<T>> acquire);
+
         void Set(string cacheKey, TimeSpan duration, bool slidingExpiration, object data);
         Task SetAsync(string cacheKey, TimeSpan duration, bool slidingExpiration, object data);
 

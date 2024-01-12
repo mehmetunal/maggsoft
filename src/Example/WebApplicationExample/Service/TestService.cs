@@ -1,5 +1,8 @@
 ﻿using Maggsoft.Cache;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApplicationExample.Service
 {
@@ -12,25 +15,36 @@ namespace WebApplicationExample.Service
             _cache = cache;
         }
 
-        public WeatherForecast Get()
+        public async Task<List<WeatherForecast>> Get()
         {
-            var result = _cache.Get(cacheKey, TimeSpan.FromSeconds(15), () =>
+            var result = await _cache.GetAsync(cacheKey, TimeSpan.FromSeconds(15), async () =>
             {
-                return new WeatherForecast() { Date = DateTime.Now, Summary = "mehmet", TemperatureC = 5 };
+                var data = await this.GetAll();
+                return data;
             });
 
             return result;
         }
 
-        public WeatherForecast Remove()
+        public Task<List<WeatherForecast>> Remove()
         {
             _cache.Remove(cacheKey);
 
-            var result = _cache.Get(cacheKey, TimeSpan.FromSeconds(15), () =>
+            var result = _cache.GetAsync(cacheKey, TimeSpan.FromSeconds(15), async () =>
             {
-                return new WeatherForecast() { Date = DateTime.Now, Summary = "mehmet___2", TemperatureC = 5 };
+                var data = await this.GetAll();
+                return data;
             });
             return result;
+        }
+
+        private async Task<List<WeatherForecast>> GetAll()
+        {
+            var data = Enumerable.Range(0, 1200)
+                     .Select(s => new WeatherForecast { Date = DateTime.Now.AddDays(s), Summary = $"{s} - Mehnme ÜNAL", TemperatureC = s })
+                     .ToList();
+
+            return await Task.FromResult(data);
         }
         /*
 public string Get()

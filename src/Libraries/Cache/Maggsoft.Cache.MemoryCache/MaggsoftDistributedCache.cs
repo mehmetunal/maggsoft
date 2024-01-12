@@ -79,7 +79,26 @@ namespace Maggsoft.Cache.MemoryCache
         }
 
         public async Task<T> GetAsync<T>(string cacheKey)
-            => await (GetAsync(cacheKey, typeof(T)) as Task<T>);
+        {
+            var cacheResult = await GetAsync(cacheKey, typeof(T));
+            if (cacheResult == null)
+                return default;
+
+            return (T)cacheResult;
+        }
+
+        public async Task<T> GetAsync<T>(string cacheKey, TimeSpan cacheTime, Func<Task<T>> acquire)
+        {
+            var result = await GetAsync<T>(cacheKey);
+            if (result != null)
+            {
+                return result;
+            }
+
+            var newData = await acquire();
+            await SetAsync(cacheKey, cacheTime, true, newData);
+            return newData;
+        }
 
         public void Set(string cacheKey, TimeSpan duration, bool slidingExpiration, object data)
         {
