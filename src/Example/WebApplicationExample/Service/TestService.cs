@@ -19,7 +19,7 @@ namespace WebApplicationExample.Service
         {
             var result = await _cache.GetAsync(cacheKey, TimeSpan.FromSeconds(15), async () =>
             {
-                var data = await this.GetAll();
+                var data = await GetAll();
                 return data;
             });
 
@@ -32,17 +32,21 @@ namespace WebApplicationExample.Service
 
             var result = _cache.GetAsync(cacheKey, TimeSpan.FromSeconds(15), async () =>
             {
-                var data = await this.GetAll();
+                var data = await GetAll();
                 return data;
             });
             return result;
         }
 
-        private async Task<List<WeatherForecast>> GetAll()
+        private static async Task<List<WeatherForecast>> GetAll()
         {
             var data = Enumerable.Range(0, 1200)
-                     .Select(s => new WeatherForecast { Date = DateTime.Now.AddDays(s), Summary = $"{s} - Mehnme ÜNAL", TemperatureC = s })
-                     .ToList();
+                     .Select(index => new WeatherForecast
+                     {
+                         Date = DateTime.Now.AddDays(index),
+                         Summary = $"{index} - Mehnme ÜNAL",
+                         TemperatureC = index
+                     }).ToList();
 
             return await Task.FromResult(data);
         }
