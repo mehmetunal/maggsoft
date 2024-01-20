@@ -12,12 +12,11 @@ using System.IO;
 
 namespace Maggsoft.ExampleTest
 {
+    // https://github.com/ChangemakerStudios/serilog-sinks-mongodb
     public class Program
     {
         public static void Main(string[] args)
         {
-            Log.Information("Application starting up...");
-
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -27,8 +26,11 @@ namespace Maggsoft.ExampleTest
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configurationBuilder)
                 .CreateLogger();
+
             try
             {
+                Log.Information("Application starting up...");
+
                 CreateHostBuilder(args)
                     .Build()
                     .CreateDatabase()
@@ -42,18 +44,11 @@ namespace Maggsoft.ExampleTest
             {
                 Log.CloseAndFlush();
             }
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(a => { a.ClearProviders(); })
-                .UseSerilog((hostContext, loggerConfig) =>
-                {
-                    loggerConfig
-                        .ReadFrom.Configuration(hostContext.Configuration)
-                        .Enrich.WithProperty("ApplicationName", hostContext.HostingEnvironment.ApplicationName);
-                })
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -43,8 +43,6 @@ namespace Maggsoft.ExampleTest
             services.AddScoped<IMssqlRepository<UserLog>,Repository<UserLog>>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.RegisterAll<IService>();
-
-            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,8 +63,6 @@ namespace Maggsoft.ExampleTest
             {
                 endpoints.MapControllers();
             });
-
-            app.UseSerilogRequestLogging();
 
             app.AddUpMigrate();
             //app.AddDownMigrate();
