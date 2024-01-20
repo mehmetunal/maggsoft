@@ -2,7 +2,7 @@
 
 namespace Maggsoft.ExampleTest.Entity
 {
-    public class Log : Data.Mssql.BaseEntity
+    public class UserLog : Data.Mssql.BaseEntity
     {
         public string Text { get; set; }
         public Guid UserId { get; set; }

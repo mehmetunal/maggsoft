@@ -1,10 +1,8 @@
 ﻿using Maggsoft.ExampleTest.Services;
 using Maggsoft.Mssql.UnitOfWork;
-using Maggsoft.Services.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
+using System;
 using System.Threading.Tasks;
 
 namespace Maggsoft.ExampleTest.Controllers
@@ -34,6 +32,17 @@ namespace Maggsoft.ExampleTest.Controllers
         [HttpGet]
         public async Task<ActionResult> Get()
         {
+            _logger.LogWarning("Örnek Login");
+            _logger.LogError("Örnek Login");
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (NotImplementedException ex)
+            {
+                _logger.LogError("Serilog Error Test", ex.Message, ex);
+                throw;
+            }
             return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
 
             //var asd = await this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));

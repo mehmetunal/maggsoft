@@ -12,6 +12,7 @@ using AppContext = Maggsoft.ExampleTest.Context.AppContext;
 using Maggsoft.Mssql.Repository;
 using Maggsoft.ExampleTest.Entity;
 using Maggsoft.Mssql.UnitOfWork;
+using Serilog;
 
 namespace Maggsoft.ExampleTest
 {
@@ -38,13 +39,12 @@ namespace Maggsoft.ExampleTest
             //services.AddScoped<INpgsqlRepository<User>,NpgsqlRepository<User>>();
             //services.AddScoped<IUnitOfWork,UnitOfWork>();
 
-
-
             services.AddScoped<IMssqlRepository<User>,Repository<User>>();
-            services.AddScoped<IMssqlRepository<Log>,Repository<Log>>();
+            services.AddScoped<IMssqlRepository<UserLog>,Repository<UserLog>>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
             services.RegisterAll<IService>();
 
+            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +65,8 @@ namespace Maggsoft.ExampleTest
             {
                 endpoints.MapControllers();
             });
+
+            app.UseSerilogRequestLogging();
 
             app.AddUpMigrate();
             //app.AddDownMigrate();

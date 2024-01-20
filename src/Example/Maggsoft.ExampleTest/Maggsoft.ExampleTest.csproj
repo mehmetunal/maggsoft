@@ -1,9 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>$(TargetFramework)</TargetFramework>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="$(SerilogAspNetCoreVersion)" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="$(SerilogSinksMSSqlServerVersion)" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="$(SerilogSettingsConfigurationVersion)" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data.Mssql\Maggsoft.Data.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Data\Maggsoft.Data\Maggsoft.Data.csproj" />
@@ -12,6 +16,9 @@
     <ProjectReference Include="..\..\Libraries\Maggsoft.Mssql\Maggsoft.Mssql.csproj" />
     <ProjectReference Include="..\..\Libraries\Services\Maggsoft.Services\Maggsoft.Services.csproj" />
     <ProjectReference Include="..\..\Presentation\Maggsoft.Framework\Maggsoft.Framework.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Log\" />
   </ItemGroup>
 
 </Project>

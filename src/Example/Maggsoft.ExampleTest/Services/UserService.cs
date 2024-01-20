@@ -19,7 +19,7 @@ namespace Maggsoft.ExampleTest.Services
     {
         protected readonly IMapper Mapper;
         public readonly IMssqlRepository<User> Repository;
-        public readonly IMssqlRepository<Log> LogRepository;
+        public readonly IMssqlRepository<UserLog> LogRepository;
         public readonly DbContext DBContext;
         public UserService()
         {
@@ -29,8 +29,8 @@ namespace Maggsoft.ExampleTest.Services
             Repository = MaggsoftContext.Current.Resolve<IMssqlRepository<User>>()
                      ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<User>)} is null");
 
-            LogRepository = MaggsoftContext.Current.Resolve<IMssqlRepository<Log>>()
-                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<Log>)} is null");
+            LogRepository = MaggsoftContext.Current.Resolve<IMssqlRepository<UserLog>>()
+                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<UserLog>)} is null");
 
             DBContext = MaggsoftContext.Current.Resolve<DbContext>()
                      ?? throw new ArgumentNullException($"{nameof(DbContext)} is null");
@@ -68,7 +68,7 @@ namespace Maggsoft.ExampleTest.Services
             user.CreatedDate = DateTime.UtcNow;
             var result = await Repository.AddAsync(user);
 
-            var logEntity = new Log { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
+            var logEntity = new UserLog { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
             await LogRepository.AddAsync(logEntity);
 
             // await LogRepository.SaveChangesAsync();

@@ -1,6 +1,4 @@
-﻿using Maggsoft.Core.Infrastructure;
-using Maggsoft.Core.Model;
-using Maggsoft.ExampleTest.Entity;
+﻿using Maggsoft.Core.Model;
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +9,6 @@ namespace Maggsoft.ExampleTest.Dto
         public Guid Id { get; set; }
         public string Text { get; set; }
 
-        public virtual ICollection<LogResultDto> Logs { get; set; } = new List<LogResultDto>();
+        public virtual ICollection<UserLogResultDto> Logs { get; set; } = new List<UserLogResultDto>();
     }
 }
