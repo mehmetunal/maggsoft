@@ -9,7 +9,7 @@ public static class ServiceCollectionExtension
         this IServiceCollection services, params Type[] assemblyPointerTypes)
     {
         services.AddDistributedMemoryCache();
-        services.AddSingleton<IMaggsoftDistributedCache, MaggsoftDistributedCache>();
+        services.AddSingleton<ICache, MaggsoftDistributedCache>();
         services.DecorateAllInterfacesUsingAspect(assemblyPointerTypes);
         return services;
     }

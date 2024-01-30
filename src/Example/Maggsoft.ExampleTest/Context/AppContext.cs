@@ -25,6 +25,6 @@ namespace Maggsoft.ExampleTest.Context
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Log> Logs { get; set; }
+        public DbSet<UserLog> UserLogs { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace Maggsoft.ExampleTest
             CreateMap<User, UserAddDto>().ReverseMap();
             CreateMap<User, UserResultDto>().ReverseMap();
             CreateMap<IPagedList<User>, IPagedList<UserResultDto>>().ReverseMap();
-            CreateMap<Log, LogResultDto>().ReverseMap();
+            CreateMap<UserLog, UserLogResultDto>().ReverseMap();
         }
     }
 }

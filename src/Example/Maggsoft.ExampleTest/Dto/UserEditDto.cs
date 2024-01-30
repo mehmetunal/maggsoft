@@ -9,6 +9,6 @@ namespace Maggsoft.ExampleTest.Dto
     {
         public Guid Id { get; set; }
         public string Text { get; set; }
-        public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
+        public virtual ICollection<UserLog> UserLogs { get; set; } = new List<UserLog>();
     }
 }

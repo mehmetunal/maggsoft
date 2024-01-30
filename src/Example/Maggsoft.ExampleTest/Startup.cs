@@ -40,7 +40,7 @@ public class Startup
 
 
         services.AddScoped<IMssqlRepository<User>, Repository<User>>();
-        services.AddScoped<IMssqlRepository<Log>, Repository<Log>>();
+        services.AddScoped<IMssqlRepository<UserLog>, Repository<UserLog>>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.RegisterAll<IService>();
     }

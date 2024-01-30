@@ -16,7 +16,7 @@ public class CacheInvalidateAttribute: AspectAttribute
     private readonly string _targetMethodName;
     
     private ILogger<CacheInvalidateAttribute> _logger;
-    private IMaggsoftDistributedCache _distributedCache;
+    private ICache _cache;
 
     #region Ctors
 
@@ -55,7 +55,7 @@ public class CacheInvalidateAttribute: AspectAttribute
     public override void OnSuccess(MethodExecutionArgs args)
     {
         string cacheKey = GetCacheName(args);
-        _distributedCache.RemoveByPattern(cacheKey);
+        _cache.RemoveByPattern(cacheKey);
         
         _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
     }
@@ -63,15 +63,15 @@ public class CacheInvalidateAttribute: AspectAttribute
     public override async Task OnSuccessAsync(MethodExecutionArgs args)
     {
         string cacheKey = GetCacheName(args);
-        await _distributedCache.RemoveByPatternAsync(cacheKey);
+        await _cache.RemoveByPatternAsync(cacheKey);
         
         _logger.LogInformation("Cache invalidated for key: {CacheKey} after invoked method : {MethodName}", cacheKey, args.Method.Name);
     }
 
     public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
     {
-        _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
-        if (_distributedCache == null)
+        _cache ??= serviceProvider.GetRequiredService<ICache>();
+        if (_cache == null)
             throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
         
         _logger ??= serviceProvider.GetRequiredService<ILogger<CacheInvalidateAttribute>>();

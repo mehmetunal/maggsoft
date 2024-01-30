@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebApplicationExample.Service;
 
 namespace WebApplicationExample.Controllers
@@ -12,12 +14,22 @@ namespace WebApplicationExample.Controllers
         public WeatherForecastController(ITestService testService)
             => _testService = testService;
 
+        //[HttpGet]
+        //public string Get()
+        //    => _testService.Get();
+
+        //[HttpGet("remove")]
+        //public string Remove()
+        //    => _testService.Remove();
+
+
+
         [HttpGet]
-        public string Get()
-            => _testService.Get();
+        public async Task<List<WeatherForecast>> Get()
+            => await _testService.Get();
 
         [HttpGet("remove")]
-        public string Remove()
+        public Task<List<WeatherForecast>> Remove()
             => _testService.Remove();
     }
 }

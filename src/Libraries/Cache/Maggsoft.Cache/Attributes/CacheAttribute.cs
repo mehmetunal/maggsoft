@@ -16,7 +16,7 @@ public class CacheAttribute: AspectAttribute
     
     private bool _dataReceivedFromCache;
     private ILogger<CacheAttribute> _logger;
-    private IMaggsoftDistributedCache _distributedCache;
+    private ICache _cache;
     
     public CacheAttribute()
     {
@@ -42,7 +42,7 @@ public class CacheAttribute: AspectAttribute
     public override void OnBefore(MethodExecutionArgs args)
     {
         string cacheKey = CacheHelper.GetCacheKey(args, CacheKey);
-        args.ReturnValue = _distributedCache.Get(cacheKey);
+        args.ReturnValue = _cache.Get(cacheKey);
         _dataReceivedFromCache = args.ReturnValue != null;
         
         if(_dataReceivedFromCache)
@@ -54,7 +54,7 @@ public class CacheAttribute: AspectAttribute
         string cacheKey = CacheHelper.GetCacheKey(args, CacheKey);
         Type genericArgumentType = args.Method.ReturnType.GenericTypeArguments.First();
         
-        args.ReturnValue = await _distributedCache.GetAsync(cacheKey, genericArgumentType);
+        args.ReturnValue = await _cache.GetAsync(cacheKey, genericArgumentType);
         _dataReceivedFromCache = args.ReturnValue != null;
         
         if(_dataReceivedFromCache)
@@ -67,7 +67,7 @@ public class CacheAttribute: AspectAttribute
             return;
         
         string cacheKey = CacheHelper.GetCacheKey(args, CacheKey);
-        _distributedCache.Set(cacheKey, TimeSpan.FromSeconds(TTL), SlidingExpiration, args.ReturnValue);
+        _cache.Set(cacheKey, TimeSpan.FromSeconds(TTL), SlidingExpiration, args.ReturnValue);
         
         _logger.LogInformation("Data cached with key: {CacheKey}", cacheKey );
     }
@@ -78,15 +78,15 @@ public class CacheAttribute: AspectAttribute
             return;
         
         string cacheKey = CacheHelper.GetCacheKey(args, CacheKey);
-        await _distributedCache.SetAsync(cacheKey, TimeSpan.FromSeconds(TTL), SlidingExpiration, args.ReturnValue);
+        await _cache.SetAsync(cacheKey, TimeSpan.FromSeconds(TTL), SlidingExpiration, args.ReturnValue);
         
         _logger.LogInformation("Data cached with key: {CacheKey}", cacheKey );
     }
 
     public override AspectAttribute LoadDependencies(IServiceProvider serviceProvider)
     {
-        _distributedCache ??= serviceProvider.GetRequiredService<IMaggsoftDistributedCache>();
-        if (_distributedCache == null)
+        _cache ??= serviceProvider.GetRequiredService<ICache>();
+        if (_cache == null)
             throw new ArgumentException("ICareerIDistributedCache is not registered on DI.");
         
         _logger ??= serviceProvider.GetRequiredService<ILogger<CacheAttribute>>();

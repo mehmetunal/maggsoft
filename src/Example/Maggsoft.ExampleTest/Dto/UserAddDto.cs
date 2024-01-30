@@ -7,6 +7,6 @@ namespace Maggsoft.ExampleTest.Dto
     public class UserAddDto : BaseDtoModel
     {
         public string Text { get; set; }
-        public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
+        public virtual ICollection<UserLog> UserLogs { get; set; } = new List<UserLog>();
     }
 }

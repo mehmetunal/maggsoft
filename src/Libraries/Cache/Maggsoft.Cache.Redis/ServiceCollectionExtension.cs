@@ -18,7 +18,7 @@ public static class ServiceCollectionExtension
         var multiplexer = ConnectionMultiplexer.Connect(redisOptions.Configuration);
         services.AddStackExchangeRedisCache(options);
         services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-        services.AddSingleton<IMaggsoftDistributedCache, RedisDistributedCache>();
+        services.AddSingleton<ICache, RedisDistributedCache>();
         services.DecorateAllInterfacesUsingAspect(assemblyPointerTypes);
         
         return services;

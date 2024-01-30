@@ -10,14 +10,12 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.MemoryCache;
 
-public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServiceProvider serviceProvider) : IMaggsoftDistributedCache
+public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider serviceProvider) : ICache
 {
     #region Properties
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    private readonly IDistributedCache _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));
+    private readonly IDistributedCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
-    #endregion
-    #region Ctor
     #endregion
 
     #region Method
@@ -32,7 +30,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
         if (deserializeType == null)
             throw new ArgumentNullException(nameof(deserializeType));
 
-        byte[] cacheData = _distributedCache.Get(cacheKey);
+        byte[] cacheData = _cache.Get(cacheKey);
         if (cacheData == null)
             return null;
 
@@ -50,7 +48,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
         if (deserializeType == null)
             throw new ArgumentNullException(nameof(deserializeType));
 
-        byte[] cacheData = await _distributedCache.GetAsync(cacheKey);
+        byte[] cacheData = await _cache.GetAsync(cacheKey);
         if (cacheData == null)
             return null;
 
@@ -60,8 +58,40 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
     public T Get<T>(string cacheKey)
         => (T)Get(cacheKey, typeof(T));
 
+    public T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire)
+    {
+        var result = Get<T>(cacheKey);
+        if (result != null)
+        {
+            return result;
+        }
+
+        var newData = acquire();
+        Set(cacheKey, cacheTime, true, newData);
+        return newData;
+    }
+
     public async Task<T> GetAsync<T>(string cacheKey)
-        => await (GetAsync(cacheKey, typeof(T)) as Task<T>);
+    {
+        var cacheResult = await GetAsync(cacheKey, typeof(T));
+        if (cacheResult == null)
+            return default;
+
+        return (T)cacheResult;
+    }
+
+    public async Task<T> GetAsync<T>(string cacheKey, TimeSpan cacheTime, Func<Task<T>> acquire)
+    {
+        var result = await GetAsync<T>(cacheKey);
+        if (result != null)
+        {
+            return result;
+        }
+
+        var newData = await acquire();
+        await SetAsync(cacheKey, cacheTime, true, newData);
+        return newData;
+    }
 
     public void Set(string cacheKey, TimeSpan duration, bool slidingExpiration, object data)
     {
@@ -73,7 +103,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
 
         byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
 
-        _distributedCache.Set(cacheKey, cacheData, new DistributedCacheEntryOptions()
+        _cache.Set(cacheKey, cacheData, new DistributedCacheEntryOptions()
         {
             SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
             AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
@@ -90,7 +120,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
 
         byte[] cacheData = MessagePackSerializer.Serialize(data, ContractlessStandardResolver.Options);
 
-        await _distributedCache.SetAsync(cacheKey, cacheData, new DistributedCacheEntryOptions()
+        await _cache.SetAsync(cacheKey, cacheData, new DistributedCacheEntryOptions()
         {
             SlidingExpiration = slidingExpiration ? duration : (TimeSpan?)null,
             AbsoluteExpiration = !slidingExpiration ? DateTimeOffset.Now + duration : (DateTimeOffset?)null
@@ -102,7 +132,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
         if (string.IsNullOrEmpty(cacheKey))
             throw new ArgumentNullException(nameof(cacheKey));
 
-        _distributedCache.Refresh(cacheKey);
+        _cache.Refresh(cacheKey);
     }
 
     public async Task RefreshAsync(string cacheKey)
@@ -110,7 +140,7 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
         if (string.IsNullOrEmpty(cacheKey))
             throw new ArgumentNullException(nameof(cacheKey));
 
-        await _distributedCache.RefreshAsync(cacheKey);
+        await _cache.RefreshAsync(cacheKey);
     }
 
     public void Remove(string cacheKey)
@@ -118,15 +148,24 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
         if (string.IsNullOrEmpty(cacheKey))
             throw new ArgumentNullException(nameof(cacheKey));
 
-        _distributedCache.Remove(cacheKey);
+        _cache.Remove(cacheKey);
     }
+
+    //public ICache RemoveT(string cacheKey)
+    //{
+    //    if (string.IsNullOrEmpty(cacheKey))
+    //        throw new ArgumentNullException(nameof(cacheKey));
+
+    //    _distributedCache.Remove(cacheKey);
+    //    return this;
+    //}
 
     public async Task RemoveAsync(string cacheKey)
     {
         if (string.IsNullOrEmpty(cacheKey))
             throw new ArgumentNullException(nameof(cacheKey));
 
-        await _distributedCache.RemoveAsync(cacheKey);
+        await _cache.RemoveAsync(cacheKey);
     }
 
     public void RemoveByPattern(string cachePattern)
@@ -167,8 +206,8 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
 
     #region Private
     private void Removes(List<string> keyList)
-        => keyList.ForEach((key) => _distributedCache.Remove(key));
-    
+        => keyList.ForEach((key) => _cache.Remove(key));
+
     private List<string> GetAllKeysList()
     {
         var items = new List<string>();
@@ -197,12 +236,12 @@ public class MaggsoftDistributedCache(IDistributedCache distributedCache, IServi
     {
         FieldInfo coherentState = typeof(MemoryDistributedCache)
             .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
-        
-        object coherentStateValue = coherentState.GetValue(_distributedCache);
-        
+
+        object coherentStateValue = coherentState.GetValue(_cache);
+
         PropertyInfo entriesCollection = coherentStateValue.GetType()
             .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
-        
+
         if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
         {
             foreach (dynamic cacheItem in entriesCollectionValue)
