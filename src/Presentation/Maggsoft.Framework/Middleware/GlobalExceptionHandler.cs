@@ -17,7 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Middleware;
-internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHostEnvironment environment, IConfiguration configuration) : IExceptionHandler
+public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHostEnvironment environment, IConfiguration configuration) : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger = logger;
     private readonly IHostEnvironment _environment = environment;
@@ -70,7 +70,7 @@ internal sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> log
 
             if (errorMessage.TryParseJson(out Error error))
             {
-                response.Message = error; 
+                response.Message = error;
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             }
             else

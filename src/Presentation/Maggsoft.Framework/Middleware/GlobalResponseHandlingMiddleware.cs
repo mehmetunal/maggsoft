@@ -14,7 +14,7 @@ namespace Maggsoft.Framework.Middleware;
 [AttributeUsage(AttributeTargets.All)]
 public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
 
-internal sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConfiguration configuration)
+public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConfiguration configuration)
 {
     private readonly RequestDelegate _next = next;
     private readonly IConfiguration _configuration = configuration;
