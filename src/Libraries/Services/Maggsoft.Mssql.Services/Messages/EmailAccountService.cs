@@ -1,25 +1,22 @@
 ﻿using Maggsoft.Core.Exceptions;
 using Maggsoft.Core.Helper;
-using Maggsoft.Data.Npgsql.Messages;
-using Maggsoft.Npgsql.Repository;
-using Maggsoft.Npgsql.Services.Messages;
+using Maggsoft.Data.Mssql.Messages;
+using Maggsoft.Mssql.Repository;
+using Maggsoft.Mssql.Services.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Npgsql.Service.Messages;
+namespace Maggsoft.Mssql.Service.Messages;
 
 /// <summary>
 /// Email account service
 /// </summary>
-public partial class EmailAccountService(INpgsqlRepository<EmailAccount> emailAccountRepository) : IEmailAccountService
+public partial class EmailAccountService(IMssqlRepository<EmailAccount> emailAccountRepository) : IEmailAccountService
 {
     #region Fields
-    private readonly INpgsqlRepository<EmailAccount> _emailAccountRepository = emailAccountRepository;
-
-    #endregion
-    #region Ctor
+    private readonly IMssqlRepository<EmailAccount> _emailAccountRepository = emailAccountRepository;
 
     #endregion
 

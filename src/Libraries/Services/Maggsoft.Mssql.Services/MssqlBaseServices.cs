@@ -6,8 +6,8 @@ using Maggsoft.Core.Infrastructure;
 using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
 using Maggsoft.Core.Model.Pagination;
-using Maggsoft.Data.Npgsql;
-using Maggsoft.Npgsql.Repository;
+using Maggsoft.Data.Mssql;
+using Maggsoft.Mssql.Repository;
 using Maggsoft.Services.Events;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +16,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Npgsql.Service
+namespace Maggsoft.Mssql.Services
 {
-    public partial class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
+    public partial class MssqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
         new()
         where TResultDto : BaseDtoModel,
         new()
@@ -30,13 +30,13 @@ namespace Maggsoft.Npgsql.Service
 
         protected readonly IMapper Mapper;
         private readonly IEventPublisher EventPublisher;
-        public readonly INpgsqlRepository<TTable> Repository;
+        public readonly IMssqlRepository<TTable> Repository;
 
         #endregion
 
         #region Ctor
 
-        protected NpgsqlBaseServices()
+        protected MssqlBaseServices()
         {
             Mapper = MaggsoftContext.Current.Resolve<IMapper>()
                      ?? throw new ArgumentNullException($"{nameof(IMapper)} is null");
@@ -44,8 +44,8 @@ namespace Maggsoft.Npgsql.Service
             EventPublisher = MaggsoftContext.Current.Resolve<IEventPublisher>()
                      ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
 
-            Repository = MaggsoftContext.Current.Resolve<INpgsqlRepository<TTable>>()
-                     ?? throw new ArgumentNullException($"{nameof(INpgsqlRepository<TTable>)} is null");
+            Repository = MaggsoftContext.Current.Resolve<IMssqlRepository<TTable>>()
+                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<TTable>)} is null");
         }
 
         #endregion
