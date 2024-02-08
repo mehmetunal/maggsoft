@@ -1,8 +1,10 @@
 ﻿using Maggsoft.ExampleTest.Services;
 using Maggsoft.Mssql.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Maggsoft.ExampleTest.Controllers
@@ -21,21 +23,29 @@ namespace Maggsoft.ExampleTest.Controllers
 
         private readonly IUserService userService = userService;
 
+        private string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public IResult Get()
         {
-            _logger.LogWarning("Örnek Login");
-            _logger.LogError("Örnek Login");
-            try
-            {
-                throw new NotImplementedException();
-            }
-            catch (NotImplementedException ex)
-            {
-                _logger.LogError("Serilog Error Test", ex.Message, ex);
-                throw;
-            }
-            return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
+            var forecast = Enumerable.Range(1, 5)
+                .Select(index => new WeatherForecast(DateTime.Now.AddDays(index), Random.Shared.Next(-20, 55), summaries[Random.Shared.Next(summaries.Length)]))
+                .ToArray();
+
+            return Results.Json(forecast);
+
+            //_logger.LogWarning("Örnek Login");
+            //_logger.LogError("Örnek Login");
+            //try
+            //{
+            //    throw new NotImplementedException();
+            //}
+            //catch (NotImplementedException ex)
+            //{
+            //    _logger.LogError("Serilog Error Test", ex.Message, ex);
+            //    throw;
+            //}
+            //return Ok(await userService.AddAsync(new Dto.UserAddDto { Text = "asdasdasdasd" }));
 
             //var asd = await this.userService.GetAsync(0, int.MaxValue, true, includes: p => p.Include(o => o.Logs.OrderByDescending(od => od.Text)));
 

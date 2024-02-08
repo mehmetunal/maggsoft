@@ -1,6 +1,6 @@
 
+using Maggsoft.Framework.Middleware;
 using Microsoft.Extensions.DependencyInjection;
-using WebApplication2.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,10 +54,13 @@ app.MapGet("/weatherforecast", () =>
             summaries[Random.Shared.Next(summaries.Length)]
         ))
         .ToArray();
-    return forecast;
+    return Results.Json(forecast);
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapGet("/hello", () =>
+    Results.Json(new { Message = "Hello World" }));
 
 app.MapGet("/weatherforecast1", () =>
 {

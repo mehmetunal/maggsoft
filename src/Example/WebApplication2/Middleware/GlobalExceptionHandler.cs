@@ -1,5 +1,4 @@
-﻿using Maggsoft.Core.Extensions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 
 namespace WebApplication2.Middleware;
 
