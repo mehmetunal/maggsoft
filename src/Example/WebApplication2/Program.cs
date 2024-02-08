@@ -60,7 +60,10 @@ app.MapGet("/weatherforecast", () =>
 .WithOpenApi();
 
 app.MapGet("/hello", () =>
-    Results.Json(new { Message = "Hello World" }));
+{
+    var result = Enumerable.Range(0, 2).Select(s => new { Message = $"Hello World {s}" });
+    return Results.Json(new { Message = "Hello World", Data = result });
+});
 
 app.MapGet("/weatherforecast1", () =>
 {

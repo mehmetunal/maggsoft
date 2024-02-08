@@ -63,6 +63,8 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
 
         Console.ForegroundColor = ConsoleColor.Green;
         Console.WriteLine($"[{DateTime.Now.ToLongTimeString()}]:{context.Request.Method}-{context.Request.Path}-size limit violation : {context.Request.ContentLength}");
+        Console.WriteLine($"Response : {json}");
+
         Console.ForegroundColor = ConsoleColor.White;
 
         context.Response.Body = originalBody;
