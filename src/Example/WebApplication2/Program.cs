@@ -1,6 +1,5 @@
 
 using Maggsoft.Framework.Middleware;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
