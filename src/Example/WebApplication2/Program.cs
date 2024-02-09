@@ -1,4 +1,6 @@
 
+using Maggsoft.Core.Base;
+using Maggsoft.Core.Model;
 using Maggsoft.Framework.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,7 +55,8 @@ app.MapGet("/weatherforecast", () =>
             summaries[Random.Shared.Next(summaries.Length)]
         ))
         .ToArray();
-    return Results.Json(forecast);
+
+    return Result.Failure(error: Error.None);
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
