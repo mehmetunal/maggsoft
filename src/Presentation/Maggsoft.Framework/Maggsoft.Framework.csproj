@@ -10,7 +10,7 @@
 		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-				<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
 
