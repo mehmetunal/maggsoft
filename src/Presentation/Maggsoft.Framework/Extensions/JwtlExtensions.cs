@@ -195,4 +195,38 @@ public static class JwtExtensions
             });
         return services;
     }
+    public static IServiceCollection AddIdentityJwtConfig(this IServiceCollection services)
+    {
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(delegate (JwtBearerOptions x)
+        {
+            x.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = delegate (AuthenticationFailedContext context)
+                {
+                    context.NoResult();
+                    context.Response.Headers.TryAdd("Token-Expired", "true");
+                    throw new UnauthorizedAccessException();
+                },
+                OnForbidden = delegate (ForbiddenContext context)
+                {
+                    context.Response.StatusCode = 403;
+                    throw new ForbiddenExtension("Forbidden");
+                },
+                OnMessageReceived = (MessageReceivedContext context) => Task.CompletedTask,
+                OnTokenValidated = (TokenValidatedContext context) => Task.CompletedTask,
+                OnChallenge = delegate (JwtBearerChallengeContext context)
+                {
+                    context.HandleResponse();
+                    throw new UnauthorizedAccessException();
+                }
+            };
+            x.BackchannelHttpHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+        });
+
+        return services;
+    }
 }

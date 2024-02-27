@@ -37,13 +37,18 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
         {
             var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;
             var minorVersionConfig = _configuration.GetSection("ApiVersion:MinorVersion")?.Value;
-
+            object jObjectData = json;
+            try
+            {
+                jObjectData = JsonSerializer.Deserialize<object>(json, jsonSettings);
+            }
+            catch { }
             response = new()
             {
-                IsSuccess = true,
-                StatusCode = StatusCodes.Status200OK,
-                Data = JsonSerializer.Deserialize<object>(json, jsonSettings),
-                ApiVersion = $"{majorVersionConfig}.{minorVersionConfig}"
+                IsSuccess = context.Response.StatusCode == StatusCodes.Status200OK,
+                StatusCode = context.Response.StatusCode,
+                Data = jObjectData,
+                ApiVersion = majorVersionConfig != null && minorVersionConfig != null ? $"{majorVersionConfig}.{minorVersionConfig}" : null
             };
 
         }

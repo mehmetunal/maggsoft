@@ -55,12 +55,14 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         else if (exception is NotFoundException || exception is KeyNotFoundException || exception is NotFoundException)
             httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
-        else if (exception is Exception || exception is FileLoadException || exception is MaggsoftException)
-            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         else if (exception is ForbiddenExtension)
             httpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
         else if (exception is UnauthorizedAccessException)
             httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        else if (exception is Exception || exception is FileLoadException || exception is MaggsoftException)
+            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        else
+            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
         if (response.ValidationMessages.Count == 0)
         {
