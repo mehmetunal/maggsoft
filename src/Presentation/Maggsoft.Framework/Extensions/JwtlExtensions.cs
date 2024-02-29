@@ -2,6 +2,7 @@
 using Maggsoft.Framework.Security.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -197,35 +198,10 @@ public static class JwtExtensions
     }
     public static IServiceCollection AddIdentityJwtConfig(this IServiceCollection services)
     {
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(delegate (JwtBearerOptions x)
-        {
-            x.Events = new JwtBearerEvents
-            {
-                OnAuthenticationFailed = delegate (AuthenticationFailedContext context)
-                {
-                    context.NoResult();
-                    context.Response.Headers.TryAdd("Token-Expired", "true");
-                    throw new UnauthorizedAccessException();
-                },
-                OnForbidden = delegate (ForbiddenContext context)
-                {
-                    context.Response.StatusCode = 403;
-                    throw new ForbiddenExtension("Forbidden");
-                },
-                OnMessageReceived = (MessageReceivedContext context) => Task.CompletedTask,
-                OnTokenValidated = (TokenValidatedContext context) => Task.CompletedTask,
-                OnChallenge = delegate (JwtBearerChallengeContext context)
-                {
-                    context.HandleResponse();
-                    throw new UnauthorizedAccessException();
-                }
-            };
-            x.BackchannelHttpHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-        }).AddCookie();
+        services
+            .AddAuthentication(IdentityConstants.BearerScheme)
+            .AddBearerToken(IdentityConstants.BearerScheme);
+        services.AddAuthorizationBuilder();
 
         return services;
     }
