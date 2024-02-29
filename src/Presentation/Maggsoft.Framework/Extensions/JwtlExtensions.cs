@@ -225,7 +225,7 @@ public static class JwtExtensions
             {
                 ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
-        });
+        }).AddCookie();
 
         return services;
     }
