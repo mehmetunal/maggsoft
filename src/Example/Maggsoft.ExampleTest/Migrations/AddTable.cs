@@ -23,7 +23,7 @@ public class AddTable : Migration
         .WithColumn(nameof(BaseEntity.DisplayOrder)).AsInt16().NotNullable().WithDefaultValue(0)
         .WithColumn("Text").AsString();
 
-        Create.Table("Logs")
+        Create.Table("UserLogs")
             .WithColumn(nameof(BaseEntity.Id)).AsGuid().PrimaryKey().WithDefaultValue(SystemMethods.NewSequentialId).NotNullable()
             .WithColumn(nameof(BaseEntity.IsPublish)).AsBoolean().WithDefaultValue(true).NotNullable()
             .WithColumn(nameof(BaseEntity.IsDeleted)).AsBoolean().WithDefaultValue(false).NotNullable()
@@ -36,8 +36,8 @@ public class AddTable : Migration
             .WithColumn(nameof(BaseEntity.DisplayOrder)).AsInt16().NotNullable().WithDefaultValue(0).WithColumn("Text").AsString()
             .WithColumn("UserId").AsGuid().ForeignKey("Users", "Id").OnDeleteOrUpdate(System.Data.Rule.Cascade);
 
-        Create.Index("IX_Logs_UserId")
-            .OnTable("Logs")
+        Create.Index("IX_UserLogs_UserId")
+            .OnTable("UserLogs")
             .OnColumn("UserId")
             .Ascending()
             .WithOptions()

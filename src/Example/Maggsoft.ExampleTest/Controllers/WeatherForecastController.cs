@@ -1,7 +1,9 @@
-﻿using Maggsoft.ExampleTest.Services;
+﻿using Maggsoft.ExampleTest.Entity;
+using Maggsoft.ExampleTest.Services;
 using Maggsoft.Mssql.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
@@ -11,13 +13,13 @@ namespace Maggsoft.ExampleTest.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController(ILogger<WeatherForecastController> logger, Context.AppContext npgsqlContext, IUnitOfWork uow, IUserService userService) : ControllerBase
+    public class WeatherForecastController(ILogger<WeatherForecastController> logger, DbContext DBContext, IUnitOfWork uow, IUserService userService) : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
-        private readonly Context.AppContext _npgsqlContext = npgsqlContext;
+        private readonly DbContext DBContext = DBContext;
         private readonly IUnitOfWork _uow = uow;
         private readonly ILogger<WeatherForecastController> _logger = logger;
 
@@ -26,13 +28,42 @@ namespace Maggsoft.ExampleTest.Controllers
         private string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
         [HttpGet]
-        public IResult Get()
+        public async Task<int> Get()
         {
-            var forecast = Enumerable.Range(1, 5)
-                .Select(index => new WeatherForecast(DateTime.Now.AddDays(index), Random.Shared.Next(-20, 55), summaries[Random.Shared.Next(summaries.Length)]))
-                .ToArray();
+            /*
+            var user = new Entity.User { Text = "tt", CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() };
+            user.UserLogs.Add(new UserLog() { Text = "MENU 1", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+            user.UserLogs.Add(new UserLog() { Text = "MENU 2", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+            user.UserLogs.Add(new UserLog() { Text = "MENU 3", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+            user.UserLogs.Add(new UserLog() { Text = "MENU 4", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
 
-            return Results.Json(forecast);
+            userService.AddAsync()
+            */
+            try
+            {
+
+                var user = new Dto.UserAddDto { Text = "asdasdasdasd" };
+                user.UserLogs.Add(new UserLog() { Text = "MENU 1", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+                user.UserLogs.Add(new UserLog() { Text = "MENU 2", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+                user.UserLogs.Add(new UserLog() { Text = "MENU 3", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+                user.UserLogs.Add(new UserLog() { Text = "MENU 4", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });
+                await userService.AddAsync(user);
+
+                DBContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            return 0;
+
+            //var forecast = Enumerable.Range(1, 5)
+            //    .Select(index => new WeatherForecast(DateTime.Now.AddDays(index), Random.Shared.Next(-20, 55), summaries[Random.Shared.Next(summaries.Length)]))
+            //    .ToArray();
+
+            //return Results.Json(forecast);
 
             //_logger.LogWarning("Örnek Login");
             //_logger.LogError("Örnek Login");
