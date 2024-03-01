@@ -210,6 +210,22 @@ public partial class EmailSender(IMaggsoftFileProvider fileProvider, ISmtpBuilde
     {
         return SendEmailAsync(email, "Reset your password for MyWebSite", $"Reset your MyWebSite password using the following code: {resetCode}");
     }
+
+
+    public async Task SendConfirmationEmailAsync<TUser>(TUser user, string email, string code, string confirmationLink, string? callbackUrl) where TUser : class
+    {
+        var frontendConfirmationLink = $"<a href='{callbackUrl}/{user.UserId}/{code}'>clicking here</a>";
+        
+        await SendEmailAsync(email, $"{user.Name}, confirm your email", $"Please confirm message (in my native language) {frontendConfirmationLink}.");
+    }
+    
+    // Merged ResetCode & ResetLink into one.
+    public async Task SendPasswordResetEmailAsync<TUser>(TUser user, string email, string resetCode, string resetLink, string? callbackUrl) where TUser : class
+    {
+        var frontendResetLink = $"<a href='{callbackUrl}/{email}/{resetCode}'>clicking here</a>";
+    
+        await SendEmailAsync(email, $"{user.Name}, reset your password", $"Reset password message (in my native language): {frontendResetLink}");
+    }
 }
  
  */
