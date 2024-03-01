@@ -167,3 +167,49 @@ public partial class EmailSender(IMaggsoftFileProvider fileProvider, ISmtpBuilde
 
     #endregion
 }
+
+/*
+ public class MyEmailSender : IEmailSender
+{
+    private readonly EmailClient _client;
+
+    public MyEmailSender(IConfiguration config)
+    {
+        var credential = new ChainedTokenCredential(
+            new ClientSecretCredential( 
+                _config["AZURE_TENANT_ID"],
+                _config["AZURE_CLIENT_ID"],
+                _config["AZURE_CLIENT_SECRET"]),
+            new ManagedIdentityCredential()
+        )
+        _client = new EmailClient(new Uri("https://my-instance.communication.azure.com/")
+    }
+
+    public Task SendEmailAsync(string email, string subject, string message)
+    {
+        var recipients = new EmailRecipients(new [] { new EmailAddress(email) });
+        var content = new EmailContent(subject)
+        {
+            PlainText = message
+        };
+
+        await _client.SendAsync(new EmailMessage("me@mywebsite.com", content, recipients);
+    }
+
+    public Task SendConfirmationLinkAsync<TUser>(TUser user, string email, string confirmationLink) where TUser : class
+    {
+        return SendEmailAsync(email, "Confirm your email for MyWebSite", $"Please confirm your MyWebSite account by <a href='{confirmationLink}'>clicking here</a>.");
+    }
+
+    public Task SendPasswordResetLinkAsync<TUser>(TUser user, string email, string resetLink) where TUser : class
+    {
+        return SendEmailAsync(email, "Reset your password for MyWebSite", $"Please reset your MyWebSite password by <a href='{resetLink}'>clicking here</a>.");
+    }
+
+    public Task SendPasswordResetCodeAsync<TUser>(TUser user, string email, string resetCode) where TUser : class
+    {
+        return SendEmailAsync(email, "Reset your password for MyWebSite", $"Reset your MyWebSite password using the following code: {resetCode}");
+    }
+}
+ 
+ */
