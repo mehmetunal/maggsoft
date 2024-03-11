@@ -7,15 +7,17 @@ namespace Maggsoft.Mssql.Services
 {
     public class BaseService
     {
-        protected virtual Guid? CurrentUserId { get; set; }
+        private string currentUserId => GetClaim(ClaimTypes.NameIdentifier);
+
+        protected virtual Guid? CurrentUserId => !string.IsNullOrEmpty(currentUserId) ? Guid.Parse(currentUserId) : null;
 
         protected virtual string CurrentUserRole => GetClaim(ClaimTypes.Role);
 
-        protected virtual string GetClaim(string key)
+        protected virtual string? GetClaim(string key)
         {
             try
             {
-                var identity = MaggsoftContext.Current.Resolve<IHttpContextAccessor>()?.HttpContext?.User?.Identity as ClaimsIdentity;
+                ClaimsIdentity? identity = MaggsoftContext.Current.Resolve<IHttpContextAccessor>()?.HttpContext?.User?.Identity as ClaimsIdentity;
                 if (identity == null)
                     return null;
 
