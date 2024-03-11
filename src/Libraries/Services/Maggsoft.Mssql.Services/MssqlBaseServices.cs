@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Mssql.Services
 {
-    public partial class MssqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
+    public partial class MssqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> : BaseService where TTable : BaseEntity,
         new()
         where TResultDto : BaseDtoModel,
         new()
