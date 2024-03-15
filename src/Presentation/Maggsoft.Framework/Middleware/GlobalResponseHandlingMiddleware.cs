@@ -1,6 +1,7 @@
 ﻿using Maggsoft.Core.Base;
 using Maggsoft.Core.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -33,6 +34,7 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
         var json = await FormatResponse(context);
 
         _ = json.TryParseJson(out Result<object> response);
+        _ = json.TryParseJson(out ProblemDetails problemDetails);
         if (response == null)
         {
             var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;
@@ -52,6 +54,13 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
             };
 
         }
+        
+        if (problemDetails != null)
+        {
+            response.StatusCode = problemDetails.Status.Value;
+            response.Message = problemDetails.Detail;
+        }
+
         if (response.StatusCode == default)
         {
             response.StatusCode = StatusCodes.Status200OK;
