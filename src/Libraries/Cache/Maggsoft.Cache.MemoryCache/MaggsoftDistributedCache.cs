@@ -234,20 +234,39 @@ public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider 
 
     private void ReadCacheKeys(Action<ICacheEntry> call)
     {
-        FieldInfo coherentState = typeof(MemoryDistributedCache)
+        FieldInfo memCache = typeof(MemoryDistributedCache)
             .GetField("_memCache", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        object coherentStateValue = coherentState.GetValue(_cache);
+        object memCacheValue = memCache.GetValue(_cache);
 
-        PropertyInfo entriesCollection = coherentStateValue.GetType()
-            .GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+        PropertyInfo entriesCollection = memCacheValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
+        if (entriesCollection != null)
         {
-            foreach (dynamic cacheItem in entriesCollectionValue)
+            if (entriesCollection.GetValue(memCacheValue) is ICollection entriesCollectionValue)
             {
-                ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
-                call(cacheItemValue);
+                foreach (dynamic cacheItem in entriesCollectionValue)
+                {
+                    ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
+                    call(cacheItemValue);
+                }
+            }
+
+        }
+        else
+        {
+            var coherentState = memCacheValue.GetType().GetField("_coherentState", BindingFlags.NonPublic | BindingFlags.Instance);
+            var coherentStateValue = coherentState.GetValue(memCacheValue);
+
+            entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
+            {
+                foreach (dynamic cacheItem in entriesCollectionValue)
+                {
+                    ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
+                    call(cacheItemValue);
+                }
             }
         }
     }
