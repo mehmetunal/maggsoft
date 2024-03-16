@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.Caching.Distributed;
 
-public class MemoryDistributedCache : IDistributedCache
+public class MemoryDistributedCacheExtend : IDistributedCache
 {
     private readonly IMemoryCache _memCache;
 
-    public MemoryDistributedCache(IOptions<MemoryDistributedCacheOptions> optionsAccessor)
+    public MemoryDistributedCacheExtend(IOptions<MemoryDistributedCacheOptions> optionsAccessor)
         : this(optionsAccessor, NullLoggerFactory.Instance) { }
 
-    public MemoryDistributedCache(IOptions<MemoryDistributedCacheOptions> optionsAccessor, ILoggerFactory loggerFactory)
+    public MemoryDistributedCacheExtend(IOptions<MemoryDistributedCacheOptions> optionsAccessor, ILoggerFactory loggerFactory)
     {
         if (optionsAccessor == null)
         {
