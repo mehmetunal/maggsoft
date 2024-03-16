@@ -13,10 +13,10 @@ namespace Maggsoft.Sqlite.Service.Messages;
 /// <summary>
 /// Email account service
 /// </summary>
-public partial class EmailAccountService(IMssqlRepository<EmailAccount> emailAccountRepository) : IEmailAccountService
+public partial class EmailAccountService(ISqliteRepository<EmailAccount> emailAccountRepository) : IEmailAccountService
 {
     #region Fields
-    private readonly IMssqlRepository<EmailAccount> _emailAccountRepository = emailAccountRepository;
+    private readonly ISqliteRepository<EmailAccount> _emailAccountRepository = emailAccountRepository;
 
     #endregion
 

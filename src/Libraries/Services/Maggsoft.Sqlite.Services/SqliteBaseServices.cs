@@ -30,7 +30,7 @@ namespace Maggsoft.Sqlite.Services
 
         protected readonly IMapper Mapper;
         private readonly IEventPublisher EventPublisher;
-        public readonly IMssqlRepository<TTable> Repository;
+        public readonly ISqliteRepository<TTable> Repository;
 
         #endregion
 
@@ -44,8 +44,8 @@ namespace Maggsoft.Sqlite.Services
             EventPublisher = MaggsoftContext.Current.Resolve<IEventPublisher>()
                      ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
 
-            Repository = MaggsoftContext.Current.Resolve<IMssqlRepository<TTable>>()
-                     ?? throw new ArgumentNullException($"{nameof(IMssqlRepository<TTable>)} is null");
+            Repository = MaggsoftContext.Current.Resolve<ISqliteRepository<TTable>>()
+                     ?? throw new ArgumentNullException($"{nameof(ISqliteRepository<TTable>)} is null");
         }
 
         #endregion

@@ -24,7 +24,7 @@ public class UnitOfWork(DbContext context) : IUnitOfWork
 
     #region BusinessSection
 
-    public IMssqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity
+    public ISqliteRepository<T> GetRepository<T>() where T : BaseEntity, IEntity
         => new Repository<T>(_context);
 
     public bool BeginNewTransaction()

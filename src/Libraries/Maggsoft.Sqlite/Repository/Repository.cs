@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Maggsoft.Sqlite.Repository;
 
-public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IEntity
+public sealed class Repository<T> : ISqliteRepository<T> where T : BaseEntity, IEntity
 {
     #region Variables
 
