@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -35,7 +36,7 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
 
         _ = json.TryParseJson(out Result<object> response);
         _ = json.TryParseJson(out ProblemDetails problemDetails);
-        if (response == null)
+        if (response == null)//lsit data
         {
             var majorVersionConfig = _configuration.GetSection("ApiVersion:MajorVersion")?.Value;
             var minorVersionConfig = _configuration.GetSection("ApiVersion:MinorVersion")?.Value;
@@ -52,13 +53,20 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
                 Data = jObjectData,
                 ApiVersion = majorVersionConfig != null && minorVersionConfig != null ? $"{majorVersionConfig}.{minorVersionConfig}" : null
             };
-
         }
-        
-        if (problemDetails != null)
+
+        if (problemDetails != null && problemDetails.Status != null)//results.problem error
         {
-            response.StatusCode = problemDetails.Status.Value;
             response.Message = problemDetails.Detail;
+            response.StatusCode = problemDetails.Status.Value;
+        }
+        else if (response != null && response.Data != null
+            && response.Data is not JsonElement && response.Message == null
+            && (response.ValidationMessages == null || (response.ValidationMessages != null && response.ValidationMessages.Count() == 0)) &&
+            (problemDetails != null && problemDetails.Status == null))//one data
+        {
+            response.Data = JsonSerializer.Deserialize<object>(json, jsonSettings);
+            response.IsSuccess = context.Response.StatusCode == StatusCodes.Status200OK;
         }
 
         if (response.StatusCode == default)

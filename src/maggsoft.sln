@@ -99,13 +99,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Mssql.Services", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Npgsql.Services", "Libraries\Services\Maggsoft.Npgsql.Services\Maggsoft.Npgsql.Services.csproj", "{872022F3-DBA5-45AF-8A75-6ACD56523802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Sqlite", "Libraries\Maggsoft.Sqlite\Maggsoft.Sqlite.csproj", "{3BE8314A-3ED1-4928-AADD-B955C1438EB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Sqlite", "Libraries\Maggsoft.Sqlite\Maggsoft.Sqlite.csproj", "{3BE8314A-3ED1-4928-AADD-B955C1438EB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Data.Sqlite", "Libraries\Data\Maggsoft.Data.Sqlite\Maggsoft.Data.Sqlite.csproj", "{50ECAD72-E449-4332-969F-AC32829BC680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Data.Sqlite", "Libraries\Data\Maggsoft.Data.Sqlite\Maggsoft.Data.Sqlite.csproj", "{50ECAD72-E449-4332-969F-AC32829BC680}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Dto.Sqlite", "Libraries\Dto\Maggsoft.Dto.Sqlite\Maggsoft.Dto.Sqlite.csproj", "{F4E22C4C-4D3F-4535-AC62-90967A9C0A17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Dto.Sqlite", "Libraries\Dto\Maggsoft.Dto.Sqlite\Maggsoft.Dto.Sqlite.csproj", "{F4E22C4C-4D3F-4535-AC62-90967A9C0A17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Sqlite.Services", "Libraries\Services\Maggsoft.Sqlite.Services\Maggsoft.Sqlite.Services.csproj", "{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Sqlite.Services", "Libraries\Services\Maggsoft.Sqlite.Services\Maggsoft.Sqlite.Services.csproj", "{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Endpoints", "Endpoints", "{D5227832-32CA-4590-AF8E-0DB5F2219F62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Endpoints", "Libraries\Endpoints\Maggsoft.Endpoints\Maggsoft.Endpoints.csproj", "{4F4C894C-4D80-4A84-BE20-08997BD5F989}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -257,6 +261,10 @@ Global
 		{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -310,6 +318,8 @@ Global
 		{50ECAD72-E449-4332-969F-AC32829BC680} = {0C64D20C-6DF0-45B7-B539-9DE066A145BE}
 		{F4E22C4C-4D3F-4535-AC62-90967A9C0A17} = {4F056C78-5586-4D84-A27E-1A8C312C03B6}
 		{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB} = {AA6D3110-B340-4EAD-9DE6-4A4138EFC36F}
+		{D5227832-32CA-4590-AF8E-0DB5F2219F62} = {69FA5BF1-2C7B-4289-B482-0E7F25D41748}
+		{4F4C894C-4D80-4A84-BE20-08997BD5F989} = {D5227832-32CA-4590-AF8E-0DB5F2219F62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}

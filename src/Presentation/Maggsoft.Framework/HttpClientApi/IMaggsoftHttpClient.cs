@@ -15,5 +15,11 @@ namespace Maggsoft.Framework.HttpClientApi
         Task<Result<T>> PostAsJsonAsync<T>(string url, T body) where T : class;
         Task<Result<T>> PostAsync<T>(string url, T body) where T : class;
         Task<Result<object>> PostAsync(string url, HttpContent content);
+
+        Task<Result<T>> PutAsJsonAsync<T>(string url, T body) where T : class;
+        Task<Result<T>> PutAsync<T>(string url, T body) where T : class;
+        Task<Result<object>> PutAsync(string url, HttpContent content);
+
+        Task<Result> DeleteAsync(string url, object id);
     }
 }
