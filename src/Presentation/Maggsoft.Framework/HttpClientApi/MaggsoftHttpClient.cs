@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.HttpClientApi
@@ -54,6 +55,7 @@ namespace Maggsoft.Framework.HttpClientApi
 
         #endregion
 
+
         #region Method
 
         /// <summary>
@@ -65,7 +67,7 @@ namespace Maggsoft.Framework.HttpClientApi
             await _httpClient.GetStringAsync("/");
         }
 
-        public virtual async Task<List<T>> GetAllAsync<T>(string url)
+        public virtual async Task<List<TResult>> GetAllAsync<TResult>(string url) where TResult : class
         {
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
@@ -73,26 +75,34 @@ namespace Maggsoft.Framework.HttpClientApi
 
             var jObject = JsonConvert.DeserializeObject<Result<object>>(responseBody).Data.ToString();
             if (string.IsNullOrEmpty(jObject))
-                return Activator.CreateInstance<List<T>>();
+                return Activator.CreateInstance<List<TResult>>();
 
-            var result = JsonConvert.DeserializeObject<List<T>>(jObject.ToString());
+            var result = JsonConvert.DeserializeObject<List<TResult>>(jObject.ToString());
 
             return result;
         }
 
-        public virtual async Task<T> GetAsync<T>(string url)
+        public virtual async Task<TResult> GetAsync<TResult>(string url) where TResult : class
         {
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
+            try
+            {
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsStringAsync();
 
-            var jObject = JsonConvert.DeserializeObject<Result<object>>(responseBody).Data.ToString();
-            if (string.IsNullOrEmpty(jObject))
-                return Activator.CreateInstance<T>();
+                var jObject = JsonConvert.DeserializeObject<Result<object>>(responseBody).Data.ToString();
+                if (string.IsNullOrEmpty(jObject))
+                    return Activator.CreateInstance<TResult>();
 
-            var result = JsonConvert.DeserializeObject<T>(jObject.ToString());
+                var result = JsonConvert.DeserializeObject<TResult>(jObject.ToString());
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public virtual async Task<HttpResponseMessage> GetClientAsync(string url, Dictionary<string, string> qParametre = null)
@@ -112,15 +122,15 @@ namespace Maggsoft.Framework.HttpClientApi
             }
         }
 
-        public async Task<Result<T>> PostAsJsonAsync<T>(string url, T body) where T : class
+        public async Task<Result<TResult>> PostAsJsonAsync<TResult>(string url, object body) where TResult : class
         {
             HttpResponseMessage obj = await _httpClient.PostAsJsonAsync(url, body);
             obj.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<Result<T>>(await obj.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result<T>> PostAsync<T>(string url, T body) where T : class
+        public async Task<Result<TResult>> PostAsync<TResult>(string url, object body) where TResult : class
         {
             var bodyJson = JsonConvert.SerializeObject(body);
             var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
@@ -128,7 +138,7 @@ namespace Maggsoft.Framework.HttpClientApi
             HttpResponseMessage obj = await _httpClient.PostAsync(url, stringContent);
             obj.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<Result<T>>(await obj.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
         public async Task<Result<object>> PostAsync(string url, HttpContent content)
@@ -136,6 +146,40 @@ namespace Maggsoft.Framework.HttpClientApi
             HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
             obj.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
+        }
+
+
+        public async Task<Result<TResult>> PutAsJsonAsync<TResult>(string url, object body) where TResult : class
+        {
+            HttpResponseMessage obj = await _httpClient.PutAsJsonAsync(url, body);
+            obj.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
+        }
+
+        public async Task<Result<TResult>> PutAsync<TResult>(string url, object body) where TResult : class
+        {
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage obj = await _httpClient.PutAsync(url, stringContent);
+            obj.EnsureSuccessStatusCode();
+
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
+        }
+
+        public async Task<Result<object>> PutAsync(string url, HttpContent content)
+        {
+            HttpResponseMessage obj = await _httpClient.PutAsync(url, content);
+            obj.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
+        }
+
+        public async Task<Result> DeleteAsync(string url, object id)
+        {
+            HttpResponseMessage obj = await _httpClient.DeleteAsync($"{url}/{id}", CancellationToken.None);
+            obj.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Result>(await obj.Content.ReadAsStringAsync());
         }
 
 

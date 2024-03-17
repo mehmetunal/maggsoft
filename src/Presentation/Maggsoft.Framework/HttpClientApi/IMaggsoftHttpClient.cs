@@ -8,16 +8,16 @@ namespace Maggsoft.Framework.HttpClientApi
     public interface IMaggsoftHttpClient
     {
         Task PingAsync();
-        Task<List<T>> GetAllAsync<T>(string url);
-        Task<T> GetAsync<T>(string url);
+        Task<List<TResult>> GetAllAsync<TResult>(string url) where TResult : class;
+        Task<TResult> GetAsync<TResult>(string url) where TResult : class;
         Task<HttpResponseMessage> GetClientAsync(string url, Dictionary<string, string> qParametre = null);
 
-        Task<Result<T>> PostAsJsonAsync<T>(string url, T body) where T : class;
-        Task<Result<T>> PostAsync<T>(string url, T body) where T : class;
+        Task<Result<TResult>> PostAsJsonAsync<TResult>(string url, object body) where TResult : class;
+        Task<Result<TResult>> PostAsync<TResult>(string url, object body) where TResult : class;
         Task<Result<object>> PostAsync(string url, HttpContent content);
 
-        Task<Result<T>> PutAsJsonAsync<T>(string url, T body) where T : class;
-        Task<Result<T>> PutAsync<T>(string url, T body) where T : class;
+        Task<Result<TResult>> PutAsJsonAsync<TResult>(string url, object body) where TResult : class;
+        Task<Result<TResult>> PutAsync<TResult>(string url, object body) where TResult : class;
         Task<Result<object>> PutAsync(string url, HttpContent content);
 
         Task<Result> DeleteAsync(string url, object id);
