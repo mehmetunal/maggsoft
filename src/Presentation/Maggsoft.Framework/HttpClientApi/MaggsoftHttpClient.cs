@@ -141,6 +141,17 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
+        public async Task<Result<TResult>> SendAsync<TResult>(string url, object body, HttpMethod method) where TResult : class
+        {
+            var request = new HttpRequestMessage(method, url);
+            var bodyJson = JsonConvert.SerializeObject(body);
+            var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
+            request.Content = stringContent;
+            HttpResponseMessage obj = await _httpClient.SendAsync(request);
+            obj.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
+        }
+
         public async Task<Result<object>> PostAsync(string url, HttpContent content)
         {
             HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
