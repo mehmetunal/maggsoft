@@ -19,8 +19,8 @@ namespace Maggsoft.Framework.HttpClientApi
     {
         #region Fields
 
-        private readonly HttpClient _httpClient;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        public readonly HttpClient _httpClient;
+        public readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IConfiguration _configuration;
         private decimal? _languageId = 0;
 
@@ -192,7 +192,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result>(await obj.Content.ReadAsStringAsync());
         }
 
-        public string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
+        public virtual string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
 
         public decimal? GetLang()
         {
