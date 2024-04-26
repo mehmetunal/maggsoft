@@ -122,7 +122,7 @@ namespace Maggsoft.Framework.HttpClientApi
             }
         }
 
-        public async Task<Result<TResult>> PostAsJsonAsync<TResult>(string url, object body) where TResult : class
+        public virtual async Task<Result<TResult>> PostAsJsonAsync<TResult>(string url, object body) where TResult : class
         {
             HttpResponseMessage obj = await _httpClient.PostAsJsonAsync(url, body);
             obj.EnsureSuccessStatusCode();
@@ -130,7 +130,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result<TResult>> PostAsync<TResult>(string url, object body) where TResult : class
+        public virtual async Task<Result<TResult>> PostAsync<TResult>(string url, object body) where TResult : class
         {
             var bodyJson = JsonConvert.SerializeObject(body);
             var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
@@ -141,7 +141,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<TResult> SendAsync<TResult>(string url, object body, HttpMethod method) where TResult : class
+        public virtual async Task<TResult> SendAsync<TResult>(string url, object body, HttpMethod method) where TResult : class
         {
             var request = new HttpRequestMessage(method, url);
             var bodyJson = JsonConvert.SerializeObject(body);
@@ -152,15 +152,14 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<TResult>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result<object>> PostAsync(string url, HttpContent content)
+        public virtual async Task<Result<object>> PostAsync(string url, HttpContent content)
         {
             HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
             obj.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
         }
 
-
-        public async Task<Result<TResult>> PutAsJsonAsync<TResult>(string url, object body) where TResult : class
+        public virtual async Task<Result<TResult>> PutAsJsonAsync<TResult>(string url, object body) where TResult : class
         {
             HttpResponseMessage obj = await _httpClient.PutAsJsonAsync(url, body);
             obj.EnsureSuccessStatusCode();
@@ -168,7 +167,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result<TResult>> PutAsync<TResult>(string url, object body) where TResult : class
+        public virtual async Task<Result<TResult>> PutAsync<TResult>(string url, object body) where TResult : class
         {
             var bodyJson = JsonConvert.SerializeObject(body);
             var stringContent = new StringContent(bodyJson, Encoding.UTF8, "application/json");
@@ -179,22 +178,21 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result<object>> PutAsync(string url, HttpContent content)
+        public virtual async Task<Result<object>> PutAsync(string url, HttpContent content)
         {
             HttpResponseMessage obj = await _httpClient.PutAsync(url, content);
             obj.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public async Task<Result> DeleteAsync(string url, object id)
+        public virtual async Task<Result> DeleteAsync(string url, object id)
         {
             HttpResponseMessage obj = await _httpClient.DeleteAsync($"{url}/{id}", CancellationToken.None);
             obj.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<Result>(await obj.Content.ReadAsStringAsync());
         }
 
-
-        private string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
+        public string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
 
         public decimal? GetLang()
         {
