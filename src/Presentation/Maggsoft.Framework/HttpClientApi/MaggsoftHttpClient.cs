@@ -152,7 +152,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<TResult>(await obj.Content.ReadAsStringAsync());
         }
 
-        public virtual async Task<Result<object>> PostAsync(string url, HttpContent content)
+        public virtual async Task<Result<object>> PostHttpContentAsync(string url, HttpContent content)
         {
             HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
             obj.EnsureSuccessStatusCode();
@@ -178,7 +178,7 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public virtual async Task<Result<object>> PutAsync(string url, HttpContent content)
+        public virtual async Task<Result<object>> PutHttpContentAsync(string url, HttpContent content)
         {
             HttpResponseMessage obj = await _httpClient.PutAsync(url, content);
             obj.EnsureSuccessStatusCode();
