@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maggsoft.Core.Base;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -813,9 +815,16 @@ public static class StringExtensions
     {
         try
         {
-            JsonSerializerOptions jsonSettings = new () { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
-            result = JsonSerializer.Deserialize<T>(obj, jsonSettings);
-            return true;
+            JsonSerializerOptions jsonSettings = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
+            JsonNode jsonNode = JsonNode.Parse(obj);
+            if (jsonNode[nameof(Result.TimeStamp)] != null)
+            {
+                result = JsonSerializer.Deserialize<T>(obj, jsonSettings);
+                return true;
+            }
+
+            result = default(T);
+            return false;
         }
         catch (Exception)
         {
