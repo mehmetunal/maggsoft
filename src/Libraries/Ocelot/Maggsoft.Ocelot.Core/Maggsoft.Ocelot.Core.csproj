@@ -17,11 +17,11 @@
 	</PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Ocelot" Version="22.0.1" />
-	  <PackageReference Include="Ocelot.Cache.CacheManager" Version="22.0.1" />
+	  <PackageReference Include="Ocelot" Version="23.2.2" />
+	  <PackageReference Include="Ocelot.Cache.CacheManager" Version="23.2.2" />
 	  <PackageReference Include="MMLib.Ocelot.Provider.AppConfiguration" Version="3.0.0" />
-	  <PackageReference Include="MMLib.SwaggerForOcelot" Version="8.1.0" />
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	  <PackageReference Include="MMLib.SwaggerForOcelot" Version="8.2.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
 </Project>
