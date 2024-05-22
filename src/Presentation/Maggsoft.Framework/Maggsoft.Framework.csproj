@@ -5,7 +5,7 @@
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
-		<Version>2.1.7</Version>
+		<Version>2.1.8</Version>
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
 		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
