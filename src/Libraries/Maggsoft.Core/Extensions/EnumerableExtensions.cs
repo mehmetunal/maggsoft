@@ -65,6 +65,9 @@ public static class EnumerableExtensions
             var member = Expression.Property(parameter, prop.Name);
             var converter = TypeDescriptor.GetConverter(prop.PropertyType); // 1
             object propertyValue = null;
+            
+            f.Operator = converter is DateTimeConverter ? Operators.Equal : f.Operator;
+
             try
             {
                 propertyValue = converter.ConvertFromInvariantString(
