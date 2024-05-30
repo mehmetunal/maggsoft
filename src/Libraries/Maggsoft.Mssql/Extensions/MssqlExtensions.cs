@@ -20,10 +20,10 @@ namespace Maggsoft.Mssql.Extensions;
 public static class MssqlExtensions
 {
     public static IServiceCollection AddMssqlConfig<TContext>(this IServiceCollection services,
-        IConfiguration configuration) where TContext : DbContext
+        IConfiguration configuration, Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null) where TContext : DbContext
     {
         var connection = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<TContext>(options => { options.UseSqlServer(connection); });
+        services.AddDbContext<TContext>(options => { options.UseSqlServer(connection, sqlServerOptionsAction); });
         services.AddScoped<DbContext, TContext>();
         return services;
     }
