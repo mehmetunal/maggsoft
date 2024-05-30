@@ -27,7 +27,7 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
         //image/
         context.Request.Headers.TryGetValue("Accept", out StringValues acceptHeaders);
 
-        if (IgnoreResponse(context) || (!string.IsNullOrEmpty(acceptHeaders) && acceptHeaders.Any(predicate: c => c.StartsWith("image/"))))
+        if (IgnoreResponse(context) || (!string.IsNullOrEmpty(acceptHeaders) && acceptHeaders.Any(predicate: c => c.Contains("image/"))))
         {
             await _next(context);
             return;
