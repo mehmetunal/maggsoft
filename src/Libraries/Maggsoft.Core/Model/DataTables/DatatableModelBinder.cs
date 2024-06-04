@@ -65,8 +65,6 @@ namespace Maggsoft.Core.Model.DataTables
                         list.Add(new Column(text, text2, searchable, orderable, searchValue, isRegexValue));
                         continue;
                     }
-
-                    break;
                 }
 
                 return list;
