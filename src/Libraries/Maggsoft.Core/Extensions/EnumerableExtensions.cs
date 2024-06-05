@@ -55,6 +55,13 @@ public static class EnumerableExtensions
         return startIndex == -1 || endIndex == -1 ? null : sender.GetRange(startIndex, endIndex);
     }
 
+    /// <summary>
+    /// https://medium.com/@maghawry.hussein20/how-to-generate-ef-queries-dynamically-75e0343c536a
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <param name="q"></param>
+    /// <param name="args"></param>
+    /// <returns></returns>
     public static IQueryable<TSource> AddFilterQuery<TSource>(this IQueryable<TSource> q, List<Filter> args)
     {
         if (args.HasNotFilter())
