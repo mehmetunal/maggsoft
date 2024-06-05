@@ -1,6 +1,6 @@
 ﻿namespace Maggsoft.Core.Model;
 
-internal class Operators
+public class Operators
 {
     public const string Equal = "eq";
     public const string NotEqual = "neq";

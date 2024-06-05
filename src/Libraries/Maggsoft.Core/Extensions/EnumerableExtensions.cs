@@ -1,9 +1,11 @@
 ﻿using Maggsoft.Core.Model;
+using Maggsoft.Core.Model.DataTables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Maggsoft.Core.Extensions;
 
@@ -64,9 +66,13 @@ public static class EnumerableExtensions
             var prop = typeof(TSource).GetProperty(f.Field);
             var member = Expression.Property(parameter, prop.Name);
             var converter = TypeDescriptor.GetConverter(prop.PropertyType); // 1
+            var propertyOperation = prop.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
             object propertyValue = null;
-            
-            f.Operator = converter is DateTimeConverter ? Operators.Equal : f.Operator;
+
+            if (string.IsNullOrEmpty(propertyOperation) && (converter is DateTimeConverter || f.Operator == "contains" && (prop.PropertyType != typeof(string) && prop.PropertyType != typeof(String))))
+                f.Operator = "eq";
+            if (!string.IsNullOrEmpty(propertyOperation))
+                f.Operator = propertyOperation;
 
             try
             {
