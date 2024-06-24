@@ -3,6 +3,8 @@ using Maggsoft.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.IO;
@@ -16,14 +18,20 @@ namespace Maggsoft.Framework.Middleware;
 
 [AttributeUsage(AttributeTargets.All)]
 public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
+public class IgnoreResponseOption
+{
+    public string[] IgnoreAcceptHeader { get; set; } = ["image/"];
+}
 
 public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConfiguration configuration)
 {
     private readonly RequestDelegate _next = next;
     private readonly IConfiguration _configuration = configuration;
     private readonly JsonSerializerOptions jsonSettings = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
-    public async Task InvokeAsync(HttpContext context)
+    private IgnoreResponseOption options;
+    public async Task InvokeAsync(HttpContext context, IOptions<IgnoreResponseOption> options)
     {
+        this.options = options?.Value;
         //image/
         context.Request.Headers.TryGetValue("Accept", out StringValues acceptHeaders);
 
@@ -31,6 +39,22 @@ public sealed class GlobalResponseHandlingMiddleware(RequestDelegate next, IConf
         {
             await _next(context);
             return;
+        }
+
+        if (this.options != null && !string.IsNullOrEmpty(acceptHeaders))
+        {
+            bool flag = false;
+
+            foreach (var opt in this.options.IgnoreAcceptHeader)
+            {
+                flag = acceptHeaders.Any(predicate: c => c.Contains(opt));
+
+                if (flag)
+                {
+                    await _next(context);
+                    return;
+                }
+            }
         }
 
         var originalBody = context.Response.Body;

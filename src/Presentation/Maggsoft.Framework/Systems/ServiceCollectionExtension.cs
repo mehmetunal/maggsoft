@@ -1,4 +1,5 @@
-﻿using Maggsoft.Core.Exceptions;
+﻿using DocumentFormat.OpenXml.Math;
+using Maggsoft.Core.Exceptions;
 using Maggsoft.Core.IoC;
 using Maggsoft.Framework.Extensions;
 using Maggsoft.Framework.Helper.ModelStateResponseFactory;
@@ -30,7 +31,7 @@ public static class ServiceCollectionExtension
         TokenOptions = tokenOptionsConfiguration.Get<ApiTokenOptions>();
 
         services.AddControllers().AddJsonOptionsConfig();
-        
+
         services.AddEndpointsApiExplorer();
 
         services.AddAdminApiCors(TokenOptions);
@@ -74,6 +75,7 @@ public static class ServiceCollectionExtension
             options.Level = CompressionLevel.SmallestSize;
         });
 
+        services.AddGlobalResponseMiddlewareWithOptions(p => p.IgnoreAcceptHeader = new[] { "image/", "txt" });
 
 
         return services;
