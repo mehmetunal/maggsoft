@@ -37,7 +37,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
             httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
         else if (exception is ModelStateException)
         {
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            httpContext.Response.StatusCode = StatusCodes.Status200OK;
             if (!string.IsNullOrEmpty(exception.Message))
             {
                 try
