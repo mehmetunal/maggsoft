@@ -12,13 +12,18 @@ public class ModelStateException : Exception
         : base()
     { }
 
-    public ModelStateException(List<string> message)
-        : base(message.ToJson())
+    public ModelStateException(string[] message)
+    : base(message.ToJson())
 
     { }
 
-    public ModelStateException(string[] message)
+    public ModelStateException(IEnumerable<string> message)
     : base(message.ToJson())
+
+    { }
+
+    public ModelStateException(List<string> message)
+        : base(message.ToJson())
 
     { }
 
