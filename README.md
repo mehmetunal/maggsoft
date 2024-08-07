@@ -4,7 +4,7 @@
 
 #.net 5
 
-aynı sunucudan apiye istek atılabilmesi için eklenmelidir.
+Aynı sunucudan apiye istek atılabilmesi için eklenmelidir.
 
 
     if (!app.Environment.IsDevelopment())
