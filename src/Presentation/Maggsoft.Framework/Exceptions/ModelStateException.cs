@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Maggsoft.Core.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Maggsoft.Framework.Exceptions;
@@ -8,6 +10,16 @@ public class ModelStateException : Exception
 {
     public ModelStateException()
         : base()
+    { }
+
+    public ModelStateException(List<string> message)
+        : base(message.ToJson())
+
+    { }
+
+    public ModelStateException(string[] message)
+    : base(message.ToJson())
+
     { }
 
     public ModelStateException(string message)

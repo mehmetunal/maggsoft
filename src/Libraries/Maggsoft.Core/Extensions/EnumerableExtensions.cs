@@ -1,4 +1,6 @@
-﻿using Maggsoft.Core.Model;
+﻿using AutoMapper.QueryableExtensions;
+using Maggsoft.Core.Mapper;
+using Maggsoft.Core.Model;
 using Maggsoft.Core.Model.DataTables;
 using System;
 using System.Collections.Generic;
@@ -151,4 +153,9 @@ public static class EnumerableExtensions
 
     public static bool IsEmpty(this object source)
         => source == null;
+
+    public static IQueryable<TDestination> ProjectTo<TDestination>(this IQueryable source)
+    {
+        return source.ProjectTo<TDestination>(AutoMapperConfiguration.MapperConfiguration);
+    }
 }

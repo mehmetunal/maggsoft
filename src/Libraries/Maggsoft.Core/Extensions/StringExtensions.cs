@@ -1,5 +1,6 @@
 ﻿using Maggsoft.Core.Base;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -831,6 +832,12 @@ public static class StringExtensions
             result = default(T);
             return false;
         }
+    }
+    public static string ToJson(this IEnumerable values)
+    {
+        var json = JsonSerializer.Serialize(values);
+
+        return json;
     }
     #endregion
 
