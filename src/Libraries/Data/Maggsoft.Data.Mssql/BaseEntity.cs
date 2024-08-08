@@ -25,5 +25,11 @@ namespace Maggsoft.Data.Mssql
         public string ModifierIP { get; set; }
         public Guid? ModifierUserId { get; set; }
         public int DisplayOrder { get; set; }
+
+        public void SoftDelete()
+        {
+            IsPublish = false;
+            IsDeleted = true;
+        }
     }
 }
