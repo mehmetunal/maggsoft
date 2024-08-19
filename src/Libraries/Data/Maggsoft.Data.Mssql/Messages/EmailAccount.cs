@@ -5,7 +5,7 @@ namespace Maggsoft.Data.Mssql.Messages;
 /// <summary>
 /// Represents an email account
 /// </summary>
-public partial class EmailAccount : BaseEntity, IPrimaryKey<Guid>
+public partial class EmailAccount : BaseEntity
 {
     /// <summary>
     /// Gets or sets an email address
