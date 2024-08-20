@@ -15,7 +15,7 @@ namespace Maggsoft.Data.Mssql
         {
             CreatedDate = DateTime.UtcNow;
         }
-        public TKey Id { get; set; }
+        public virtual TKey Id { get; set; }
         public bool IsPublish { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
