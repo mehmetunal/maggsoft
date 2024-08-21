@@ -55,4 +55,9 @@ public static class DateTimeExtensions
     {
         return TimeZoneInfo.ConvertTime(DateTimeOffset.FromUnixTimeSeconds(timeStamp), GetTimeZoneInfo()).DateTime;
     }
+
+    public static string ToFormattedString(this DateTime dateTime, string format)
+    {
+        return dateTime.ToString(format);
+    }
 }

@@ -810,7 +810,6 @@ public static class StringExtensions
         return input;
     }
 
-
     [DebuggerStepThrough]
     public static bool TryParseJson<T>(this string obj, out T result)
     {
@@ -833,11 +832,27 @@ public static class StringExtensions
             return false;
         }
     }
+
     public static string ToJson(this IEnumerable values)
     {
         var json = JsonSerializer.Serialize(values);
 
         return json;
+    }
+
+    public static bool IsNullOrEmpty(this string str)
+    {
+        return string.IsNullOrEmpty(str);
+    }
+
+    public static int WordCount(this string str)
+    {
+        return str.Split(new[] { ' ', '.', '?' }, StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+
+    public static string ToTitleCase(this string str)
+    {
+        return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
     }
     #endregion
 
