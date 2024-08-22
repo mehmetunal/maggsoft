@@ -5,7 +5,7 @@
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
 		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
 		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
-		<Version>2.0.1</Version>
+		<Version>2.0.2</Version>
 		<Description>The Maggsoft.Services.</Description>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-	  <PackageReference Include="RazorEngineCore" Version="2024.4.1" />
+	  <PackageReference Include="RazorEngineCore" Version="2023.11.2" />
 	</ItemGroup>
 	
 	<ItemGroup>
