@@ -1,5 +1,4 @@
 ﻿using Maggsoft.Core.Exceptions;
-using Maggsoft.Core.Messages;
 using Maggsoft.Data.Sqlite.Messages;
 using MailKit.Net.Smtp;
 using MailKit.Security;
