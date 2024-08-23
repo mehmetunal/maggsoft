@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace Maggsoft.Core.Exceptions;
@@ -54,4 +55,25 @@ public partial class MaggsoftException : Exception
         : base(message, innerException)
     {
     }
+
+    public static void ThrowIfEquel(object dc, object c, string exceptionMessage = "")
+    {
+        if (!dc.Equals(c))
+        {
+            Throw(string.IsNullOrEmpty(exceptionMessage) ? $"dc:${dc} not equel c:{c}" : exceptionMessage);
+        }
+    }
+
+
+    public static void ThrowIfEquel(bool ifCondition, string exceptionMessage = "")
+    {
+        if (ifCondition)
+        {
+            Throw(exceptionMessage);
+        }
+    }
+
+    [DoesNotReturn]
+    internal static void Throw(string? paramName) =>
+           throw new MaggsoftException(paramName);
 }
