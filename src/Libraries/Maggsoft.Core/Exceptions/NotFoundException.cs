@@ -29,11 +29,16 @@ public class NotFoundException : Exception
     /// <summary>
     /// ThrowIfNull
     /// </summary>
-    /// <param name="argument">object argument</param>
+    /// <param name="argument">argument</param>
+    /// <param name="format">format</param>
     /// <exception cref="NotFoundException"></exception>
-    protected static void ThrowIfNull(object argument)
+    public static void ThrowIfNull(object argument, string format = "{0}")
     {
         if (argument.IsEmpty())
-            throw new NotFoundException($"{nameof(argument)}");
+            Throw(string.Format(format, nameof(argument)));
     }
-} 
+
+    [DoesNotReturn]
+    internal static void Throw(string? paramName) =>
+       throw new NotFoundException(paramName);
+}
