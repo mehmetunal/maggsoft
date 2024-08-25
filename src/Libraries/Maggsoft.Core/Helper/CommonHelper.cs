@@ -192,8 +192,8 @@ public partial class CommonHelper
     /// <param name="value">The value to set the property to.</param>
     public static void SetProperty(object instance, string propertyName, object value)
     {
-        if (instance == null) throw new ArgumentNullException(nameof(instance));
-        if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+        if (instance == null) throw new System.ArgumentNullException(nameof(instance));
+        if (propertyName == null) throw new System.ArgumentNullException(nameof(propertyName));
 
         var instanceType = instance.GetType();
         var pi = instanceType.GetProperty(propertyName);
@@ -306,7 +306,7 @@ public partial class CommonHelper
     {
         if (target == null)
         {
-            throw new ArgumentNullException(nameof(target), "The assignment target cannot be null.");
+            throw new System.ArgumentNullException(nameof(target), "The assignment target cannot be null.");
         }
 
         if (string.IsNullOrEmpty(fieldName))
