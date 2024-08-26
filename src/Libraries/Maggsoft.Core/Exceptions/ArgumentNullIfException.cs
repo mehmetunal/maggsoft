@@ -21,6 +21,13 @@ namespace Maggsoft.Core.Exceptions
             }
         }
 
+        public static void ThrowIfEquel(bool ifCondition, string exceptionMessage = "")
+        {
+            if (ifCondition)
+            {
+                Throw(exceptionMessage);
+            }
+        }
         [DoesNotReturn]
         internal static void Throw(string? paramName) =>
                throw new ArgumentNullException(paramName);
