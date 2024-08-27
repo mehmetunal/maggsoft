@@ -72,13 +72,13 @@ public static class EnumerableExtensions
         var parameter = Expression.Parameter(typeof(TSource), "x");
         foreach (var f in args.Where(w => !string.IsNullOrEmpty(w.Field) && w.Value.IsNotNull()))
         {
-            var prop = typeof(TSource).GetProperty(f.Field);
-            var member = Expression.Property(parameter, prop.Name);
-            var converter = TypeDescriptor.GetConverter(prop.PropertyType); // 1
-            var propertyOperation = prop.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
+            var propertyInfo = typeof(TSource).GetProperty(f.Field);
+            var propertyExpression = Expression.Property(parameter, propertyInfo.Name);
+            var converter = TypeDescriptor.GetConverter(propertyInfo.PropertyType); // 1
+            var propertyOperation = propertyInfo.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
             object propertyValue = null;
 
-            if (string.IsNullOrEmpty(propertyOperation) && (converter is DateTimeConverter || f.Operator == "contains" && (prop.PropertyType != typeof(string) && prop.PropertyType != typeof(String))))
+            if (string.IsNullOrEmpty(propertyOperation) && (converter is DateTimeConverter || f.Operator == "contains" && (propertyInfo.PropertyType != typeof(string) && propertyInfo.PropertyType != typeof(String))))
                 f.Operator = "eq";
             if (!string.IsNullOrEmpty(propertyOperation))
                 f.Operator = propertyOperation;
@@ -100,31 +100,38 @@ public static class EnumerableExtensions
                     ); // 3
             }
             var constant = Expression.Constant(propertyValue);
-            var valueExpression = Expression.Convert(constant, prop.PropertyType); // 4
-            Expression filter = Expression.Equal(member, valueExpression);
+            var valueExpression = Expression.Convert(constant, propertyInfo.PropertyType); // 4
+            Expression filter = Expression.Equal(propertyExpression, valueExpression);
 
             if (f.Operator == Operators.NotEqual || f.Operator == Operators.IsNotNull)
-                filter = Expression.NotEqual(member, valueExpression);
+                filter = Expression.NotEqual(propertyExpression, valueExpression);
             else if (f.Operator == Operators.StartsWith)
-                filter = Expression.Call(member, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), valueExpression);
+                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), valueExpression);
             else if (f.Operator == Operators.Contains)
             {
-                var toLower = Expression.Call(member, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes));
+                var toLower = Expression.Call(propertyExpression, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes));
                 filter = Expression.Call(toLower, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
             }
             //filter = Expression.Call(member, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
             else if (f.Operator == Operators.EndsWith)
-                filter = Expression.Call(member, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), valueExpression);
+                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), valueExpression);
             else if (f.Operator == Operators.DoesNotContain)
-                filter = Expression.Not(Expression.Call(member, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression));
+                filter = Expression.Not(Expression.Call(propertyExpression, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression));
             else if (f.Operator == Operators.GreaterThan)
-                filter = Expression.GreaterThan(member, valueExpression);
+                filter = Expression.GreaterThan(propertyExpression, valueExpression);
             else if (f.Operator == Operators.GreaterThanOrEqual)
-                filter = Expression.GreaterThanOrEqual(member, valueExpression);
+                filter = Expression.GreaterThanOrEqual(propertyExpression, valueExpression);
             else if (f.Operator == Operators.LessThan)
-                filter = Expression.LessThan(member, valueExpression);
+                filter = Expression.LessThan(propertyExpression, valueExpression);
             else if (f.Operator == Operators.LessThanOrEqual)
-                filter = Expression.LessThanOrEqual(member, valueExpression);
+                filter = Expression.LessThanOrEqual(propertyExpression, valueExpression);
+
+            string[] sourceArray = ["startswith", "contains", "endswith", "doesnotcontain"];
+            if (sourceArray.Contains(f.Operator))
+            {
+                var notNullExpression = Expression.NotEqual(propertyExpression, Expression.Constant(null, propertyInfo.PropertyType));
+                filter = Expression.AndAlso(notNullExpression, filter);
+            }
 
             var lambda = Expression.Lambda<Func<TSource, bool>>(filter, parameter);
             q = q.Where(lambda);
