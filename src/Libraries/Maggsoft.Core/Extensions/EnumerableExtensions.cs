@@ -131,6 +131,19 @@ public static class EnumerableExtensions
             {
                 var notNullExpression = Expression.NotEqual(propertyExpression, Expression.Constant(null, propertyInfo.PropertyType));
                 filter = Expression.AndAlso(notNullExpression, filter);
+                /*
+                    *** supporting the OR logical operator ***
+                    
+                    if (statement.Conector == FilterStatementConector.And)
+                    {
+                        finalExpression = Expression.AndAlso(finalExpression, expression);
+                    }
+                    else
+                    {
+                        finalExpression = Expression.OrElse(finalExpression, expression);
+                    }
+
+                 */
             }
 
             var lambda = Expression.Lambda<Func<TSource, bool>>(filter, parameter);
