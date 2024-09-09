@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public IReadOnlyList<WeatherForecast> Get()
+        public Result<List<WeatherForecast>> Get()
         {
             var model = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -34,8 +34,8 @@ namespace WebApplication1.Controllers
             .ToList();
 
             //return Result.Success();
-            //return Result.Success(FollowerMessage.OK);
-           // return Result<IReadOnlyList<WeatherForecast>>.Success(model,StatusCodes.Status226IMUsed, FollowerMessage.OK);
+            return Result.Success();
+            // return Result<IReadOnlyList<WeatherForecast>>.Success(model,StatusCodes.Status226IMUsed, FollowerMessage.OK);
             //return Result<IList<WeatherForecast>>.Success(model,SuccessMessage.None);
             //return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);
 
@@ -62,7 +62,7 @@ namespace WebApplication1.Controllers
     {
         public static Error NotFound(Guid id) => new("Followers.NotFound", $"The follower with Id '{id}' was not found");
 
-        public static readonly Error SameUser = new ("Followers.SameUser", "Can't follow yourself");
+        public static readonly Error SameUser = new("Followers.SameUser", "Can't follow yourself");
 
         public static readonly Error NonPublicProfile = new("Followers.NonPublicProfile", "Can't follow non-public profiles");
 

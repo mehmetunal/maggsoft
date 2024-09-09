@@ -1,7 +1,6 @@
-﻿using Maggsoft.Core.Model;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Maggsoft.Core.Model;
 
 namespace Maggsoft.Core.Base;
 
@@ -18,7 +17,6 @@ public partial class Result<T> : Result where T : class
     {
         Data = data;
     }
-
 
     protected internal Result(T data, int statusCode, SuccessMessage message)
         : base(true, message) => (Data, StatusCode) = (data, statusCode);
@@ -38,17 +36,16 @@ public partial class Result<T> : Result where T : class
         set => _data = value;
     }
 
-    public static Result<T> Success(T data, SuccessMessage message) => new(data, message);
-    public static Result<T> Success(T data) => new(data, SuccessMessage.None);
-
-    public static Result<T> Success(T data, int statusCode, SuccessMessage message) => new(data, statusCode, message);
-    public static Result<T> Success(T data, int statusCode) => new(data, statusCode, SuccessMessage.None);
-
-
     public static implicit operator Result<T>(T data)
     {
         return new Result<T>(data);
     }
+
+    public static Result<T> Success(T data, SuccessMessage message) => new(data, message);
+    public static Result<T> Success(T data) => new(data, SuccessMessage.None);
+    public static Result<T> Success(T data, int statusCode, SuccessMessage message) => new(data, statusCode, message);
+    public static Result<T> Success(T data, int statusCode) => new(data, statusCode, SuccessMessage.None);
+    public static new Result<T> Failure(Error error) => Failure(error);
 }
 
 public class Result : IResult
@@ -84,9 +81,7 @@ public class Result : IResult
 
     public static Result Success() => new(true, SuccessMessage.None);
     public static Result Success(SuccessMessage message) => new(true, message);
-
     public static Result Success(int statusCode) => new(true, statusCode, SuccessMessage.None);
     public static Result Success(int statusCode, SuccessMessage message) => new(true, statusCode, message);
-
     public static Result Failure(Error error) => new(false, error);
 }
