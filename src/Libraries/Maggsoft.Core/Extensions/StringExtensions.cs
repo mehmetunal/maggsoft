@@ -854,6 +854,20 @@ public static class StringExtensions
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(str.ToLower());
     }
+
+    public static bool CheckForNotLatin(this string stringToCheck)
+    {
+        bool boolToReturn = false;
+        foreach (char c in stringToCheck)
+        {
+            int code = (int)c;
+            // for lower and upper cases respectively
+            if ((code > 96 && code < 123) || (code > 64 && code < 91))
+                boolToReturn = true;
+            // visit C# ASCII Table - Dot Net Perls 6 for more codes
+        }
+        return boolToReturn;
+    }
     #endregion
 
 }
