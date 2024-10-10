@@ -152,11 +152,11 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<TResult>(await obj.Content.ReadAsStringAsync());
         }
 
-        public virtual async Task<Result<object>> PostHttpContentAsync(string url, HttpContent content)
+        public virtual async Task<Result<TResult>> PostHttpContentAsync<TResult>(string url, HttpContent content) where TResult : class
         {
             HttpResponseMessage obj = await _httpClient.PostAsync(url, content);
             obj.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
         public virtual async Task<Result<TResult>> PutAsJsonAsync<TResult>(string url, object body) where TResult : class
@@ -178,11 +178,11 @@ namespace Maggsoft.Framework.HttpClientApi
             return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
-        public virtual async Task<Result<object>> PutHttpContentAsync(string url, HttpContent content)
+        public virtual async Task<Result<TResult>> PutHttpContentAsync<TResult>(string url, HttpContent content) where TResult : class
         {
             HttpResponseMessage obj = await _httpClient.PutAsync(url, content);
             obj.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<Result<object>>(await obj.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<Result<TResult>>(await obj.Content.ReadAsStringAsync());
         }
 
         public virtual async Task<Result> DeleteAsync(string url, object id)
