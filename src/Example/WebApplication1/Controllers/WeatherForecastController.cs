@@ -34,7 +34,6 @@ namespace WebApplication1.Controllers
             .ToList();
 
             //return Result.Success();
-            return Result.Success();
             // return Result<IReadOnlyList<WeatherForecast>>.Success(model,StatusCodes.Status226IMUsed, FollowerMessage.OK);
             //return Result<IList<WeatherForecast>>.Success(model,SuccessMessage.None);
             //return Result<IList<WeatherForecast>>.Success(model,FollowerMessage.OK);

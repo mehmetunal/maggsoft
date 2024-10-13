@@ -8,8 +8,8 @@
 		<Version>2.0.3</Version>
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+		<RepositoryUrl>https://github.com/maggasoft/maggsoft</RepositoryUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/maggasoft/maggsoft-logo/main/icon.png</PackageIconUrl>
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
 

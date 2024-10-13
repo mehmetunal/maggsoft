@@ -8,7 +8,7 @@
 		<Version>1.0.0.0</Version>
 		<Description>The Maggsoft.Npgsql.Services</Description>
 		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/mehmetunal/maggsoft</RepositoryUrl>
+		<RepositoryUrl>https://github.com/maggsoft/maggsoft</RepositoryUrl>
 		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 		<RepositoryType>Git</RepositoryType>
 	</PropertyGroup>
