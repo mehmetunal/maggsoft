@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 namespace Maggsoft.Cache;
-
+ 
 public interface ICache
 {
     object Get(string cacheKey);
