@@ -111,8 +111,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Endpoints", "Endpoints", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Endpoints", "Libraries\Endpoints\Maggsoft.Endpoints\Maggsoft.Endpoints.csproj", "{4F4C894C-4D80-4A84-BE20-08997BD5F989}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C7CB98C5-A9BF-4BA3-BD88-12013278B2F8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
