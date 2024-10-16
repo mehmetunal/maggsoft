@@ -20,43 +20,72 @@ jobs:
         with:
           dotnet-version: '8.x'  # Kullanýlan .NET Core sürümünü belirleyin
 
-      # Son committe hangi dosyaların değiştiğini bul
-      - name: Find changed projects
-        id: changes
+      - name: get changed files
+        id: getfile
         run: |
-          git diff --name-only HEAD > changed_files.txt
-            cat changed_files.txt
-
-      # Dinamik olarak proje dizinini bul
-      - name: Identify changed project
-        id: project
+              echo "::set-output name=files::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | xargs)"
+      
+      - name: echo output
         run: |
-          project_path=$(grep -E -o '^[^/]+/' changed_files.txt | head -n 1)
-          echo "Changed project path: $project_path"
-          echo "::set-output name=project_path::$project_path"
+          echo ${{ steps.getfile.outputs.files }}
+# name: .NET 8 Package Version and Push
 
-      # NuGet paket versiyonunu belirle
-      - name: Determine Package Version
-        id: version
-        run: |
-          # Son commit tarihini kullanarak versiyon oluştur
-          commit_date=$(git log -1 --format=%cd --date=format:'%Y.%m.%d')
-          commit_sha=$(git rev-parse --short HEAD)
-          version="${commit_date}-${commit_sha}"
+# on:
+#   push:
+#     branches:
+#       - main
 
-          echo "Package version: $version"
-          echo "::set-output name=package_version::$version"
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
 
-      # .NET projeyi pack et (otomatik versiyonla)
-      - name: Pack .NET Project
-        run: |
-          cd ${{ steps.project.outputs.project_path }}
-          dotnet pack --configuration Release --output ./bin/Release
+#     steps:
+#       # Repository'i checkout et
+#       - uses: actions/checkout@v4
+      
+#       # 2. .NET Core'un ayarlanmasý
+#       - name: Setup .NET Core
+#         uses: actions/setup-dotnet@v3
+#         with:
+#           dotnet-version: '8.x'  # Kullanýlan .NET Core sürümünü belirleyin
+
+#       # Son committe hangi dosyaların değiştiğini bul
+#       - name: Find changed projects
+#         id: changes
+#         run: |
+#           git diff --name-only HEAD > changed_files.txt
+#             cat changed_files.txt
+
+#       # Dinamik olarak proje dizinini bul
+#       - name: Identify changed project
+#         id: project
+#         run: |
+#           project_path=$(grep -E -o '^[^/]+/' changed_files.txt | head -n 1)
+#           echo "Changed project path: $project_path"
+#           echo "::set-output name=project_path::$project_path"
+
+#       # NuGet paket versiyonunu belirle
+#       - name: Determine Package Version
+#         id: version
+#         run: |
+#           # Son commit tarihini kullanarak versiyon oluştur
+#           commit_date=$(git log -1 --format=%cd --date=format:'%Y.%m.%d')
+#           commit_sha=$(git rev-parse --short HEAD)
+#           version="${commit_date}-${commit_sha}"
+
+#           echo "Package version: $version"
+#           echo "::set-output name=package_version::$version"
+
+#       # .NET projeyi pack et (otomatik versiyonla)
+#       - name: Pack .NET Project
+#         run: |
+#           cd ${{ steps.project.outputs.project_path }}
+#           dotnet pack --configuration Release --output ./bin/Release
 
           
-      # Paketi NuGet'e push et
-      - name: Push to NuGet
-        run: |
-          cd ${{ steps.project.outputs.project_path }}
-          dotnet nuget push bin/Release/*.nupkg --api-key ${{ secrets.PACKAGES_TOKEN }} --source https://nuget.pkg.github.com/mehmetunal/index.json
+#       # Paketi NuGet'e push et
+#       - name: Push to NuGet
+#         run: |
+#           cd ${{ steps.project.outputs.project_path }}
+#           dotnet nuget push bin/Release/*.nupkg --api-key ${{ secrets.PACKAGES_TOKEN }} --source https://nuget.pkg.github.com/mehmetunal/index.json
           
