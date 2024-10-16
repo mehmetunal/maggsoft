@@ -19,18 +19,22 @@ jobs:
 
     steps:
       # Repository'i checkout et
-      - uses: actions/checkout@v4
-      - name: Find changed .csproj files
-        id: find-changed-csproj
-        run: |
-            CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+     - name: Checkout code
+       uses: actions/checkout@v2
+       with:
+         fetch-depth: 5
+
+     - name: Find changed .csproj files
+       id: find-changed-csproj
+       run: |
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
             echo "Changed files: $CHANGED_FILES"
             CS_PROJ_FILES=$(echo "$CHANGED_FILES" | grep '.csproj$')
             echo "Changed .csproj files: $CS_PROJ_FILES"
             echo "::set-output name=csproj_files::$CS_PROJ_FILES"
 
-      - name: Display changed .csproj files
-        run: | 
+     - name: Display changed .csproj files
+       run: | 
             echo "Changed .csproj files: ${{ steps.find-changed-csproj.outputs.csproj_files }}"
 
 # name: .NET 8 Package Version and Push
