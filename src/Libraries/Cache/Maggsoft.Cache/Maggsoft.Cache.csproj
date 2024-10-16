@@ -17,6 +17,7 @@
 	  <PackageReference Include="MessagePack" Version="2.5.140" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\Aspect\Maggsoft.Aspect.Core\Maggsoft.Aspect.Core.csproj" />
   </ItemGroup>
