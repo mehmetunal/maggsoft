@@ -36,10 +36,13 @@ namespace Maggsoft.ExampleTest.Controllers
         public async Task<int> Get()
         {
 
-            var asd = await Cache.GetAsync(cacheKey: $"{UsersInRoleAsync}", TimeSpan.FromDays(1), async () => { return 0; });
+            var asd = await Cache.GetAsync(cacheKey: $"{UsersInRoleAsync}", TimeSpan.FromDays(1), async () =>
+            {
+                return 15;
+
+            });
 
             await Cache.RemoveByPatternAsync(UserPrefix);
-
 
             /*
             var user = new Entity.User { Text = "tt", CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() };

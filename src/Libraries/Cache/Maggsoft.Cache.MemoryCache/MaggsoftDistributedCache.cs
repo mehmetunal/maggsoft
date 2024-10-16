@@ -75,7 +75,7 @@ public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider 
     {
         var cacheResult = await GetAsync(cacheKey, typeof(T));
         if (cacheResult == null)
-            return default;
+            return (T?)default;
 
         return (T)cacheResult;
     }
@@ -83,7 +83,7 @@ public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider 
     public async Task<T> GetAsync<T>(string cacheKey, TimeSpan cacheTime, Func<Task<T>> acquire)
     {
         var result = await GetAsync<T>(cacheKey);
-        if (result != null)
+        if (result != null && !result.Equals((T)default))
         {
             return result;
         }
@@ -258,7 +258,7 @@ public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider 
             var coherentState = memCacheValue.GetType().GetField("_coherentState", BindingFlags.NonPublic | BindingFlags.Instance);
             var coherentStateValue = coherentState.GetValue(memCacheValue);
 
-            entriesCollection = coherentStateValue.GetType().GetProperty("EntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
+            entriesCollection = coherentStateValue.GetType().GetProperty("StringEntriesCollection", BindingFlags.NonPublic | BindingFlags.Instance);
 
             if (entriesCollection.GetValue(coherentStateValue) is ICollection entriesCollectionValue)
             {
