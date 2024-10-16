@@ -1,32 +1,38 @@
 ﻿
+
+
+
+
 name: .NET 8 Package Version and Push
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  find-changed-csproj:
     runs-on: ubuntu-latest
 
     steps:
       # Repository'i checkout et
       - uses: actions/checkout@v4
-      
-      # 2. .NET Core'un ayarlanmasý
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.x'  # Kullanýlan .NET Core sürümünü belirleyin
-
-      - name: get changed files
-        id: files
-        uses: jitterbit/get-changed-files@v1
+      - name: Find changed .csproj files
+        id: find-changed-csproj
         run: |
-            for changed_file in ${{ steps.files.outputs.all }}; do
-                echo "Do something with this ${changed_file}."
-            done
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+            echo "Changed files: $CHANGED_FILES"
+            CS_PROJ_FILES=$(echo "$CHANGED_FILES" | grep '.csproj$')
+            echo "Changed .csproj files: $CS_PROJ_FILES"
+            echo "::set-output name=csproj_files::$CS_PROJ_FILES"
+
+      - name: Display changed .csproj files
+        run: | 
+            echo "Changed .csproj files: ${{ steps.find-changed-csproj.outputs.csproj_files }}"
+
 # name: .NET 8 Package Version and Push
 
 # on:
