@@ -45,7 +45,8 @@ jobs:
     - name: Publish to GitHub Packages
       run: |
         for package in ./nupkg/*.nupkg; do
-          dotnet nuget push $package --source "maggsoft_github"
+          dotnet nuget push $package --api-key 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 --source https://nuget.pkg.github.com/mehmetunal/index.json
+          #dotnet nuget push $package --source "maggsoft_github"
         done
       env:
         NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
