@@ -24,8 +24,8 @@ jobs:
       - name: Find changed projects
         id: changes
         run: |
-          git diff --name-only HEAD~1 HEAD > changed_files.txt
-          cat changed_files.txt
+          git diff --name-only HEAD > changed_files.txt
+            cat changed_files.txt
 
       # Dinamik olarak proje dizinini bul
       - name: Identify changed project
