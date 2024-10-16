@@ -23,7 +23,7 @@ jobs:
       - name: Find changed .csproj files
         id: find-changed-csproj
         run: |
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+            CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
             echo "Changed files: $CHANGED_FILES"
             CS_PROJ_FILES=$(echo "$CHANGED_FILES" | grep '.csproj$')
             echo "Changed .csproj files: $CS_PROJ_FILES"
