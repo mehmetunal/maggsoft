@@ -5,7 +5,7 @@ namespace Maggsoft.Core;
 
 /// <summary>
 /// Hash helper class
-/// </summary>  
+/// </summary>   
 public partial class HashHelper
 {
     /// <summary>

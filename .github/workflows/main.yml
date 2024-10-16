@@ -1,50 +1,82 @@
-name: Publish Changed Projects
+name: Publish .NET Core Package
 
 on:
   push:
-    branches: [ "develop" ]
-  pull_request:
-    branches: [ "develop" ]
+    branches:
+      - develop  # Ana branch'e yapýlan push'larý dinler
 
 jobs:
-  build_and_publish:
+  detect-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # 1. Kaynak kodun kontrol edilmesi (checkout)
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
+      # 2. .NET Core'un ayarlanmasý
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'  # Kullanýlan .NET Core sürümünü belirleyin
 
-    - name: Determine changed projects
-      id: changes
-      run: |
-        echo "CHANGED_PROJECTS=$(git diff --name-only HEAD^ HEAD | grep -E 'src/.*\.csproj' | cut -d/ -f2 | uniq)" >> $GITHUB_ENV
+      # 3. Son commit'teki deðiþiklikleri belirle
+      - name: Determine modified project
+        id: determine_project
+        run: |
+          # Deðiþikliklerin olduðu dizini buluyoruz
+          MODIFIED_PROJECT=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep 'src/' | cut -d/ -f2 | sort | uniq)
+          
+          # Bulunan proje dizinini ekrana yazdýrýyoruz
+          echo "Modified project: $MODIFIED_PROJECT"
+          
+          # Bu deðeri sonraki adýmlarda kullanabilmek için kaydediyoruz
+          echo "::set-output name=project::$MODIFIED_PROJECT"
 
-    - name: Restore dependencies
-      run: |
-        for project in ${{ env.CHANGED_PROJECTS }}; do
-          dotnet restore src/$project/$project.csproj --ignore-failed-sources
-        done
+      # 4. Dinamik versiyon numarasý oluþtur (commit sayýsý ve tarih bazlý)
+      - name: Generate version number
+        id: version
+        run: |
+          # Commit sayýsýna ve tarihe dayalý versiyon numarasý oluþturma
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          DATE=$(date +'%Y%m%d')
+          VERSION="1.0.${COMMIT_COUNT}-${DATE}"
+          
+          # Versiyon numarasýný ekrana yazdýr
+          echo "Generated version: $VERSION"
+          
+          # Versiyon numarasýný kaydet
+          echo "::set-output name=version::$VERSION"
 
-    - name: Build
-      run: |
-        for project in ${{ env.CHANGED_PROJECTS }}; do
-          dotnet build src/$project/$project.csproj --configuration Release --no-restore
-        done
+      # 5. Proje dosyasýndaki versiyon numarasýný güncelle
+      - name: Update project version
+        run: |
+          PROJECT_DIR="src/${{ steps.determine_project.outputs.project }}"
+          VERSION=${{ steps.version.outputs.version }}
+          
+          echo "Updating version in $PROJECT_DIR"
+          
+          # Proje dosyasýndaki (csproj) <Version> alanýný dinamik olarak güncelle
+          sed -i 's|<Version>.*</Version>|<Version>'$VERSION'</Version>|g' $PROJECT_DIR/*.csproj
 
-    - name: Pack
-      run: |
-        for project in ${{ env.CHANGED_PROJECTS }}; do
-          dotnet pack src/$project/$project.csproj --configuration Release --no-build --output ./nupkg /p:Version=$(git rev-parse --short HEAD)
-        done
+      # 6. Deðiþiklik yapýlan projeyi derleyip paketle
+      - name: Restore and build project
+        run: |
+          PROJECT_DIR="src/${{ steps.determine_project.outputs.project }}"
+          echo "Restoring and building project in $PROJECT_DIR"
+          
+          dotnet restore $PROJECT_DIR
+          dotnet build $PROJECT_DIR --configuration Release
+          dotnet pack $PROJECT_DIR --configuration Release --output ./nupkgs
 
-    - name: Publish to GitHub Packages
-      run: |
-        for package in ./nupkg/*.nupkg; do
-          dotnet nuget push $package --api-key ${{ secrets.PACKAGES_TOKEN }} --source https://nuget.pkg.github.com/mehmetunal/index.json
-          #dotnet nuget push $package --source "maggsoft_github"
-        done
+      # 7. NuGet veya GitHub Packages'e push et
+      - name: Publish to GitHub Packages
+        if: github.event_name == 'push'
+        run: dotnet nuget push ./nupkgs/*.nupkg --source "github" --api-key ${{ secrets.PACKAGES_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+
+      # NuGet.org'a yükleme (isteðe baðlý)
+      # - name: Publish to NuGet.org
+      #   if: github.event_name == 'push'
+      #   run: dotnet nuget push ./nupkgs/*.nupkg --source "nuget.org" --api-key ${{ secrets.NUGET_API_KEY }}
