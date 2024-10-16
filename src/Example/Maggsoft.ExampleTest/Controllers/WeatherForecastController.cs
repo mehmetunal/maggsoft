@@ -1,4 +1,5 @@
-﻿using Maggsoft.ExampleTest.Entity;
+﻿using Maggsoft.Cache;
+using Maggsoft.ExampleTest.Entity;
 using Maggsoft.ExampleTest.Services;
 using Maggsoft.Mssql.UnitOfWork;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +14,7 @@ namespace Maggsoft.ExampleTest.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController(ILogger<WeatherForecastController> logger, DbContext DBContext, IUnitOfWork uow, IUserService userService) : ControllerBase
+    public class WeatherForecastController(ILogger<WeatherForecastController> logger, DbContext DBContext, IUnitOfWork uow, IUserService userService, ICache Cache) : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
@@ -27,9 +28,22 @@ namespace Maggsoft.ExampleTest.Controllers
 
         private string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
 
+        public static string Prefix => "CacheKey_";
+        public static string UserPrefix => $"{Prefix}{nameof(UserService)}";
+        public static string UsersInRoleAsync => $"{UserPrefix}{nameof(Get)}";
+
         [HttpGet]
         public async Task<int> Get()
         {
+
+            var asd = await Cache.GetAsync(cacheKey: $"{UsersInRoleAsync}", TimeSpan.FromDays(1), async () =>
+            {
+                return 15;
+
+            });
+
+            await Cache.RemoveByPatternAsync(UserPrefix);
+
             /*
             var user = new Entity.User { Text = "tt", CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() };
             user.UserLogs.Add(new UserLog() { Text = "MENU 1", UserId = user.Id, CreatorIP = "123", CreatedDate = DateTime.UtcNow, CreatorUserId = Guid.NewGuid() });

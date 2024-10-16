@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AppContext = Maggsoft.ExampleTest.Context.AppContext;
+using Maggsoft.Cache;
+using Maggsoft.Cache.MemoryCache;
 
 namespace Maggsoft.ExampleTest;
 
@@ -43,6 +45,8 @@ public class Startup
         services.AddScoped<IMssqlRepository<UserLog>, Repository<UserLog>>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.RegisterAll<IService>();
+
+        services.AddMaggsoftDistributedMemoryCache(typeof(IService));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
