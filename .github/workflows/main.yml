@@ -25,8 +25,10 @@ jobs:
         id: determine_project
         run: |
           # Deðiþikliklerin olduðu dizini buluyoruz
-          MODIFIED_PROJECT=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | grep 'src/' | cut -d/ -f2 | sort | uniq)
+          MODIFIED_PROJECT=$(git diff-tree --no-commit-id --name-only -r 85b02bc65bc790bffd1497f573cd9e6e019fe2f6 | grep 'src/' | cut -d/ -f2 | sort | uniq)
           
+          echo "github.sha" : ${{ github.sha }}
+
           # Bulunan proje dizinini ekrana yazdýrýyoruz
           echo "Modified project: $MODIFIED_PROJECT"
           
