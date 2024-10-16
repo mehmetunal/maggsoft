@@ -109,7 +109,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Sqlite.Services", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Endpoints", "Endpoints", "{D5227832-32CA-4590-AF8E-0DB5F2219F62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maggsoft.Endpoints", "Libraries\Endpoints\Maggsoft.Endpoints\Maggsoft.Endpoints.csproj", "{4F4C894C-4D80-4A84-BE20-08997BD5F989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Endpoints", "Libraries\Endpoints\Maggsoft.Endpoints\Maggsoft.Endpoints.csproj", "{4F4C894C-4D80-4A84-BE20-08997BD5F989}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C7CB98C5-A9BF-4BA3-BD88-12013278B2F8}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
