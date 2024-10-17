@@ -13,7 +13,7 @@
 	  <PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/maggasoft/maggsoft</RepositoryUrl>
 	  <PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
-	  <RepositoryType>Git</RepositoryType>
+	  <RepositoryType>Git</RepositoryType>   
   </PropertyGroup>
 
 </Project>

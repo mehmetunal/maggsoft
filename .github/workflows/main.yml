@@ -205,7 +205,7 @@ jobs:
                 
               #  echo "$PROJECT change files"
 
-                 if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
+                 if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
                     echo "$VFN package adı"
                     echo "$VERSION version"
                     echo "Version_$VFN.txt"
