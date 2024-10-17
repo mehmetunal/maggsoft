@@ -197,7 +197,7 @@ jobs:
                 echo "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
-                    echo "$VFN
+                    echo "$VFN"
                     #echo "This is a version file" > Version_$VFN.txt
                     #ls -la  
                     #git status
