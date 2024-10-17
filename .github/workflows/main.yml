@@ -43,10 +43,18 @@ jobs:
         MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
     permissions:
      contents: write  # GitHub Actions'ın repoya dosya yazabilmesi için izin veriyoruz.
+
     name: changed-files
     steps:
       - uses: actions/checkout@v4
+      
+      
+      - name: Restore ConsoleProject dependencies
+        run: dotnet restore src/Tools/Maggsoft.VersioningTool  # Proje yolunu belirt
 
+      - name: Build the ConsoleProject
+        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+        
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v45
