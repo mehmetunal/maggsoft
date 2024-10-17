@@ -37,7 +37,7 @@
 
         File.WriteAllText(filePath, newVersion);
 
-        Console.WriteLine(newVersion);  
+        Console.WriteLine(newVersion);    
 
-    }
+    } 
 }
