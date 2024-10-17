@@ -118,6 +118,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8DF5F6E3-A65B-44F2-B212-26B71DE3C39C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VersioningTool", "Tools\VersioningTool\VersioningTool.csproj", "{D22258B9-3E72-4783-8B3F-954986C8209F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -272,6 +276,10 @@ Global
 		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F4C894C-4D80-4A84-BE20-08997BD5F989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D22258B9-3E72-4783-8B3F-954986C8209F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D22258B9-3E72-4783-8B3F-954986C8209F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D22258B9-3E72-4783-8B3F-954986C8209F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D22258B9-3E72-4783-8B3F-954986C8209F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,6 +335,8 @@ Global
 		{D566139A-80B9-4A3E-BA4D-0B06FDAE4ECB} = {AA6D3110-B340-4EAD-9DE6-4A4138EFC36F}
 		{D5227832-32CA-4590-AF8E-0DB5F2219F62} = {69FA5BF1-2C7B-4289-B482-0E7F25D41748}
 		{4F4C894C-4D80-4A84-BE20-08997BD5F989} = {D5227832-32CA-4590-AF8E-0DB5F2219F62}
+		{8DF5F6E3-A65B-44F2-B212-26B71DE3C39C} = {2BCEB3B0-C3CA-4C6A-B413-FB5A7370A681}
+		{D22258B9-3E72-4783-8B3F-954986C8209F} = {8DF5F6E3-A65B-44F2-B212-26B71DE3C39C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}
