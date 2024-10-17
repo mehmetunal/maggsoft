@@ -53,6 +53,7 @@ jobs:
       - name: List all changed files
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
         run: |
             for file in ${ALL_CHANGED_FILES}; do
                 if [[ "${file}" == *"Maggsoft.Aspect.Core/Maggsoft.Aspect.Core"* ]]; then
