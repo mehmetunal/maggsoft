@@ -47,8 +47,12 @@ jobs:
     name: changed-files
     steps:
       - uses: actions/checkout@v4
-      
-      
+            
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'  # Specify your .NET version
+            
       - name: Restore ConsoleProject dependencies
         run: dotnet restore src/Tools/Maggsoft.VersioningTool  # Proje yolunu belirt
 
@@ -211,16 +215,16 @@ jobs:
                     dotnet restore $PROJECT
                     dotnet build $PROJECT --configuration Release
                     dotnet msbuild $PROJECT \
-                      -maxcpucount \
-                      -verbosity:m \
-                      -nologo \
-                      -restore \
-                      -target:pack \
-                      --property:_IsPacking=true \
-                      --property:PackageOutputPath=/home/runner/work/maggsoft/maggsoft/nupkgs \
-                      --property:Configuration=Release \
-                      --property:PackageVersion=$VERSION \
-                      --property:DOTNET_CLI_DISABLE_PUBLISH_AND_PACK_RELEASE=true
+                    -maxcpucount \
+                    -verbosity:m \
+                    -nologo \
+                    -restore \
+                    -target:pack \
+                    --property:_IsPacking=true \
+                    --property:PackageOutputPath=/home/runner/work/maggsoft/maggsoft/nupkgs \
+                    --property:Configuration=Release \
+                    --property:PackageVersion=$VERSION \
+                    --property:DOTNET_CLI_DISABLE_PUBLISH_AND_PACK_RELEASE=true
 
                     #dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
                     #dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
