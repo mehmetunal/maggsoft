@@ -55,7 +55,6 @@ jobs:
             DATE=$(date +'%y%m%d')
             VERSION="1.0.${COMMIT_COUNT}-${DATE}"
             for file in ${ALL_CHANGED_FILES}; do
-                echo "$file was changed"
                 if [[ "${file}" == *"Maggsoft.Aspect.Core/Maggsoft.Aspect.Core"* ]]; then
                    echo "${{env.MaggsoftAspectCore}}"
                    dotnet restore ${{env.MaggsoftAspectCore}}
@@ -213,7 +212,10 @@ jobs:
                    dotnet pack ${{env.MaggsoftFramework}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
                 fi
                 
-            #    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                 if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
+                    echo "$file was changed"
+                    #    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                 fi
             
             done
             echo "Finish..."
