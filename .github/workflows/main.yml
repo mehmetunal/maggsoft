@@ -64,131 +64,131 @@ jobs:
           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
         run: |
             for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"Maggsoft.Aspect.Core/Maggsoft.Aspect.Core"* ]]; then
+                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Aspect.Core"* ]]; then
                    PROJECT=${{ env.MaggsoftAspectCore }}
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Aspect.Core" )
                    VFN="MaggsoftAspectCore"
-                elif [[ "${file}" == *"Maggsoft.Cache/Maggsoft.Cache"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Cache/Maggsoft.Cache"* ]]; then
                    PROJECT=${{env.MaggsoftCache}}
                    VFN="MaggsoftCache"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Cache" )
-                elif [[ "${file}" == *"Maggsoft.Cache.MemoryCache/Maggsoft.Cache.MemoryCache"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Cache/Maggsoft.Cache.MemoryCache"* ]]; then
                    PROJECT=${{env.MaggsoftCacheMemoryCache}}
                    VFN="MaggsoftCacheMemoryCache"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Cache.MemoryCache" )
-                elif [[ "${file}" == *"Maggsoft.Cache.Redis/Maggsoft.Cache.Redis"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Cache/Maggsoft.Cache.Redis"* ]]; then
                    PROJECT=${{env.MaggsoftCacheRedis}}
                    VFN="MaggsoftCacheRedis"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Cache.Redis" )
-                elif [[ "${file}" == *"Maggsoft.Data/Maggsoft.Data"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data"* ]]; then
                    PROJECT=${{env.MaggsoftData}}
                    VFN="MaggsoftData"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Data" )
-                elif [[ "${file}" == *"Maggsoft.Data.Mongo/Maggsoft.Data.Mongo"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Mongo"* ]]; then
                    PROJECT=${{env.MaggsoftDataMongo}}
                    VFN="MaggsoftDataMongo"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Data.Mongo" )
-                elif [[ "${file}" == *"Maggsoft.Data.Mssql/Maggsoft.Data.Mssql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Mssql"* ]]; then
                    PROJECT=${{env.MaggsoftDataMssql}}
                    VFN="MaggsoftDataMssql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Data.Mssql" )
-                elif [[ "${file}" == *"Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Npgsql"* ]]; then
                    PROJECT=${{env.MaggsoftDataNpgsql}}
                    VFN="MaggsoftDataNpgsql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Data.Npgsql" )
-                elif [[ "${file}" == *"Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Sqlite"* ]]; then
                    PROJECT=${{env.MaggsoftDataSqlite}}
                    VFN="MaggsoftDataSqlite"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Data.Sqlite" )
-                elif [[ "${file}" == *"Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mongo"* ]]; then
                    PROJECT=${{env.MaggsoftDtoMongo}}
                    VFN="MaggsoftDtoMongo"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Dto.Mongo" )
-                elif [[ "${file}" == *"Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mssql"* ]]; then
                    PROJECT=${{env.MaggsoftDtoMssql}}
                    VFN="MaggsoftDtoMssql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Dto.Mssql" )
-                elif [[ "${file}" == *"Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Npgsql"* ]]; then
                    PROJECT=${{env.MaggsoftDataNpgsql}}
                    VFN="MaggsoftDtoNpgsql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Dto.Npgsql" )
-                elif [[ "${file}" == *"Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Sqlite"* ]]; then
                    PROJECT=${{env.MaggsoftDtoSqlite}}
                    VFN="MaggsoftDtoSqlite"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Dto.Sqlite" )
-                elif [[ "${file}" == *"Maggsoft.Endpoints/Maggsoft.Endpoints"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Endpoints/Maggsoft.Endpoints"* ]]; then
                    PROJECT=${{env.MaggsoftEndpoints}}
                    VFN="MaggsoftEndpoints"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Endpoints" )
-                elif [[ "${file}" == *"Maggsoft.EventBus/Maggsoft.EventBus"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/EventBus/Maggsoft.EventBus"* ]]; then
                    PROJECT=${{env.MaggsoftEventBus}}
                    VFN="MaggsoftEventBus"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.EventBus" )
-                elif [[ "${file}" == *"Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/EventBus/Maggsoft.EventBus.AzureServiceBus"* ]]; then
                    PROJECT=${{env.MaggsoftEventBusAzureServiceBus}}
                    VFN="MaggsoftEventBusAzureServiceBus"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.EventBus.AzureServiceBus" )
-                elif [[ "${file}" == *"Maggsoft.EventBus.IoC/Maggsoft.EventBus.IoC"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/EventBus/Maggsoft.EventBus.IoC"* ]]; then
                    PROJECT=${{env.MaggsoftEventBusIoC}}
                    VFN="MaggsoftEventBusIoC"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.EventBus.IoC" )
-                elif [[ "${file}" == *"Maggsoft.EventBus.RabbitMQ/Maggsoft.EventBus.RabbitMQ"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/EventBus/Maggsoft.EventBus.RabbitMQ"* ]]; then
                    PROJECT=${{env.MaggsoftEventBusRabbitMQ}}
                    VFN="MaggsoftEventBusRabbitMQ"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.EventBus.RabbitMQ" )
-                elif [[ "${file}" == *"Maggsoft.Logging/Maggsoft.Logging"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Logging/Maggsoft.Logging"* ]]; then
                    PROJECT=${{env.MaggsoftLogging}}
                    VFN="MaggsoftLogging"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Logging" )
-                elif [[ "${file}" == *"Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/EventBus/Ocelot/Maggsoft.Ocelot.Core"* ]]; then
                    PROJECT=${{env.MaggsoftOcelotCore}}
                    VFN="MaggsoftOcelotCore"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Ocelot.Core" )
-                elif [[ "${file}" == *"Maggsoft.Mongo.Services/Maggsoft.Mongo.Services"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Mongo.Services"* ]]; then
                    PROJECT=${{env.MaggsoftMongoServices}}
                    VFN="MaggsoftMongoServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Mongo.Services" )
-                elif [[ "${file}" == *"Maggsoft.Mssql.Services/Maggsoft.Mssql.Services"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Mssql.Services"* ]]; then
                    PROJECT=${{env.MaggsoftMssqlServices}}
                    VFN="MaggsoftMssqlServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Mssql.Services" )
-                elif [[ "${file}" == *"Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Npgsql.Services"* ]]; then
                    PROJECT=${{env.MaggsoftNpgsqlServices}}
                    VFN="MaggsoftNpgsqlServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Npgsql.Services" )
-                elif [[ "${file}" == *"Maggsoft.Services/Maggsoft.Services"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Services"* ]]; then
                    PROJECT=${{env.MaggsoftServices}}
                    VFN="MaggsoftServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Services" )
-                elif [[ "${file}" == *"Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Sqlite.Services"* ]]; then
                    PROJECT=${{env.MaggsoftSqliteServices}}
                    VFN="MaggsoftSqliteServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Sqlite.Services" )
-                elif [[ "${file}" == *"Maggsoft.Core/Maggsoft.Core"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Core"* ]]; then
                    PROJECT=${{env.MaggsoftCore}}
                    VFN="MaggsoftCore"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Core" )
-                elif [[ "${file}" == *"Maggsoft.Mongo/Maggsoft.Mongo"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Mongo"* ]]; then
                    PROJECT=${{env.MaggsoftMongo}}
                    VFN="MaggsoftMongo"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Mongo" )
-                elif [[ "${file}" == *"Maggsoft.Mssql/Maggsoft.Mssql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Mssql"* ]]; then
                    PROJECT=${{env.MaggsoftMssql}}
                    VFN="MaggsoftMssql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Mssql" )
-                elif [[ "${file}" == *"Maggsoft.Npgsql/Maggsoft.Npgsql"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Npgsql"* ]]; then
                    PROJECT=${{env.MaggsoftNpgsql}}
                    VFN="MaggsoftNpgsql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Npgsql" )
-                elif [[ "${file}" == *"Maggsoft.Sqlite/Maggsoft.Sqlite"* ]]; then
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Sqlite"* ]]; then
                    PROJECT=${{env.MaggsoftSqlite}}
                    VFN="MaggsoftSqlite"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Sqlite" )
-                elif [[ "${file}" == *"Maggsoft.Framework/Maggsoft.Framework"* ]]; then
+                elif [[ "${file}" == *"src/Presentation/Maggsoft.Framework"* ]]; then
                    PROJECT=${{env.MaggsoftFramework}}
                    VFN="MaggsoftFramework"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Framework" )
-                elif [[ "${file}" == *"Maggsoft.VersioningTool/Maggsoft.VersioningTool"* ]]; then
+                elif [[ "${file}" == *"src/Tools/Maggsoft.VersioningTool"* ]]; then
                    PROJECT=${{env.MaggsoftVersioningTool}}
                    VFN="MaggsoftVersioningTool"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftVersioningTool" )
