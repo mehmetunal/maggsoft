@@ -181,18 +181,17 @@ jobs:
                    VFN="MaggsoftFramework"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Framework" )
                 elif [[ "${file}" == *"Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool"* ]]; then
-                   PROJECT=${{env.VersioningTool}}
-                   VFN="VersioningTool"
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "VersioningTool" )
+                   PROJECT=${{env.MaggsoftVersioningTool}}
+                   VFN="MaggsoftVersioningTool"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftVersioningTool" )
                 fi
                 
                 echo "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
-                    
+                    #"Version_VersioningTool.txt"
                     echo "This is a version file" > Version_$VFN.txt
                     ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
-                  
                     git status
 
                     git config user.name "mehmetunal"

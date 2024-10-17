@@ -6,7 +6,7 @@
         string versionFilePath = $"Version{(!string.IsNullOrEmpty(pathName) ? $"_{pathName}" : "")}.txt";
 
         string directoryPath = $"{Directory.GetCurrentDirectory()}/ProjectVersion";    
-        string filePath = Path.Combine(directoryPath, versionFilePath);
+        string filePath = Path.Combine(directoryPath, versionFilePath);   
 
         string currentVersion = "1.0.0";
         if (File.Exists(filePath))   
