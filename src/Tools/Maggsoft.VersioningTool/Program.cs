@@ -9,7 +9,7 @@
         string filePath = Path.Combine(directoryPath, versionFilePath);
 
         string currentVersion = "1.0.0";
-        if (File.Exists(filePath))
+        if (File.Exists(filePath))   
         {
             currentVersion = File.ReadAllText(filePath).Trim();
         }
