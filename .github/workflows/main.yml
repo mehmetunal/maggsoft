@@ -41,6 +41,8 @@ jobs:
         MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
         MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
         MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
+    permissions:
+     contents: write  # GitHub Actions'ın repoya dosya yazabilmesi için izin veriyoruz.
     name: changed-files
     steps:
       - uses: actions/checkout@v4
