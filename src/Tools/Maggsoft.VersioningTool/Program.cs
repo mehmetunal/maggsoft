@@ -3,7 +3,7 @@
     static void Main(string[] args)
     {
         string pathName = args.Length > 0 ? args[0] : "";
-        string versionFilePath = $"Version{(!string.IsNullOrEmpty(pathName) ? $".{pathName}" : "")}.txt";
+        string versionFilePath = $"Version{(!string.IsNullOrEmpty(pathName) ? $"_{pathName}" : "")}.txt";
 
         string directoryPath = $"{Directory.GetCurrentDirectory()}/ProjectVersion";
         string filePath = Path.Combine(directoryPath, versionFilePath);
