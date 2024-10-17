@@ -41,6 +41,7 @@ jobs:
         MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
         MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
         MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
+        MaggsoftTest: "src/Tools/Test/Test.csproj"
     permissions:
      contents: write  # GitHub Actions'ın repoya dosya yazabilmesi için izin veriyoruz.
 
@@ -196,6 +197,10 @@ jobs:
                    PROJECT=${{env.MaggsoftVersioningTool}}
                    VFN="MaggsoftVersioningTool"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftVersioningTool" )
+                elif [[ "${file}" == *"src/Tools/Test"* ]]; then
+                   PROJECT=${{env.MaggsoftTest}}
+                   VFN="MaggsoftTest"
+                   VERSION=$(dotnet run --project src/Tools/Test -- "MaggsoftTest" )
                 fi
                 
               #  echo "$PROJECT change files"

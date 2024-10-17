@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+
+	  <Copyright>Copyright © Maggsoft, Ltd</Copyright>
+	  <Company>asd</Company>
+	  <Authors>dfgdfg</Authors>
+	  <Description>asdasd.</Description>
+	  <PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/maggasoft/maggsoft</RepositoryUrl>
+	  <PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+	  <RepositoryType>Git</RepositoryType>
+  </PropertyGroup>
+
+</Project>

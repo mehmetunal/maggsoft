@@ -122,6 +122,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8DF5F6E3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.VersioningTool", "Tools\Maggsoft.VersioningTool\Maggsoft.VersioningTool.csproj", "{B9553AF4-1265-49AE-ACA4-A9A5935F250F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Tools\Test\Test.csproj", "{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -280,6 +282,10 @@ Global
 		{B9553AF4-1265-49AE-ACA4-A9A5935F250F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9553AF4-1265-49AE-ACA4-A9A5935F250F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9553AF4-1265-49AE-ACA4-A9A5935F250F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -337,6 +343,7 @@ Global
 		{4F4C894C-4D80-4A84-BE20-08997BD5F989} = {D5227832-32CA-4590-AF8E-0DB5F2219F62}
 		{8DF5F6E3-A65B-44F2-B212-26B71DE3C39C} = {2BCEB3B0-C3CA-4C6A-B413-FB5A7370A681}
 		{B9553AF4-1265-49AE-ACA4-A9A5935F250F} = {8DF5F6E3-A65B-44F2-B212-26B71DE3C39C}
+		{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E} = {8DF5F6E3-A65B-44F2-B212-26B71DE3C39C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9EE3ED25-C1C9-4452-AEDD-DBC833CCE8F8}
