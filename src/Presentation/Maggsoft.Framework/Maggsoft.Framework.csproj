@@ -1,30 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>2.2.5</Version>
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/maggsoft/maggsoft</RepositoryUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
-		<RepositoryType>Git</RepositoryType>
+		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
-		<PackageReference Include="FastMember" Version="1.5.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" Version="1.2.3" />
-		<PackageReference Include="Azure.Identity" Version="1.12.0" />
-		<PackageReference Include="Azure.Security.KeyVault.Certificates" Version="4.6.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.24" />
+		<PackageReference Include="DocumentFormat.OpenXml"/>
+		<PackageReference Include="FastMember"/>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core"/>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning"/>
+		<PackageReference Include="Swashbuckle.AspNetCore"/>
+		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" />
+		<PackageReference Include="Azure.Identity"/>
+		<PackageReference Include="Azure.Security.KeyVault.Certificates" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" />
 	</ItemGroup>
 
 	<ItemGroup>

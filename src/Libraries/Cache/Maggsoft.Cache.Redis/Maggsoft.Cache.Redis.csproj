@@ -1,22 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>2.0.1</Version>
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/maggasoft/maggsoft</RepositoryUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
-		<RepositoryType>Git</RepositoryType>
+		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="MessagePack" Version="2.5.140" />
-		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.5" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+		<PackageReference Include="MessagePack"/>
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis"  />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"/>
 	</ItemGroup>
 
 	<ItemGroup>

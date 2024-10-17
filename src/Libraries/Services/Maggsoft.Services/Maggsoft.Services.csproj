@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
-		<Company>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Company>
-		<Authors>Maggsoft Bilişim Teknolojileri İthalat İhracat Ticaret, Ltd</Authors>
+		<TargetFramework>$(TargetFramework)</TargetFramework>
+		<Copyright>$(Copyright)</Copyright>
+		<Company>$(Company)</Company>
+		<Authors>$(Authors)</Authors>
 		<Version>2.0.2</Version>
 		<Description>The Maggsoft.Services.</Description>
-		<PackageProjectUrl>https://www.maggsoft.com/</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/maggsoft/maggsoft</RepositoryUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
-		<RepositoryType>Git</RepositoryType>
+		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
+		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-	  <PackageReference Include="RazorEngineCore" Version="2023.11.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" />
+	  <PackageReference Include="RazorEngineCore" />
 	</ItemGroup>
 	
 	<ItemGroup>
