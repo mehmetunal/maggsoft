@@ -151,7 +151,7 @@ jobs:
                    VFN="VersioningTool"
                 fi
                 
-                eco "$PROJECT change files"
+                echo "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
                     
