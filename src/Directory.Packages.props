@@ -56,10 +56,6 @@
 		
 		<PackageVersion Include="MailKit" Version="4.6.0" />
 		
-		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
-		<PackageVersion Include="RazorEngineCore" Version="2023.11.2" />
-		
-		<PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
 		<PackageVersion Include="RazorEngineCore" Version="2023.11.2" />
 
 		<PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
