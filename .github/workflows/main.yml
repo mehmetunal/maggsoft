@@ -119,6 +119,8 @@ jobs:
                    PROJECT=${{env.MaggsoftFramework}}
                 fi
                 
+                eco "$PROJECT change files"
+
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
                     dotnet restore $PROJECT
                     dotnet build $PROJECT --configuration Release
