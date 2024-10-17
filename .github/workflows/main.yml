@@ -195,7 +195,7 @@ jobs:
                 elif [[ "${file}" == *"src/Tools/Test"* ]]; then
                    PROJECT=${{env.MaggsoftTest}}
                    VFN="MaggsoftTest"
-                   VERSION=$(dotnet run --project src/Tools/Test -- "MaggsoftTest" )
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftTest" )
                 fi
                 
               #  echo "$PROJECT change files"
