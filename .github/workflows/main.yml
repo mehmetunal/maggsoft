@@ -210,7 +210,19 @@ jobs:
                     
                     dotnet restore $PROJECT
                     dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+                    dotnet msbuild $PROJECT \
+                      -maxcpucount \
+                      -verbosity:m \
+                      -nologo \
+                      -restore \
+                      -target:pack \
+                      --property:_IsPacking=true \
+                      --property:PackageOutputPath=/home/runner/work/maggsoft/maggsoft/nupkgs \
+                      --property:Configuration=Release \
+                      --property:PackageVersion=$VERSION \
+                      --property:DOTNET_CLI_DISABLE_PUBLISH_AND_PACK_RELEASE=true
+
+                    #dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
                     #dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
                  fi
             
