@@ -210,7 +210,7 @@ jobs:
                     
                     dotnet restore $PROJECT
                     dotnet build $PROJECT --configuration Release
-                    #dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
                     #dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
                  fi
             
