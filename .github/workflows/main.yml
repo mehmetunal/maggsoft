@@ -58,8 +58,8 @@ jobs:
             for file in ${ALL_CHANGED_FILES}; do
                 if [[ "${file}" == *"Maggsoft.Aspect.Core/Maggsoft.Aspect.Core"* ]]; then
                    PROJECT=${{ env.MaggsoftAspectCore }}
-                   VFN="MaggsoftAspectCore"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Aspect.Core" )
+                   VFN="MaggsoftAspectCore"
                 elif [[ "${file}" == *"Maggsoft.Cache/Maggsoft.Cache"* ]]; then
                    PROJECT=${{env.MaggsoftCache}}
                    VFN="MaggsoftCache"
@@ -197,8 +197,8 @@ jobs:
 
                     git config user.name "mehmetunal"
                     git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file"
+                    git add Version_$VFN.txt
+                    git commit -m "Add version file" || echo "No changes to commit"
                     git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
 
                     dotnet restore $PROJECT
