@@ -197,13 +197,15 @@ jobs:
                 echo "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
-                    echo "$VFN"
+                    echo "$VFN package adı"
+                    echo "$VERSION version"
                     echo "This is a version file" > Version_$VFN.txt
                     ls -la  
                     git status
                     #
                     git config user.name "mehmetunal"
                     git config user.email "unal.m1991@gmail.com"
+                    git pull
                     git add Version_$VFN.txt
                     git commit -m "Add version file" || echo "No changes to commit"
                     git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
