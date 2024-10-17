@@ -214,7 +214,7 @@ jobs:
                 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
                     echo "$file was changed"
-                    #    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
                  fi
             
             done
