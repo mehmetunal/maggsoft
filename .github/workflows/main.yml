@@ -208,10 +208,10 @@ jobs:
                     git commit -m "Add version file" || echo "No changes to commit"
                     git push origin main
                     
-                    #dotnet restore $PROJECT
-                    #dotnet build $PROJECT --configuration Release
-                    #dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    #dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                    dotnet restore $PROJECT
+                    dotnet build $PROJECT --configuration Release
+                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
                  fi
             
             done
