@@ -10,7 +10,7 @@ namespace Maggsoft.Framework.Security.Authorization;
 
 public class AuthorizeCheckOperationFilter : IOperationFilter
 {
-    private readonly ApiTokenOptions _apiTokenOptions;
+    private readonly ApiTokenOptions _apiTokenOptions; 
 
     public AuthorizeCheckOperationFilter(IOptions<ApiTokenOptions> apiTokenOptions)
     {
