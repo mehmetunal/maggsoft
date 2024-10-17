@@ -3,9 +3,9 @@
     static void Main(string[] args)
     {
         string pathName = args.Length > 0 ? args[0] : "";
-        string versionFilePath = $"VERSION{(!string.IsNullOrEmpty(pathName) ? $"_{pathName}" : "")}.txt";
+        string versionFilePath = $"Version{(!string.IsNullOrEmpty(pathName) ? $".{pathName}" : "")}.txt";
 
-        string directoryPath = $"{Directory.GetCurrentDirectory()}/version_folder";
+        string directoryPath = $"{Directory.GetCurrentDirectory()}/ProjectVersion";
         string filePath = Path.Combine(directoryPath, versionFilePath);
 
         string currentVersion = "1.0.0";

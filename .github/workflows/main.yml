@@ -40,6 +40,7 @@ jobs:
         MaggsoftNpgsql: "src/Libraries/Maggsoft.Npgsql/Maggsoft.Npgsql.csproj"
         MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
         MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
+        MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
     name: changed-files
     steps:
       - uses: actions/checkout@v4
@@ -145,14 +146,17 @@ jobs:
                 elif [[ "${file}" == *"Maggsoft.Framework/Maggsoft.Framework"* ]]; then
                    PROJECT=${{env.MaggsoftFramework}}
                    VFN="Maggsoft.Framework"
+                elif [[ "${file}" == *"Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool"* ]]; then
+                   PROJECT=${{env.VersioningTool}}
+                   VFN="VersioningTool"
                 fi
                 
                 eco "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
                     
-                    VERSION=$(dotnet run --project src/Tools/VersioningTool -- "ClassLibrary2" )
-                    echo "This is a version file" > VERSION_$VFN.txt
+                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "$VFN" )
+                    echo "This is a version file" > Version._$VFN.txt
                     ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
                   
                     git status
