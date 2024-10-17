@@ -193,10 +193,6 @@ jobs:
                    PROJECT=${{env.MaggsoftFramework}}
                    VFN="MaggsoftFramework"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "Maggsoft.Framework" )
-                elif [[ "${file}" == *"src/Tools/Maggsoft.VersioningTool"* ]]; then
-                   PROJECT=${{env.MaggsoftVersioningTool}}
-                   VFN="MaggsoftVersioningTool"
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftVersioningTool" )
                 elif [[ "${file}" == *"src/Tools/Test"* ]]; then
                    PROJECT=${{env.MaggsoftTest}}
                    VFN="MaggsoftTest"
