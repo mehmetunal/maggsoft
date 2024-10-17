@@ -14,7 +14,7 @@
             currentVersion = File.ReadAllText(filePath).Trim();
         }
 
-        if (!Directory.Exists(directoryPath))
+        if (!Directory.Exists(directoryPath)) 
         { 
             Directory.CreateDirectory(directoryPath);
         }
