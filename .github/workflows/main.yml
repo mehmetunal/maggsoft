@@ -199,7 +199,7 @@ jobs:
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
                     echo "$VFN package adı"
                     echo "$VERSION version"
-                    echo "This is a version file" > Version_$VFN.txt
+                    echo "Version_$VFN.txt"
                     #ls -la  
                     #git status
                     
