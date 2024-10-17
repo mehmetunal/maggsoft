@@ -1,100 +1,219 @@
-﻿
-
-
-
-
-name: .NET 8 Package Version and Push
-
+﻿name: CI
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
-  find-changed-csproj:
-    runs-on: ubuntu-latest
-
+  changed_files:
+    runs-on: ubuntu-latest  # windows-latest || macos-latest
+    env:
+        MaggsoftAspectCore: "src/Libraries/Aspect/Maggsoft.Aspect.Core/Maggsoft.Aspect.Core.csproj"
+        MaggsoftCache: "src/Libraries/Cache/Maggsoft.Cache/Maggsoft.Cache.csproj"
+        MaggsoftCacheMemoryCache: "src/Libraries/Cache/Maggsoft.Cache.MemoryCache/Maggsoft.Cache.MemoryCache.csproj"
+        MaggsoftCacheRedis: "src/Libraries/Cache/Maggsoft.Cache.Redis/Maggsoft.Cache.Redis.csproj"
+        MaggsoftData: "src/Libraries/Data/Maggsoft.Data/Maggsoft.Data.csproj"
+        MaggsoftDataMongo: "src/Libraries/Data/Maggsoft.Data.Mongo/Maggsoft.Data.Mongo.csproj"
+        MaggsoftDataMssql: "src/Libraries/Data/Maggsoft.Data.Mssql/Maggsoft.Data.Mssql.csproj"
+        MaggsoftDataNpgsql: "src/Libraries/Data/Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql.csproj"
+        MaggsoftDataSqlite: "src/Libraries/Data/Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite.csproj"
+        MaggsoftDtoMongo: "src/Libraries/Dto/Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo.csproj"
+        MaggsoftDtoMssql: "src/Libraries/Dto/Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql.csproj"
+        MaggsoftDtoNpgsql: "src/Libraries/Dto/Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql.csproj"
+        MaggsoftDtoSqlite: "src/Libraries/Dto/Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite.csproj"
+        MaggsoftEndpoints: "src/Libraries/Endpoints/Maggsoft.Endpoints/Maggsoft.Endpoints.csproj"
+        MaggsoftEventBus: "src/Libraries/EventBus/Maggsoft.EventBus/Maggsoft.EventBus.csproj"
+        MaggsoftEventBusAzureServiceBus: "src/Libraries/EventBus/Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus.csproj"
+        MaggsoftEventBusIoC: "src/Libraries/EventBus/Maggsoft.EventBus.IoC/Maggsoft.EventBus.IoC.csproj"
+        MaggsoftEventBusRabbitMQ: "src/Libraries/EventBus/Maggsoft.EventBus.RabbitMQ/Maggsoft.EventBus.RabbitMQ.csproj"
+        MaggsoftLogging: "src/Libraries/Logging/Maggsoft.Logging/Maggsoft.Logging.csproj"
+        MaggsoftOcelotCore: "src/Libraries/Ocelot/Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core.csproj"
+        MaggsoftMongoServices: "src/Libraries/Services/Maggsoft.Mongo.Services/Maggsoft.Mongo.Services.csproj"
+        MaggsoftMssqlServices: "src/Libraries/Services/Maggsoft.Mssql.Services/Maggsoft.Mssql.Services.csproj"
+        MaggsoftNpgsqlServices: "src/Libraries/Services/Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services.csproj"
+        MaggsoftServices: "src/Libraries/Services/Maggsoft.Services/Maggsoft.Services.csproj"
+        MaggsoftSqliteServices: "src/Libraries/Services/Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services.csproj"
+        MaggsoftCore: "src/Libraries/Maggsoft.Core/Maggsoft.Core.csproj"
+        MaggsoftMongo: "src/Libraries/Maggsoft.Mongo/Maggsoft.Mongo.csproj"
+        MaggsoftMssql: "src/Libraries/Maggsoft.Mssql/Maggsoft.Mssql.csproj"
+        MaggsoftNpgsql: "src/Libraries/Maggsoft.Npgsql/Maggsoft.Npgsql.csproj"
+        MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
+        MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
+    name: changed-files
     steps:
-      # Repository'i checkout et
-     - name: Checkout code
-       uses: actions/checkout@v2
-       with:
-         fetch-depth: 5
+      - uses: actions/checkout@v4
 
-     - name: Find changed .csproj files
-       id: find-changed-csproj
-       run: |
-            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
-            echo "Changed files: $CHANGED_FILES"
-            CS_PROJ_FILES=$(echo "$CHANGED_FILES" | grep '.csproj$')
-            echo "Changed .csproj files: $CS_PROJ_FILES"
-            echo "::set-output name=csproj_files::$CS_PROJ_FILES"
-
-     - name: Display changed .csproj files
-       run: | 
-            echo "Changed .csproj files: ${{ steps.find-changed-csproj.outputs.csproj_files }}"
-
-# name: .NET 8 Package Version and Push
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       # Repository'i checkout et
-#       - uses: actions/checkout@v4
-      
-#       # 2. .NET Core'un ayarlanmasý
-#       - name: Setup .NET Core
-#         uses: actions/setup-dotnet@v3
-#         with:
-#           dotnet-version: '8.x'  # Kullanýlan .NET Core sürümünü belirleyin
-
-#       # Son committe hangi dosyaların değiştiğini bul
-#       - name: Find changed projects
-#         id: changes
-#         run: |
-#           git diff --name-only HEAD > changed_files.txt
-#             cat changed_files.txt
-
-#       # Dinamik olarak proje dizinini bul
-#       - name: Identify changed project
-#         id: project
-#         run: |
-#           project_path=$(grep -E -o '^[^/]+/' changed_files.txt | head -n 1)
-#           echo "Changed project path: $project_path"
-#           echo "::set-output name=project_path::$project_path"
-
-#       # NuGet paket versiyonunu belirle
-#       - name: Determine Package Version
-#         id: version
-#         run: |
-#           # Son commit tarihini kullanarak versiyon oluştur
-#           commit_date=$(git log -1 --format=%cd --date=format:'%Y.%m.%d')
-#           commit_sha=$(git rev-parse --short HEAD)
-#           version="${commit_date}-${commit_sha}"
-
-#           echo "Package version: $version"
-#           echo "::set-output name=package_version::$version"
-
-#       # .NET projeyi pack et (otomatik versiyonla)
-#       - name: Pack .NET Project
-#         run: |
-#           cd ${{ steps.project.outputs.project_path }}
-#           dotnet pack --configuration Release --output ./bin/Release
-
-          
-#       # Paketi NuGet'e push et
-#       - name: Push to NuGet
-#         run: |
-#           cd ${{ steps.project.outputs.project_path }}
-#           dotnet nuget push bin/Release/*.nupkg --api-key ${{ secrets.PACKAGES_TOKEN }} --source https://nuget.pkg.github.com/mehmetunal/index.json
-          
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+            COMMIT_COUNT=$(git rev-list --count HEAD)
+            DATE=$(date +'%y%m%d')
+            VERSION="1.0.${COMMIT_COUNT}-${DATE}"
+            for file in ${ALL_CHANGED_FILES}; do
+                echo "$file was changed"
+                if [[ "${file}" == *"Maggsoft.Aspect.Core/Maggsoft.Aspect.Core"* ]]; then
+                   echo "${{env.MaggsoftAspectCore}}"
+                   dotnet restore ${{env.MaggsoftAspectCore}}
+                   dotnet build ${{env.MaggsoftAspectCore}} --configuration Release
+                   dotnet pack ${{env.MaggsoftAspectCore}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Cache/Maggsoft.Cache"* ]]; then
+                   echo "${{env.MaggsoftCache}}"
+                   dotnet restore ${{env.MaggsoftCache}}
+                   dotnet build ${{env.MaggsoftCache}} --configuration Release
+                   dotnet pack ${{env.MaggsoftCache}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Cache.MemoryCache/Maggsoft.Cache.MemoryCache"* ]]; then
+                   echo "${{env.MaggsoftCacheMemoryCache}}"
+                   dotnet restore ${{env.MaggsoftCacheMemoryCache}}
+                   dotnet build ${{env.MaggsoftCacheMemoryCache}} --configuration Release
+                   dotnet pack ${{env.MaggsoftCacheMemoryCache}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Cache.Redis/Maggsoft.Cache.Redis"* ]]; then
+                   echo "${{env.MaggsoftCacheRedis}}"
+                   dotnet restore ${{env.MaggsoftCacheRedis}}
+                   dotnet build ${{env.MaggsoftCacheRedis}} --configuration Release
+                   dotnet pack ${{env.MaggsoftCacheRedis}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Data/Maggsoft.Data"* ]]; then
+                   echo "${{env.MaggsoftData}}"
+                   dotnet restore ${{env.MaggsoftData}}
+                   dotnet build ${{env.MaggsoftData}} --configuration Release
+                   dotnet pack ${{env.MaggsoftData}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Data.Mongo/Maggsoft.Data.Mongo"* ]]; then
+                   echo "${{env.MaggsoftDataMongo}}"
+                   dotnet restore ${{env.MaggsoftDataMongo}}
+                   dotnet build ${{env.MaggsoftDataMongo}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDataMongo}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Data.Mssql/Maggsoft.Data.Mssql"* ]]; then
+                   echo "${{env.MaggsoftDataMssql}}"
+                   dotnet restore ${{env.MaggsoftDataMssql}}
+                   dotnet build ${{env.MaggsoftDataMssql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDataMssql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql"* ]]; then
+                   echo "${{env.MaggsoftDataNpgsql}}"
+                   dotnet restore ${{env.MaggsoftDataNpgsql}}
+                   dotnet build ${{env.MaggsoftDataNpgsql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDataNpgsql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite"* ]]; then
+                   echo "${{env.MaggsoftDataSqlite}}"
+                   dotnet restore ${{env.MaggsoftDataSqlite}}
+                   dotnet build ${{env.MaggsoftDataSqlite}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDataSqlite}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo"* ]]; then
+                   echo "${{env.MaggsoftDtoMongo}}"
+                   dotnet restore ${{env.MaggsoftDtoMongo}}
+                   dotnet build ${{env.MaggsoftDtoMongo}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDtoMongo}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql"* ]]; then
+                   echo "${{env.MaggsoftDtoMssql}}"
+                   dotnet restore ${{env.MaggsoftDtoMssql}}
+                   dotnet build ${{env.MaggsoftDtoMssql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDtoMssql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql"* ]]; then
+                   echo "${{env.MaggsoftDataNpgsql}}"
+                   dotnet restore ${{env.MaggsoftDtoNpgsql}}
+                   dotnet build ${{env.MaggsoftDtoNpgsql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDtoNpgsql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite"* ]]; then
+                   echo "${{env.MaggsoftDtoSqlite}}"
+                   dotnet restore ${{env.MaggsoftDtoSqlite}}
+                   dotnet build ${{env.MaggsoftDtoSqlite}} --configuration Release
+                   dotnet pack ${{env.MaggsoftDtoSqlite}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Endpoints/Maggsoft.Endpoints"* ]]; then
+                   echo "${{env.MaggsoftEndpoints}}"
+                   dotnet restore ${{env.MaggsoftEndpoints}}
+                   dotnet build ${{env.MaggsoftEndpoints}} --configuration Release
+                   dotnet pack ${{env.MaggsoftEndpoints}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.EventBus/Maggsoft.EventBus"* ]]; then
+                   echo "${{env.MaggsoftEventBus}}"
+                   dotnet restore ${{env.MaggsoftEventBus}}
+                   dotnet build ${{env.MaggsoftEventBus}} --configuration Release
+                   dotnet pack ${{env.MaggsoftEventBus}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus"* ]]; then
+                   echo "${{env.MaggsoftEventBusAzureServiceBus}}"
+                   dotnet restore ${{env.MaggsoftEventBusAzureServiceBus}}
+                   dotnet build ${{env.MaggsoftEventBusAzureServiceBus}} --configuration Release
+                   dotnet pack ${{env.MaggsoftEventBusAzureServiceBus}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.EventBus.IoC/Maggsoft.EventBus.IoC"* ]]; then
+                   echo "${{env.MaggsoftEventBusIoC}}"
+                   dotnet restore ${{env.MaggsoftEventBusIoC}}
+                   dotnet build ${{env.MaggsoftEventBusIoC}} --configuration Release
+                   dotnet pack ${{env.MaggsoftEventBusIoC}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.EventBus.RabbitMQ/Maggsoft.EventBus.RabbitMQ"* ]]; then
+                   echo "${{env.MaggsoftEventBusRabbitMQ}}"
+                   dotnet restore ${{env.MaggsoftEventBusRabbitMQ}}
+                   dotnet build ${{env.MaggsoftEventBusRabbitMQ}} --configuration Release
+                   dotnet pack ${{env.MaggsoftEventBusRabbitMQ}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Logging/Maggsoft.Logging"* ]]; then
+                   echo "${{env.MaggsoftLogging}}"
+                   dotnet restore ${{env.MaggsoftLogging}}
+                   dotnet build ${{env.MaggsoftLogging}} --configuration Release
+                   dotnet pack ${{env.MaggsoftLogging}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core"* ]]; then
+                   echo "${{env.MaggsoftOcelotCore}}"
+                   dotnet restore ${{env.MaggsoftOcelotCore}}
+                   dotnet build ${{env.MaggsoftOcelotCore}} --configuration Release
+                   dotnet pack ${{env.MaggsoftOcelotCore}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Mongo.Services/Maggsoft.Mongo.Services"* ]]; then
+                   echo "${{env.MaggsoftMongoServices}}"
+                   dotnet restore ${{env.MaggsoftMongoServices}}
+                   dotnet build ${{env.MaggsoftMongoServices}} --configuration Release
+                   dotnet pack ${{env.MaggsoftMongoServices}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Mssql.Services/Maggsoft.Mssql.Services"* ]]; then
+                   echo "${{env.MaggsoftMssqlServices}}"
+                   dotnet restore ${{env.MaggsoftMssqlServices}}
+                   dotnet build ${{env.MaggsoftMssqlServices}} --configuration Release
+                   dotnet pack ${{env.MaggsoftMssqlServices}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services"* ]]; then
+                   echo "${{env.MaggsoftNpgsqlServices}}"
+                   dotnet restore ${{env.MaggsoftNpgsqlServices}}
+                   dotnet build ${{env.MaggsoftNpgsqlServices}} --configuration Release
+                   dotnet pack ${{env.MaggsoftNpgsqlServices}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Services/Maggsoft.Services"* ]]; then
+                   echo "${{env.MaggsoftServices}}"
+                   dotnet restore ${{env.MaggsoftServices}}
+                   dotnet build ${{env.MaggsoftServices}} --configuration Release
+                   dotnet pack ${{env.MaggsoftServices}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services"* ]]; then
+                   echo "${{env.MaggsoftSqliteServices}}"
+                   dotnet restore ${{env.MaggsoftSqliteServices}}
+                   dotnet build ${{env.MaggsoftSqliteServices}} --configuration Release
+                   dotnet pack ${{env.MaggsoftSqliteServices}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Core/Maggsoft.Core"* ]]; then
+                   echo "${{env.MaggsoftCore}}"
+                   dotnet restore ${{env.MaggsoftCore}}
+                   dotnet build ${{env.MaggsoftCore}} --configuration Release
+                   dotnet pack ${{env.MaggsoftCore}} --configuration Release --output  ./nupkgs  #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Mongo/Maggsoft.Mongo"* ]]; then
+                   echo "${{env.MaggsoftMongo}}"
+                   dotnet restore ${{env.MaggsoftMongo}}
+                   dotnet build ${{env.MaggsoftMongo}} --configuration Release
+                   dotnet pack ${{env.MaggsoftMongo}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Mssql/Maggsoft.Mssql"* ]]; then
+                   echo "${{env.MaggsoftMssql}}"
+                   dotnet restore ${{env.MaggsoftMssql}}
+                   dotnet build ${{env.MaggsoftMssql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftMssql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Npgsql/Maggsoft.Npgsql"* ]]; then
+                   echo "${{env.MaggsoftNpgsql}}"
+                   dotnet restore ${{env.MaggsoftNpgsql}}
+                   dotnet build ${{env.MaggsoftNpgsql}} --configuration Release
+                   dotnet pack ${{env.MaggsoftNpgsql}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Sqlite/Maggsoft.Sqlite"* ]]; then
+                   echo "${{env.MaggsoftSqlite}}"
+                   dotnet restore ${{env.MaggsoftSqlite}}
+                   dotnet build ${{env.MaggsoftSqlite}} --configuration Release
+                   dotnet pack ${{env.MaggsoftSqlite}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                elif [[ "${file}" == *"Maggsoft.Framework/Maggsoft.Framework"* ]]; then
+                   echo "${{env.MaggsoftFramework}}"
+                   dotnet restore ${{env.MaggsoftFramework}}
+                   dotnet build ${{env.MaggsoftFramework}} --configuration Release
+                   dotnet pack ${{env.MaggsoftFramework}} --configuration Release --output  ./nupkgs #/p:PackageVersion=$VERSION
+                fi
+                
+            #    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+            
+            done
+            echo "Finish..."
