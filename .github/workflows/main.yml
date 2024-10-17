@@ -200,15 +200,15 @@ jobs:
                     echo "$VFN package adı"
                     echo "$VERSION version"
                     echo "Version_$VFN.txt"
-                    #ls -la  
-                    #git status
+                    ls -la  
+                    git status
                     
-                    #git config user.name "mehmetunal"
-                    #git config user.email "unal.m1991@gmail.com"
-                    #git pull
-                    #git add Version_$VFN.txt
-                    #git commit -m "Add version file" || echo "No changes to commit"
-                    #git push origin/main https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
+                    git config user.name "mehmetunal"
+                    git config user.email "unal.m1991@gmail.com"
+                    git pull
+                    git add .
+                    git commit -m "Add version file" || echo "No changes to commit"
+                    git push origin/main https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
                     
                     #dotnet restore $PROJECT
                     #dotnet build $PROJECT --configuration Release
