@@ -156,8 +156,8 @@ jobs:
                 echo "$PROJECT change files"
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"Tools/Maggsoft.VersioningTool"* ]]; then
-                    echo $VFN
-                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- $VFN )
+                    echo "$VFN"
+                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "$VFN" )
                     echo "This is a version file" > Version._$VFN.txt
                     ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
                   
