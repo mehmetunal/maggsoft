@@ -196,6 +196,7 @@ jobs:
                 
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
+                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
                     echo "$VFN package adı"
                     echo "$VERSION version"
                     echo "Version_$VFN.txt"
