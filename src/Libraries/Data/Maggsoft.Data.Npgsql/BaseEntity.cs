@@ -11,7 +11,7 @@ public class BaseEntity : BaseEntity<Guid>
 [Serializable]
 public abstract class BaseEntity<TKey> : Data.BaseEntity, IBaseEntity<TKey>, IEntity
 {
-    public BaseEntity()
+    public BaseEntity() 
     {
         CreatedDate = DateTime.UtcNow;
     }

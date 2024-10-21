@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Maggsoft.Mssql.UnitOfWork;
 
-public class UnitOfWork(DbContext context) : IUnitOfWork 
+public class UnitOfWork(DbContext context) : IUnitOfWork  
 {
     #region Variables
 

@@ -4,7 +4,7 @@ using Maggsoft.Aspect.Core;
 
 namespace Maggsoft.Cache;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtension 
 {
     public static IServiceCollection DecorateAllInterfacesUsingAspect(this IServiceCollection services, params Type[] assemblyPointerTypes)
     {

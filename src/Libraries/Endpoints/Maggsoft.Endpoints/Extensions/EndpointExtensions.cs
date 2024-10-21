@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace Maggsoft.Endpoints.Extensions;
 
-public static class EndpointExtensions
+public static class EndpointExtensions 
 {
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {

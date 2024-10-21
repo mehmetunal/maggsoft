@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.MemoryCache;  
 
-public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider serviceProvider) : ICache
+public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider serviceProvider) : ICache 
 {
     #region Properties
     private readonly IServiceProvider _serviceProvider = serviceProvider;

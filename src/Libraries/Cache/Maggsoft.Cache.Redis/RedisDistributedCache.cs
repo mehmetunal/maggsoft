@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Cache.Redis; 
 
-public class RedisDistributedCache(
+public class RedisDistributedCache( 
     IDistributedCache distributedCache,
     IConnectionMultiplexer connectionMultiplexer,
     IOptions<RedisCacheOptions> redisCacheOptions) : ICache

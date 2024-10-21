@@ -12,7 +12,7 @@ namespace Maggsoft.EventBus.IoC;
 
 public class DependencyContainer 
 {
-    public static void RegisterEventBusConntionServices(IServiceCollection services, IConfiguration Configuration)
+    public static void RegisterEventBusConntionServices(IServiceCollection services, IConfiguration Configuration) 
     {
         var azureServiceBusEnabled = Configuration.GetSection("EventBus:AzureServiceBusEnabled");
         if (azureServiceBusEnabled != null && bool.Parse(azureServiceBusEnabled.Value) == true)

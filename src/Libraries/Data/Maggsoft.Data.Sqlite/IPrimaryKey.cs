@@ -4,7 +4,7 @@
     {
     }
 
-    public interface IPrimaryKey<TKey> : IPrimaryKey
+    public interface IPrimaryKey<TKey> : IPrimaryKey 
     {
     }
 }

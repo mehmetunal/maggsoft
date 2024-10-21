@@ -11,7 +11,7 @@ using System.Net.Sockets;
 namespace Maggsoft.EventBus.RabbitMQ; 
 
 public class DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
-      : IRabbitMQPersistentConnection
+      : IRabbitMQPersistentConnection 
 {
     private readonly IConnectionFactory _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
     private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger = logger ?? throw new ArgumentNullException(nameof(logger));

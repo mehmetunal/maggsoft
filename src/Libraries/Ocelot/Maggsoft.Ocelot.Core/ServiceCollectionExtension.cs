@@ -9,7 +9,7 @@ using MMLib.Ocelot.Provider.AppConfiguration;
 
 namespace Maggsoft.Ocelot.Core;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtension 
 {
     public static IServiceCollection AddOcelotConfig(this IServiceCollection services, IConfiguration Configuration)
     {

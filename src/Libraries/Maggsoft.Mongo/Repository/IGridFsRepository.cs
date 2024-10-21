@@ -12,7 +12,7 @@ using MongoDB.Driver.Linq;
 
 namespace Maggsoft.Mongo.Repository;
 
-public interface IGridFsRepository
+public interface IGridFsRepository 
 {
     #region Collection
 

@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Sqlite.UnitOfWork;
+namespace Maggsoft.Sqlite.UnitOfWork;  
 
 public interface IUnitOfWork : IDisposable
 {

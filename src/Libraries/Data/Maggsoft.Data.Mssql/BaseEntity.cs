@@ -10,7 +10,7 @@ namespace Maggsoft.Data.Mssql
 
     [Serializable]
     public abstract class BaseEntity<TKey> : Data.BaseEntity, IBaseEntity<TKey>, IEntity
-    {
+    { 
         public BaseEntity()
         {
             CreatedDate = DateTime.UtcNow;

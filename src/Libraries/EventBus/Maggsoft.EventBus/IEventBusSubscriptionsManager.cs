@@ -7,7 +7,7 @@ using static Maggsoft.EventBus.InMemoryEventBusSubscriptionsManager;
 
 namespace Maggsoft.EventBus;
 
-public interface IEventBusSubscriptionsManager 
+public interface IEventBusSubscriptionsManager  
 {
     bool IsEmpty { get; }
     event EventHandler<string> OnEventRemoved;

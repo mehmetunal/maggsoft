@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Maggsoft.Data.Mongo;
 
 
-public abstract class BaseEntity : Data.BaseEntity, IBaseEntity, IEntity
+public abstract class BaseEntity : Data.BaseEntity, IBaseEntity, IEntity 
 {
     protected BaseEntity()
     {
