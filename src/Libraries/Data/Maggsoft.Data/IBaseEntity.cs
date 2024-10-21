@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace Maggsoft.Data;
 
-public interface IBaseEntity 
+public interface IBaseEntity  
 {
 }
 public interface IBaseEntity<TKey> : IBaseEntity
