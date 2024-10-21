@@ -13,7 +13,7 @@ namespace Maggsoft.Cache.Redis;
 public class RedisDistributedCache( 
     IDistributedCache distributedCache,
     IConnectionMultiplexer connectionMultiplexer,
-    IOptions<RedisCacheOptions> redisCacheOptions) : ICache
+    IOptions<RedisCacheOptions> redisCacheOptions) : ICache 
 {
     private readonly IDatabase _cache = connectionMultiplexer.GetDatabase();
     private readonly IDistributedCache _distributedCache = distributedCache ?? throw new ArgumentNullException(nameof(distributedCache));

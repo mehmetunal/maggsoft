@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.EventBus.ServiceBus;
 
-public class AzureEventBusServiceBus : IEventBus, IDisposable 
+public class AzureEventBusServiceBus : IEventBus, IDisposable  
 {
     private readonly IAzureServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly ILogger<AzureEventBusServiceBus> _logger;

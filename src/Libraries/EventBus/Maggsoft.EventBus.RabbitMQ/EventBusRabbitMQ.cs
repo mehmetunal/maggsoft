@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.EventBus.RabbitMQ;
 
-public class EventBusRabbitMQ : IEventBus, IDisposable
+public class EventBusRabbitMQ : IEventBus, IDisposable 
 {
     const string BROKER_NAME = "rescuer_event_bus";
 

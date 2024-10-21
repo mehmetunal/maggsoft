@@ -20,7 +20,7 @@ namespace Maggsoft.Npgsql.Services;
 
 public partial class NpgsqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
     new()
-    where TResultDto : BaseDtoModel,
+    where TResultDto : BaseDtoModel, 
     new()
     where TEditDto : BaseDtoModel,
     new()

@@ -16,7 +16,7 @@ using System.Web;
 
 namespace Maggsoft.Core.Extensions;
 
-public static class StringExtensions
+public static class StringExtensions 
 {
     public const string CarriageReturnLineFeed = "\r\n";
     public const string Empty = "";

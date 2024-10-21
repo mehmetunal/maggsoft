@@ -11,7 +11,7 @@ public interface IEventBusSubscriptionsManager
 {
     bool IsEmpty { get; }
     event EventHandler<string> OnEventRemoved;
-    void AddDynamicSubscription<TH>(string eventName)
+    void AddDynamicSubscription<TH>(string eventName) 
        where TH : IDynamicIntegrationEventHandler;
 
     void AddSubscription<T, TH>()

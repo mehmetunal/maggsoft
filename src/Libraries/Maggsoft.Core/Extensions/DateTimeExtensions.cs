@@ -16,7 +16,7 @@ public static class DateTimeExtensions
         if (condition)
             target += 7;
 
-        return from.AddDays(target - start);
+        return from.AddDays(target - start); 
     }
 
     /// <summary>

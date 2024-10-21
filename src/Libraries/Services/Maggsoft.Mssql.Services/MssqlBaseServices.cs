@@ -20,7 +20,7 @@ namespace Maggsoft.Mssql.Services
 {
     public partial class MssqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> : BaseService where TTable : BaseEntity,
         new()
-        where TResultDto : BaseDtoModel,
+        where TResultDto : BaseDtoModel, 
         new()
         where TEditDto : BaseDtoModel,
         new()

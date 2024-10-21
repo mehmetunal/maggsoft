@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Sqlite.Services 
 {
-    public partial class SqliteBaseServices<TTable, TResultDto, TEditDto, TAddDto> : BaseService where TTable : BaseEntity,
+    public partial class SqliteBaseServices<TTable, TResultDto, TEditDto, TAddDto> : BaseService where TTable : BaseEntity, 
         new()
         where TResultDto : BaseDtoModel,
         new()

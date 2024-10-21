@@ -15,7 +15,7 @@ namespace Maggsoft.Services;
 
 public partial class MongoBaseService<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
     new()
-    where TResultDto : BaseDtoModel,  
+    where TResultDto : BaseDtoModel,   
     new()
     where TEditDto : BaseDtoModel,
     new()

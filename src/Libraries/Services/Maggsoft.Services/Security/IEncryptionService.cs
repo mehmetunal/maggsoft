@@ -10,7 +10,7 @@ public interface IEncryptionService
     /// </summary>
     /// <param name="size">Key size</param>
     /// <returns>Salt key</returns>
-    string CreateSaltKey(int size); 
+    string CreateSaltKey(int size);  
 
     /// <summary>
     /// Create a password hash

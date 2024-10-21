@@ -15,7 +15,7 @@ public static class ServiceCollectionExtension
     {
         services.AddOcelot(Configuration).AddCacheManager(option => option.WithDictionaryHandle())
             .AddAppConfiguration();
-        services.AddSwaggerForOcelot(Configuration);
+        services.AddSwaggerForOcelot(Configuration); 
 
         return services;
     }
