@@ -215,6 +215,7 @@ jobs:
 
   changed_files:
     runs-on: ubuntu-latest  # windows-latest || macos-latest
+    needs: cahnged_version
     permissions:
      contents: write 
 
