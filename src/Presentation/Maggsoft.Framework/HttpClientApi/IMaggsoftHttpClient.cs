@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.HttpClientApi
 {
-    public interface IMaggsoftHttpClient
+    public interface IMaggsoftHttpClient 
     {
         Task PingAsync();
         Task<List<TResult>> GetAllAsync<TResult>(string url) where TResult : class;
