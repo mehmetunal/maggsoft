@@ -113,6 +113,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.Endpoints", "Libra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A7D6F502-1562-4DA5-9EF1-781CA222751C}"
 	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\change-files-packages.yml = ..\.github\workflows\change-files-packages.yml
 		Directory.Packages.props = Directory.Packages.props
 		..\.github\workflows\main.yml = ..\.github\workflows\main.yml
 		nuget.config = nuget.config
@@ -122,7 +123,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{8DF5F6E3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maggsoft.VersioningTool", "Tools\Maggsoft.VersioningTool\Maggsoft.VersioningTool.csproj", "{B9553AF4-1265-49AE-ACA4-A9A5935F250F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Tools\Test\Test.csproj", "{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Tools\Test\Test.csproj", "{E61BAAB8-C4D6-48D4-8A48-D3B53BE83E2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,7 +12,7 @@ namespace Maggsoft.Data.Mssql
     public abstract class BaseEntity<TKey> : Data.BaseEntity, IBaseEntity<TKey>, IEntity
     { 
         public BaseEntity()
-        {
+        { 
             CreatedDate = DateTime.UtcNow;
         }
         public virtual TKey Id { get; set; }

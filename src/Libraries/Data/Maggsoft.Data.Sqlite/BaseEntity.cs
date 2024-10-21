@@ -9,7 +9,7 @@ namespace Maggsoft.Data.Sqlite
     }
 
     [Serializable]
-    public abstract class BaseEntity<TKey> : Data.BaseEntity, IBaseEntity<TKey>, IEntity 
+    public abstract class BaseEntity<TKey> : Data.BaseEntity, IBaseEntity<TKey>, IEntity  
     {
         public BaseEntity()
         {

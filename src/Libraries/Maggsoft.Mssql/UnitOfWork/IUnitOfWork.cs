@@ -12,7 +12,7 @@ public interface IUnitOfWork : IDisposable
     IMssqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity;
 
     bool BeginNewTransaction();
-    Task<bool> BeginNewTransactionAsync();
+    Task<bool> BeginNewTransactionAsync(); 
     bool RollBackTransaction();
     Task<bool> RollBackTransactionAsync();
 

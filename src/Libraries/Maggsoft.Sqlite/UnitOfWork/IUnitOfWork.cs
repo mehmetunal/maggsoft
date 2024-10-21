@@ -9,7 +9,7 @@ namespace Maggsoft.Sqlite.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    ISqliteRepository<T> GetRepository<T>() where T : BaseEntity, IEntity;
+    ISqliteRepository<T> GetRepository<T>() where T : BaseEntity, IEntity; 
 
     bool BeginNewTransaction();
     Task<bool> BeginNewTransactionAsync();

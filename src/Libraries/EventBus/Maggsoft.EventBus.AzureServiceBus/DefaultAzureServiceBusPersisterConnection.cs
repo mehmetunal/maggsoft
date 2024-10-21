@@ -18,7 +18,7 @@ public class DefaultAzureServiceBusPersisterConnection : IAzureServiceBusPersist
         _topicClient = new ServiceBusClient(_serviceBusConnectionString);
     }
 
-    public ServiceBusClient TopicClient
+    public ServiceBusClient TopicClient 
     {
         get
         {

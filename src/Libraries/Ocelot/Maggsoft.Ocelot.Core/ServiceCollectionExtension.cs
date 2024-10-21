@@ -20,7 +20,7 @@ public static class ServiceCollectionExtension
         return services;
     }
 
-    public static void UseOcelotConfig(this IApplicationBuilder app)
+    public static void UseOcelotConfig(this IApplicationBuilder app) 
     {
         app.UseSwaggerForOcelotUI(opt =>
         {

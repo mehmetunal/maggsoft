@@ -19,7 +19,7 @@ public class DependencyContainer
         {
             services.AddSingleton<IAzureServiceBusPersisterConnection>(sp =>
             {
-                var serviceBusConnectionString = Configuration["EventBus:EventBusConnection"];
+                var serviceBusConnectionString = Configuration["EventBus:EventBusConnection"]; 
 
                 return new DefaultAzureServiceBusPersisterConnection(serviceBusConnectionString);
             });

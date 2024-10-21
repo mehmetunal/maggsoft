@@ -19,7 +19,7 @@ public class MaggsoftSerilogLoggerFactory
 
     public static ILogger CreateSerilogLogger(IConfiguration configuration)
     {
-        string applicationName = configuration["Serilog:ApplicationName"];
+        string applicationName = configuration["Serilog:ApplicationName"]; 
         
         return new LoggerConfiguration()
             .Enrich.WithProperty("ApplicationContext", applicationName)

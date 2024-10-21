@@ -13,7 +13,7 @@ namespace Maggsoft.Mssql.Services
 
         protected virtual string CurrentUserRole => GetClaim(ClaimTypes.Role);
 
-        protected virtual string? GetClaim(string key)
+        protected virtual string? GetClaim(string key) 
         {
             try
             {

@@ -9,7 +9,7 @@ public interface ICache
     object Get(string cacheKey, Type deserializeType);
 
     Task<object> GetAsync(string cacheKey);
-    Task<object> GetAsync(string cacheKey, Type deserializeType);
+    Task<object> GetAsync(string cacheKey, Type deserializeType); 
 
     T Get<T>(string cacheKey);
     T Get<T>(string cacheKey, TimeSpan cacheTime, Func<T> acquire);

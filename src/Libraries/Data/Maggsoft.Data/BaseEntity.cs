@@ -1,5 +1,5 @@
 ﻿namespace Maggsoft.Data;
 
-public partial class BaseEntity : IBaseEntity    
+public partial class BaseEntity : IBaseEntity     
 {
 }

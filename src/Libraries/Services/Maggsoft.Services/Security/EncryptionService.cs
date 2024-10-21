@@ -19,7 +19,7 @@ public class EncryptionService(IConfiguration configuration) : IEncryptionServic
     #endregion
     #region Ctor
 
-    #endregion
+    #endregion 
 
     #region Utilities
 

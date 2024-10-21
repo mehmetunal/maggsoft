@@ -13,7 +13,7 @@ namespace Maggsoft.Endpoints.Extensions;
 
 public static class EndpointExtensions  
 {
-    public static IServiceCollection AddEndpoints(this IServiceCollection services)
+    public static IServiceCollection AddEndpoints(this IServiceCollection services) 
     {
         ServiceDescriptor[] serviceDescriptors = GetAssemblies().SelectMany(s => s.GetTypes())
             .Where(type => type is { IsAbstract: false, IsInterface: false } &&

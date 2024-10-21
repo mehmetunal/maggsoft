@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Cache.Redis; 
+namespace Maggsoft.Cache.Redis;  
 
 public class RedisDistributedCache( 
     IDistributedCache distributedCache,

@@ -14,7 +14,7 @@ public interface IEventBusSubscriptionsManager
     void AddDynamicSubscription<TH>(string eventName) 
        where TH : IDynamicIntegrationEventHandler;
 
-    void AddSubscription<T, TH>()
+    void AddSubscription<T, TH>() 
        where T : IntegrationEvent
        where TH : IIntegrationEventHandler<T>;
 

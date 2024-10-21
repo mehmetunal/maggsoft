@@ -21,7 +21,7 @@ public class EventBusRabbitMQ : IEventBus, IDisposable
 {
     const string BROKER_NAME = "rescuer_event_bus";
 
-    private readonly IRabbitMQPersistentConnection _persistentConnection;
+    private readonly IRabbitMQPersistentConnection _persistentConnection; 
     private readonly ILogger<EventBusRabbitMQ> _logger;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly IServiceProvider _provider;
