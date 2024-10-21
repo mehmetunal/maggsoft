@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Maggsoft.Core.Base;
 
-public interface IResult
+public interface IResult 
 {
     object Message { get; set; }
     List<string> ValidationMessages { get; set; }
