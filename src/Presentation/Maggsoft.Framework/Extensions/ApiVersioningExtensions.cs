@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Maggsoft.Framework.Extensions;
 
-public static class ApiVersioningExtensions
+public static class ApiVersioningExtensions 
 {
     /// <summary>
     /// AddApiVersioningConfig
