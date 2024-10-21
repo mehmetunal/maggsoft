@@ -5,7 +5,7 @@
 		<Copyright>$(Copyright)</Copyright>
 		<Company>$(Company)</Company>
 		<Authors>$(Authors)</Authors>
-		<Version>2.0.2</Version>
+		<Version>2.0.3</Version>
 		<Description>The Maggsoft.Sqlite.Services</Description>
 		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
 		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
