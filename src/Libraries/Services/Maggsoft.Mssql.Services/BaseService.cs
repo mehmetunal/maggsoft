@@ -9,7 +9,7 @@ namespace Maggsoft.Mssql.Services
     {
         private string currentUserId => GetClaim(ClaimTypes.NameIdentifier);
 
-        protected virtual Guid? CurrentUserId => !string.IsNullOrEmpty(currentUserId) ? Guid.Parse(currentUserId) : null;
+        protected virtual Guid? CurrentUserId => !string.IsNullOrEmpty(currentUserId) ? Guid.Parse(currentUserId) : null; 
 
         protected virtual string CurrentUserRole => GetClaim(ClaimTypes.Role);
 

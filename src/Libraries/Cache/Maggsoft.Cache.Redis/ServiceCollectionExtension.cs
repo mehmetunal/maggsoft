@@ -5,7 +5,7 @@ using System;
 
 namespace Maggsoft.Cache.Redis;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtension 
 {
     public static IServiceCollection AddMaggsoftDistributedRedisCache(
         this IServiceCollection services, 

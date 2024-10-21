@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.Caching.Distributed;
 
-public class MemoryDistributedCacheExtend : IDistributedCache
+public class MemoryDistributedCacheExtend : IDistributedCache 
 {
     private readonly IMemoryCache _memCache;
 

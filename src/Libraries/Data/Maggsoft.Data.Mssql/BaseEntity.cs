@@ -4,7 +4,7 @@ using System;
 namespace Maggsoft.Data.Mssql
 {
     [Serializable]
-    public class BaseEntity : BaseEntity<Guid>
+    public class BaseEntity : BaseEntity<Guid> 
     {
     }
 

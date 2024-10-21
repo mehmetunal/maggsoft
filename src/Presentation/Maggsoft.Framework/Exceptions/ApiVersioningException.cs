@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Maggsoft.Framework.Exceptions;
 
 [Serializable]
-public class ApiVersioningException : Exception
+public class ApiVersioningException : Exception 
 {
     public ApiVersioningException()
         : base()

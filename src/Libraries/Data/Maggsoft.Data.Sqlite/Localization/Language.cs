@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Maggsoft.Data.Sqlite.Localization;
 
-public partial class Language : BaseEntity, IPrimaryKey<Guid>
+public partial class Language : BaseEntity, IPrimaryKey<Guid> 
 {
     public Language()
     {

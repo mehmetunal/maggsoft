@@ -7,7 +7,7 @@ namespace Maggsoft.Sqlite.Services
 {
     public class BaseService
     {
-        private string currentUserId => GetClaim(ClaimTypes.NameIdentifier);
+        private string currentUserId => GetClaim(ClaimTypes.NameIdentifier); 
 
         protected virtual Guid? CurrentUserId => !string.IsNullOrEmpty(currentUserId) ? Guid.Parse(currentUserId) : null;
 

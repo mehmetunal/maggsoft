@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Sqlite.Repository;
 
-public interface ISqliteRepository<T> : IRepository<T> where T : BaseEntity, IEntity
+public interface ISqliteRepository<T> : IRepository<T> where T : BaseEntity, IEntity 
 {
     #region CustomMethod
     IQueryable<T> AsNoTrackingWithIdentityResolution();

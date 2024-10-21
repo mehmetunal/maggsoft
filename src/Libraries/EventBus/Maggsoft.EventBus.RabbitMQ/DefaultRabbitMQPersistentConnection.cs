@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace Maggsoft.EventBus.RabbitMQ;
+namespace Maggsoft.EventBus.RabbitMQ; 
 
 public class DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
       : IRabbitMQPersistentConnection

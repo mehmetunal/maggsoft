@@ -7,7 +7,7 @@ using System;
 
 namespace Maggsoft.Npgsql.Context;
 
-public class NpgsqlContext : DbContext
+public class NpgsqlContext : DbContext 
 {
     #region Ctor
     public NpgsqlContext()

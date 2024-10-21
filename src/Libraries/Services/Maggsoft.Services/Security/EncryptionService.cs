@@ -10,7 +10,7 @@ namespace Maggsoft.Services.Security;
 /// <summary>
 /// Encryption service
 /// </summary>
-public class EncryptionService(IConfiguration configuration) : IEncryptionService
+public class EncryptionService(IConfiguration configuration) : IEncryptionService 
 {
     #region Fields
 

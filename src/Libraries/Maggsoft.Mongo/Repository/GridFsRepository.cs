@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Mongo.Repository;
 
-public sealed class GridFsRepository : IGridFsRepository
+public sealed class GridFsRepository : IGridFsRepository 
 {
     #region Collection
 

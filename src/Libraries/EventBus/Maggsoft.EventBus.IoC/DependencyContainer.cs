@@ -10,7 +10,7 @@ using System;
 
 namespace Maggsoft.EventBus.IoC;
 
-public class DependencyContainer
+public class DependencyContainer 
 {
     public static void RegisterEventBusConntionServices(IServiceCollection services, IConfiguration Configuration)
     {

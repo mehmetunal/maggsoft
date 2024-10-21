@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Ocelot.Core.Middleware;
+namespace Maggsoft.Ocelot.Core.Middleware; 
 
 /// <summary>
 /// 

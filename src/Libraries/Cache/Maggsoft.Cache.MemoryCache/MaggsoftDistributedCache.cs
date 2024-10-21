@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Cache.MemoryCache; 
+namespace Maggsoft.Cache.MemoryCache;  
 
 public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider serviceProvider) : ICache
 {

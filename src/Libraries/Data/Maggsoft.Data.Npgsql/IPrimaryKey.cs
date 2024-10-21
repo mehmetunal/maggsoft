@@ -4,6 +4,6 @@ public interface IPrimaryKey
 {
 }
 
-public interface IPrimaryKey<TKey> : IPrimaryKey
+public interface IPrimaryKey<TKey> : IPrimaryKey 
 {
 }
