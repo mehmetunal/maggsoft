@@ -1,1392 +1,1392 @@
-﻿name: CI
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+﻿# name: CI
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
-env:
-    MaggsoftAspectCore: "src/Libraries/Aspect/Maggsoft.Aspect.Core/Maggsoft.Aspect.Core.csproj"
-    MaggsoftCache: "src/Libraries/Cache/Maggsoft.Cache/Maggsoft.Cache.csproj"
-    MaggsoftCacheMemoryCache: "src/Libraries/Cache/Maggsoft.Cache.MemoryCache/Maggsoft.Cache.MemoryCache.csproj"
-    MaggsoftCacheRedis: "src/Libraries/Cache/Maggsoft.Cache.Redis/Maggsoft.Cache.Redis.csproj"
-    MaggsoftData: "src/Libraries/Data/Maggsoft.Data/Maggsoft.Data.csproj"
-    MaggsoftDataMongo: "src/Libraries/Data/Maggsoft.Data.Mongo/Maggsoft.Data.Mongo.csproj"
-    MaggsoftDataMssql: "src/Libraries/Data/Maggsoft.Data.Mssql/Maggsoft.Data.Mssql.csproj"
-    MaggsoftDataNpgsql: "src/Libraries/Data/Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql.csproj"
-    MaggsoftDataSqlite: "src/Libraries/Data/Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite.csproj"
-    MaggsoftDtoMongo: "src/Libraries/Dto/Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo.csproj"
-    MaggsoftDtoMssql: "src/Libraries/Dto/Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql.csproj"
-    MaggsoftDtoNpgsql: "src/Libraries/Dto/Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql.csproj"
-    MaggsoftDtoSqlite: "src/Libraries/Dto/Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite.csproj"
-    MaggsoftEndpoints: "src/Libraries/Endpoints/Maggsoft.Endpoints/Maggsoft.Endpoints.csproj"
-    MaggsoftEventBus: "src/Libraries/EventBus/Maggsoft.EventBus/Maggsoft.EventBus.csproj"
-    MaggsoftEventBusAzureServiceBus: "src/Libraries/EventBus/Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus.csproj"
-    MaggsoftEventBusIoC: "src/Libraries/EventBus/Maggsoft.EventBus.IoC/Maggsoft.EventBus.IoC.csproj"
-    MaggsoftEventBusRabbitMQ: "src/Libraries/EventBus/Maggsoft.EventBus.RabbitMQ/Maggsoft.EventBus.RabbitMQ.csproj"
-    MaggsoftLogging: "src/Libraries/Logging/Maggsoft.Logging/Maggsoft.Logging.csproj"
-    MaggsoftOcelotCore: "src/Libraries/Ocelot/Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core.csproj"
-    MaggsoftMongoServices: "src/Libraries/Services/Maggsoft.Mongo.Services/Maggsoft.Mongo.Services.csproj"
-    MaggsoftMssqlServices: "src/Libraries/Services/Maggsoft.Mssql.Services/Maggsoft.Mssql.Services.csproj"
-    MaggsoftNpgsqlServices: "src/Libraries/Services/Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services.csproj"
-    MaggsoftServices: "src/Libraries/Services/Maggsoft.Services/Maggsoft.Services.csproj"
-    MaggsoftSqliteServices: "src/Libraries/Services/Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services.csproj"
-    MaggsoftCore: "src/Libraries/Maggsoft.Core/Maggsoft.Core.csproj"
-    MaggsoftMongo: "src/Libraries/Maggsoft.Mongo/Maggsoft.Mongo.csproj"
-    MaggsoftMssql: "src/Libraries/Maggsoft.Mssql/Maggsoft.Mssql.csproj"
-    MaggsoftNpgsql: "src/Libraries/Maggsoft.Npgsql/Maggsoft.Npgsql.csproj"
-    MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
-    MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
-    MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
-    MaggsoftTest: "src/Tools/Test/Test.csproj"
+# env:
+#     MaggsoftAspectCore: "src/Libraries/Aspect/Maggsoft.Aspect.Core/Maggsoft.Aspect.Core.csproj"
+#     MaggsoftCache: "src/Libraries/Cache/Maggsoft.Cache/Maggsoft.Cache.csproj"
+#     MaggsoftCacheMemoryCache: "src/Libraries/Cache/Maggsoft.Cache.MemoryCache/Maggsoft.Cache.MemoryCache.csproj"
+#     MaggsoftCacheRedis: "src/Libraries/Cache/Maggsoft.Cache.Redis/Maggsoft.Cache.Redis.csproj"
+#     MaggsoftData: "src/Libraries/Data/Maggsoft.Data/Maggsoft.Data.csproj"
+#     MaggsoftDataMongo: "src/Libraries/Data/Maggsoft.Data.Mongo/Maggsoft.Data.Mongo.csproj"
+#     MaggsoftDataMssql: "src/Libraries/Data/Maggsoft.Data.Mssql/Maggsoft.Data.Mssql.csproj"
+#     MaggsoftDataNpgsql: "src/Libraries/Data/Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql.csproj"
+#     MaggsoftDataSqlite: "src/Libraries/Data/Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite.csproj"
+#     MaggsoftDtoMongo: "src/Libraries/Dto/Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo.csproj"
+#     MaggsoftDtoMssql: "src/Libraries/Dto/Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql.csproj"
+#     MaggsoftDtoNpgsql: "src/Libraries/Dto/Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql.csproj"
+#     MaggsoftDtoSqlite: "src/Libraries/Dto/Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite.csproj"
+#     MaggsoftEndpoints: "src/Libraries/Endpoints/Maggsoft.Endpoints/Maggsoft.Endpoints.csproj"
+#     MaggsoftEventBus: "src/Libraries/EventBus/Maggsoft.EventBus/Maggsoft.EventBus.csproj"
+#     MaggsoftEventBusAzureServiceBus: "src/Libraries/EventBus/Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus.csproj"
+#     MaggsoftEventBusIoC: "src/Libraries/EventBus/Maggsoft.EventBus.IoC/Maggsoft.EventBus.IoC.csproj"
+#     MaggsoftEventBusRabbitMQ: "src/Libraries/EventBus/Maggsoft.EventBus.RabbitMQ/Maggsoft.EventBus.RabbitMQ.csproj"
+#     MaggsoftLogging: "src/Libraries/Logging/Maggsoft.Logging/Maggsoft.Logging.csproj"
+#     MaggsoftOcelotCore: "src/Libraries/Ocelot/Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core.csproj"
+#     MaggsoftMongoServices: "src/Libraries/Services/Maggsoft.Mongo.Services/Maggsoft.Mongo.Services.csproj"
+#     MaggsoftMssqlServices: "src/Libraries/Services/Maggsoft.Mssql.Services/Maggsoft.Mssql.Services.csproj"
+#     MaggsoftNpgsqlServices: "src/Libraries/Services/Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services.csproj"
+#     MaggsoftServices: "src/Libraries/Services/Maggsoft.Services/Maggsoft.Services.csproj"
+#     MaggsoftSqliteServices: "src/Libraries/Services/Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services.csproj"
+#     MaggsoftCore: "src/Libraries/Maggsoft.Core/Maggsoft.Core.csproj"
+#     MaggsoftMongo: "src/Libraries/Maggsoft.Mongo/Maggsoft.Mongo.csproj"
+#     MaggsoftMssql: "src/Libraries/Maggsoft.Mssql/Maggsoft.Mssql.csproj"
+#     MaggsoftNpgsql: "src/Libraries/Maggsoft.Npgsql/Maggsoft.Npgsql.csproj"
+#     MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
+#     MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
+#     MaggsoftVersioningTool: "src/Tools/Maggsoft.VersioningTool/Maggsoft.VersioningTool.csproj"
+#     MaggsoftTest: "src/Tools/Test/Test.csproj"
 
-jobs:
-  MaggsoftAspectCore:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    permissions:
-     contents: write 
+# jobs:
+#   MaggsoftAspectCore:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Aspect.Core"* ]]; then
-                   PROJECT=${{ env.MaggsoftAspectCore }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftAspectCore" )
-                   VFN="MaggsoftAspectCore"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Aspect.Core"* ]]; then
+#                    PROJECT=${{ env.MaggsoftAspectCore }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftAspectCore" )
+#                    VFN="MaggsoftAspectCore"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftCache:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftAspectCore
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftCache:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftAspectCore
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache"* ]]; then
-                   PROJECT=${{ env.MaggsoftCache }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCache" )
-                   VFN="MaggsoftCache"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache"* ]]; then
+#                    PROJECT=${{ env.MaggsoftCache }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCache" )
+#                    VFN="MaggsoftCache"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."  
-  MaggsoftCacheMemoryCache:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftCache
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."  
+#   MaggsoftCacheMemoryCache:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftCache
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache.MemoryCache"* ]]; then
-                   PROJECT=${{ env.MaggsoftCacheMemoryCache }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCacheMemoryCache" )
-                   VFN="MaggsoftCacheMemoryCache"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache.MemoryCache"* ]]; then
+#                    PROJECT=${{ env.MaggsoftCacheMemoryCache }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCacheMemoryCache" )
+#                    VFN="MaggsoftCacheMemoryCache"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftCacheRedis:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftCacheMemoryCache
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftCacheRedis:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftCacheMemoryCache
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache.Redis"* ]]; then
-                   PROJECT=${{ env.MaggsoftCacheRedis }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCacheRedis" )
-                   VFN="MaggsoftCacheRedis"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Cache.Redis"* ]]; then
+#                    PROJECT=${{ env.MaggsoftCacheRedis }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCacheRedis" )
+#                    VFN="MaggsoftCacheRedis"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftCore:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftCacheRedis
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftCore:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftCacheRedis
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Core"* ]]; then
-                   PROJECT=${{ env.MaggsoftCore }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCore" )
-                   VFN="MaggsoftCore"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Core"* ]]; then
+#                    PROJECT=${{ env.MaggsoftCore }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftCore" )
+#                    VFN="MaggsoftCore"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftData:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftCore
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftData:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftCore
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data"* ]]; then
-                   PROJECT=${{ env.MaggsoftData }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftData" )
-                   VFN="MaggsoftData"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data"* ]]; then
+#                    PROJECT=${{ env.MaggsoftData }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftData" )
+#                    VFN="MaggsoftData"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftDataMongo:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftData
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftDataMongo:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftData
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Mongo"* ]]; then
-                   PROJECT=${{ env.MaggsoftDataMongo }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMongo" )
-                   VFN="MaggsoftDataMongo"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Mongo"* ]]; then
+#                    PROJECT=${{ env.MaggsoftDataMongo }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMongo" )
+#                    VFN="MaggsoftDataMongo"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftDataMssql:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftDataMongo
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftDataMssql:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftDataMongo
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Mssql"* ]]; then
-                   PROJECT=${{ env.MaggsoftDataMssql }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMssql" )
-                   VFN="MaggsoftDataMssql"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Mssql"* ]]; then
+#                    PROJECT=${{ env.MaggsoftDataMssql }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMssql" )
+#                    VFN="MaggsoftDataMssql"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftDataNpgsql:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftDataMssql
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftDataNpgsql:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftDataMssql
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Npgsql"* ]]; then
-                   PROJECT=${{ env.MaggsoftDataNpgsql }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataNpgsql" )
-                   VFN="MaggsoftDataNpgsql"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Npgsql"* ]]; then
+#                    PROJECT=${{ env.MaggsoftDataNpgsql }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataNpgsql" )
+#                    VFN="MaggsoftDataNpgsql"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftDataSqlite:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftDataNpgsql
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftDataSqlite:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftDataNpgsql
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Sqlite"* ]]; then
-                   PROJECT=${{ env.MaggsoftDataSqlite }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataSqlite" )
-                   VFN="MaggsoftDataSqlite"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Data.Sqlite"* ]]; then
+#                    PROJECT=${{ env.MaggsoftDataSqlite }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataSqlite" )
+#                    VFN="MaggsoftDataSqlite"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."   
-  MaggsoftEndpoints:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftDataSqlite
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."   
+#   MaggsoftEndpoints:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftDataSqlite
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Endpoints"* ]]; then
-                   PROJECT=${{ env.MaggsoftEndpoints }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEndpoints" )
-                   VFN="MaggsoftEndpoints"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Endpoints"* ]]; then
+#                    PROJECT=${{ env.MaggsoftEndpoints }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEndpoints" )
+#                    VFN="MaggsoftEndpoints"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftEventBus:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftEndpoints
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftEventBus:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftEndpoints
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus"* ]]; then
-                   PROJECT=${{ env.MaggsoftEventBus }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBus" )
-                   VFN="MaggsoftEventBus"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus"* ]]; then
+#                    PROJECT=${{ env.MaggsoftEventBus }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBus" )
+#                    VFN="MaggsoftEventBus"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftEventBusAzureServiceBus:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftEventBus
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftEventBusAzureServiceBus:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftEventBus
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.AzureServiceBus"* ]]; then
-                   PROJECT=${{ env.MaggsoftEventBusAzureServiceBus }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusAzureServiceBus" )
-                   VFN="MaggsoftEventBusAzureServiceBus"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.AzureServiceBus"* ]]; then
+#                    PROJECT=${{ env.MaggsoftEventBusAzureServiceBus }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusAzureServiceBus" )
+#                    VFN="MaggsoftEventBusAzureServiceBus"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftEventBusRabbitMQ:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftEventBusAzureServiceBus
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftEventBusRabbitMQ:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftEventBusAzureServiceBus
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.RabbitMQ"* ]]; then
-                   PROJECT=${{ env.MaggsoftEventBusRabbitMQ }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusRabbitMQ" )
-                   VFN="MaggsoftEventBusRabbitMQ"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.RabbitMQ"* ]]; then
+#                    PROJECT=${{ env.MaggsoftEventBusRabbitMQ }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusRabbitMQ" )
+#                    VFN="MaggsoftEventBusRabbitMQ"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftEventBusIoC:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftEventBusRabbitMQ
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftEventBusIoC:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftEventBusRabbitMQ
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.IoC"* ]]; then
-                   PROJECT=${{ env.MaggsoftEventBusIoC }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusIoC" )
-                   VFN="MaggsoftEventBusIoC"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.EventBus.IoC"* ]]; then
+#                    PROJECT=${{ env.MaggsoftEventBusIoC }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftEventBusIoC" )
+#                    VFN="MaggsoftEventBusIoC"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftLogging:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftEventBusIoC
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftLogging:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftEventBusIoC
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Logging"* ]]; then
-                   PROJECT=${{ env.MaggsoftLogging }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftLogging" )
-                   VFN="MaggsoftLogging"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Logging"* ]]; then
+#                    PROJECT=${{ env.MaggsoftLogging }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftLogging" )
+#                    VFN="MaggsoftLogging"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftOcelotCore:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftLogging
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftOcelotCore:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftLogging
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Ocelot.Core"* ]]; then
-                   PROJECT=${{ env.MaggsoftOcelotCore }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftOcelotCore" )
-                   VFN="MaggsoftOcelotCore"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Ocelot.Core"* ]]; then
+#                    PROJECT=${{ env.MaggsoftOcelotCore }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftOcelotCore" )
+#                    VFN="MaggsoftOcelotCore"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..." 
-  MaggsoftMongo:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftOcelotCore
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..." 
+#   MaggsoftMongo:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftOcelotCore
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mongo"* ]]; then
-                   PROJECT=${{ env.MaggsoftMongo }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMongo" )
-                   VFN="MaggsoftMongo"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mongo"* ]]; then
+#                    PROJECT=${{ env.MaggsoftMongo }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMongo" )
+#                    VFN="MaggsoftMongo"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftMssql:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftMongo
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftMssql:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftMongo
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mssql"* ]]; then
-                   PROJECT=${{ env.MaggsoftMssql }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssql" )
-                   VFN="MaggsoftMssql"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mssql"* ]]; then
+#                    PROJECT=${{ env.MaggsoftMssql }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssql" )
+#                    VFN="MaggsoftMssql"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftNpgsql:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftMssql
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftNpgsql:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftMssql
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Npgsql"* ]]; then
-                   PROJECT=${{ env.MaggsoftNpgsql }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftNpgsql" )
-                   VFN="MaggsoftNpgsql"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Npgsql"* ]]; then
+#                    PROJECT=${{ env.MaggsoftNpgsql }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftNpgsql" )
+#                    VFN="MaggsoftNpgsql"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftSqlite:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftNpgsql
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftSqlite:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftNpgsql
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Sqlite"* ]]; then
-                   PROJECT=${{ env.MaggsoftSqlite }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftSqlite" )
-                   VFN="MaggsoftSqlite"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Sqlite"* ]]; then
+#                    PROJECT=${{ env.MaggsoftSqlite }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftSqlite" )
+#                    VFN="MaggsoftSqlite"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftFramework:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftSqlite
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftFramework:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftSqlite
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Framework"* ]]; then
-                   PROJECT=${{ env.MaggsoftFramework }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftFramework" )
-                   VFN="MaggsoftFramework"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Framework"* ]]; then
+#                    PROJECT=${{ env.MaggsoftFramework }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftFramework" )
+#                    VFN="MaggsoftFramework"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftServices:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftFramework
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftServices:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftFramework
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Services"* ]]; then
-                   PROJECT=${{ env.MaggsoftServices }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftServices" )
-                   VFN="MaggsoftServices"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Services"* ]]; then
+#                    PROJECT=${{ env.MaggsoftServices }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftServices" )
+#                    VFN="MaggsoftServices"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftMongoServices:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftServices
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftMongoServices:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftServices
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mongo.Services"* ]]; then
-                   PROJECT=${{ env.MaggsoftMongoServices }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMongoServices" )
-                   VFN="MaggsoftMongoServices"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mongo.Services"* ]]; then
+#                    PROJECT=${{ env.MaggsoftMongoServices }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMongoServices" )
+#                    VFN="MaggsoftMongoServices"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftMssqlServices:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftMongoServices
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftMssqlServices:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftMongoServices
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mssql.Services"* ]]; then
-                   PROJECT=${{ env.MaggsoftMssqlServices }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssqlServices" )
-                   VFN="MaggsoftMssqlServices"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Mssql.Services"* ]]; then
+#                    PROJECT=${{ env.MaggsoftMssqlServices }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssqlServices" )
+#                    VFN="MaggsoftMssqlServices"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftNpgsqlServices:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftMssqlServices
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftNpgsqlServices:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftMssqlServices
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Npgsql.Services"* ]]; then
-                   PROJECT=${{ env.MaggsoftNpgsqlServices }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftNpgsqlServices" )
-                   VFN="MaggsoftNpgsqlServices"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Npgsql.Services"* ]]; then
+#                    PROJECT=${{ env.MaggsoftNpgsqlServices }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftNpgsqlServices" )
+#                    VFN="MaggsoftNpgsqlServices"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
-  MaggsoftSqliteServices:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
-    needs: MaggsoftNpgsqlServices
-    permissions:
-     contents: write 
+#             done
+#             echo "Finish..."
+#   MaggsoftSqliteServices:
+#     runs-on: ubuntu-latest  # windows-latest || macos-latest
+#     needs: MaggsoftNpgsqlServices
+#     permissions:
+#      contents: write 
 
-    name: changed-files
-    steps:
-      - uses: actions/checkout@v4
+#     name: changed-files
+#     steps:
+#       - uses: actions/checkout@v4
             
-      - name: Restore ConsoleProject dependencies
-        run: dotnet restore src/Tools/Maggsoft.VersioningTool 
+#       - name: Restore ConsoleProject dependencies
+#         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
-      - name: Build the ConsoleProject
-        run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
+#       - name: Build the ConsoleProject
+#         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-      - name: List all changed files
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
-        run: |
-            for file in ${ALL_CHANGED_FILES}; do
-                if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Sqlite.Services"* ]]; then
-                   PROJECT=${{ env.MaggsoftSqliteServices }}
-                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftSqliteServices" )
-                   VFN="MaggsoftSqliteServices"
+#       - name: Get changed files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v45
+#       - name: List all changed files
+#         env:
+#           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+#           PACKAGES_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
+#         run: |
+#             for file in ${ALL_CHANGED_FILES}; do
+#                 if [[ "${file}" == *"src/Libraries/Aspect/Maggsoft.Sqlite.Services"* ]]; then
+#                    PROJECT=${{ env.MaggsoftSqliteServices }}
+#                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftSqliteServices" )
+#                    VFN="MaggsoftSqliteServices"
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
+#                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+#                     echo "$VFN package adı"
+#                     echo "$VERSION version"
+#                     echo "Version_$VFN.txt"
+#                     ls -la  
                     
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+#                     git config user.name "mehmetunal"
+#                     git config user.email "unal.m1991@gmail.com"
+#                     git add .
+#                     git commit -m "Add version file" || echo "No changes to commit"
+#                     git push origin main
                     
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                 fi
+#                     dotnet restore $PROJECT
+#                     dotnet build $PROJECT --configuration Release
+#                     dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+#                     dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#                  fi
             
-            done
-            echo "Finish..."
+#             done
+#             echo "Finish..."

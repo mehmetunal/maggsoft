@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>$(TargetFramework)</TargetFramework>
 		<Copyright>$(Copyright)</Copyright>
 		<Company>$(Company)</Company>
 		<Authors>$(Authors)</Authors>
-		<Version>2.0.22</Version>
+		<Version>2.0.15</Version>
 		<Description>The Maggsoft.Core project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
 		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
 		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
