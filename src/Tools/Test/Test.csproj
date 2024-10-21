@@ -5,6 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Copyright>Copyright © Maggsoft, Ltd</Copyright>
+		<Version>1.0.0</Version>
 		<Company>asd</Company>
 		<Authors>dfgdfg</Authors>
 		<Description>asdasd.</Description>
