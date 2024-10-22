@@ -196,9 +196,6 @@ jobs:
                 
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
-
-                    dotnet nuget locals all --clear   
-                 
                     sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
                     echo "$VFN package adı"
                     echo "$VERSION version"
