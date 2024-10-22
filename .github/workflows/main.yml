@@ -196,6 +196,10 @@ jobs:
                 
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
+                    
+                    dotnet nuget locals all --clear
+                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+
                     echo "$VFN package adı"
                     echo "$VERSION version"
                     echo "Version_$VFN.txt"
@@ -203,16 +207,12 @@ jobs:
 
                     git status
                     
-                    # sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-
-
                     git config user.name "mehmetunal"
                     git config user.email "unal.m1991@gmail.com"
                     git add .
                     git commit -m "Add version file" || echo "No changes to commit"
                     git push origin main
 
-                    dotnet nuget locals all --clear
                     dotnet clean $PROJECT
                     dotnet restore $PROJECT
                     dotnet build $PROJECT --configuration Release
