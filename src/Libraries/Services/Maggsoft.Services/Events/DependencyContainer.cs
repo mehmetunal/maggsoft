@@ -15,7 +15,6 @@ public static class DependencyContainer
     /// </summary>
     /// <param name="services"></param>
     /// <exception cref="Exception"></exception>
-    /// <typeparam name="TServices"></typeparam>
     public static void RegisterEventConsumer(this IServiceCollection services)
     {
         try
