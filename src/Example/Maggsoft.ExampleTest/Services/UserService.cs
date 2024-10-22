@@ -6,6 +6,7 @@ using Maggsoft.Core.Model.Pagination;
 using Maggsoft.ExampleTest.Dto;
 using Maggsoft.ExampleTest.Entity;
 using Maggsoft.Mssql.Repository;
+using Maggsoft.Services.Events;
 using Maggsoft.Services.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,6 +19,7 @@ namespace Maggsoft.ExampleTest.Services;
 public class UserService : IUserService
 {
     protected readonly IMapper Mapper;
+    private readonly IEventPublisher EventPublisher;
     public readonly IMssqlRepository<User> Repository;
     public readonly IMssqlRepository<UserLog> LogRepository;
     public readonly DbContext DBContext;
@@ -34,6 +36,8 @@ public class UserService : IUserService
 
         DBContext = MaggsoftContext.Current.Resolve<DbContext>()
                  ?? throw new ArgumentNullException($"{nameof(DbContext)} is null");
+        EventPublisher = MaggsoftContext.Current.Resolve<IEventPublisher> ()
+                 ?? throw new ArgumentNullException($"{nameof(IEventPublisher)} is null");
     }
     public async Task<IPagedList<UserResultDto>> GetAsync(int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false, Expression<Func<User, object>> @order = null,
         Func<IIncludable<User>, IIncludable> @includes = null)
@@ -71,8 +75,9 @@ public class UserService : IUserService
         var logEntity = new UserLog { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
         await LogRepository.AddAsync(logEntity);
 
-         //await LogRepository.SaveChangesAsync();
+        //await LogRepository.SaveChangesAsync();
         //await DBContext.SaveChangesAsync();
+        EventPublisher.EntityInserted(logEntity);
 
         return result.ToModel<UserResultDto>();
     }

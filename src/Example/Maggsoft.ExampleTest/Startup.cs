@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using AppContext = Maggsoft.ExampleTest.Context.AppContext;
 using Maggsoft.Cache;
 using Maggsoft.Cache.MemoryCache;
+using Maggsoft.Services.Events;
+using Maggsoft.Data.Mssql;
+using Maggsoft.Data.Events;
 
 namespace Maggsoft.ExampleTest;
 
@@ -40,11 +43,13 @@ public class Startup
 
         services.AddAutoMapperConfig(p => p.AddProfile<AutoMapping>(), typeof(Startup));
 
-
+        services.AddSingleton<IEventPublisher, EventPublisher>();
         services.AddScoped<IMssqlRepository<User>, Repository<User>>();
         services.AddScoped<IMssqlRepository<UserLog>, Repository<UserLog>>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.RegisterAll<IService>();
+
+        services.RegisterEventConsumer();
 
         services.AddMaggsoftDistributedMemoryCache(typeof(IService));
     }
