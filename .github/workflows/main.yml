@@ -203,7 +203,7 @@ jobs:
 
                     git status
                     
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+                    # sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
 
 
                     git config user.name "mehmetunal"
