@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,12 @@ namespace Maggsoft.Framework.HttpClientApi
                 _languageId = GetLang();
                 if (_languageId != null)
                     _httpClient.DefaultRequestHeaders.Add("X-LanguageID", _languageId.ToString());
+
+                var userAgent = _httpContextAccessor.HttpContext.Request.Headers[HeaderNames.UserAgent];
+                if (userAgent.Count() > 0)
+                {
+                    _httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, userAgent[0]);
+                }
 
                 var token = GetToken();
                 if (!string.IsNullOrEmpty(token))
