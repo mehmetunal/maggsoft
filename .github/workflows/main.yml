@@ -18,10 +18,10 @@ jobs:
         MaggsoftDataMssql: "src/Libraries/Data/Maggsoft.Data.Mssql/Maggsoft.Data.Mssql.csproj"
         MaggsoftDataNpgsql: "src/Libraries/Data/Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql.csproj"
         MaggsoftDataSqlite: "src/Libraries/Data/Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite.csproj"
-        # MaggsoftDtoMongo: "src/Libraries/Dto/Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo.csproj"
-        # MaggsoftDtoMssql: "src/Libraries/Dto/Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql.csproj"
-        # MaggsoftDtoNpgsql: "src/Libraries/Dto/Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql.csproj"
-        # MaggsoftDtoSqlite: "src/Libraries/Dto/Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite.csproj"
+        MaggsoftDtoMongo: "src/Libraries/Dto/Maggsoft.Dto.Mongo/Maggsoft.Dto.Mongo.csproj"
+        MaggsoftDtoMssql: "src/Libraries/Dto/Maggsoft.Dto.Mssql/Maggsoft.Dto.Mssql.csproj"
+        MaggsoftDtoNpgsql: "src/Libraries/Dto/Maggsoft.Dto.Npgsql/Maggsoft.Dto.Npgsql.csproj"
+        MaggsoftDtoSqlite: "src/Libraries/Dto/Maggsoft.Dto.Sqlite/Maggsoft.Dto.Sqlite.csproj"
         MaggsoftEndpoints: "src/Libraries/Endpoints/Maggsoft.Endpoints/Maggsoft.Endpoints.csproj"
         MaggsoftEventBus: "src/Libraries/EventBus/Maggsoft.EventBus/Maggsoft.EventBus.csproj"
         MaggsoftEventBusAzureServiceBus: "src/Libraries/EventBus/Maggsoft.EventBus.AzureServiceBus/Maggsoft.EventBus.AzureServiceBus.csproj"
@@ -100,22 +100,22 @@ jobs:
                    PROJECT=${{env.MaggsoftDataSqlite}}
                    VFN="MaggsoftDataSqlite"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataSqlite" )
-                # elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mongo"* ]]; then
-                #    PROJECT=${{env.MaggsoftDtoMongo}}
-                #    VFN="MaggsoftDtoMongo"
-                #    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoMongo" )
-                # elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mssql"* ]]; then
-                #    PROJECT=${{env.MaggsoftDtoMssql}}
-                #    VFN="MaggsoftDtoMssql"
-                #    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoMssql" )
-                # elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Npgsql"* ]]; then
-                #    PROJECT=${{env.MaggsoftDataNpgsql}}
-                #    VFN="MaggsoftDtoNpgsql"
-                #    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoNpgsql" )
-                # elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Sqlite"* ]]; then
-                #    PROJECT=${{env.MaggsoftDtoSqlite}}
-                #    VFN="MaggsoftDtoSqlite"
-                #    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoSqlite" )
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mongo"* ]]; then
+                   PROJECT=${{env.MaggsoftDtoMongo}}
+                   VFN="MaggsoftDtoMongo"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoMongo" )
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Mssql"* ]]; then
+                   PROJECT=${{env.MaggsoftDtoMssql}}
+                   VFN="MaggsoftDtoMssql"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoMssql" )
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Npgsql"* ]]; then
+                   PROJECT=${{env.MaggsoftDataNpgsql}}
+                   VFN="MaggsoftDtoNpgsql"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoNpgsql" )
+                elif [[ "${file}" == *"src/Libraries/Dto/Maggsoft.Dto.Sqlite"* ]]; then
+                   PROJECT=${{env.MaggsoftDtoSqlite}}
+                   VFN="MaggsoftDtoSqlite"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDtoSqlite" )
                 elif [[ "${file}" == *"src/Libraries/Endpoints/Maggsoft.Endpoints"* ]]; then
                    PROJECT=${{env.MaggsoftEndpoints}}
                    VFN="MaggsoftEndpoints"
