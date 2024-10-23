@@ -109,10 +109,9 @@ namespace Maggsoft.Framework.HttpClientApi
 
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
-
-                throw;
+                return null;
             }
         }
 

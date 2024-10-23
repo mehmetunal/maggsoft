@@ -112,7 +112,7 @@ public static class ServiceCollectionExtension
 
         app.UseMiddleware<GlobalResponseHandlingMiddleware>();
 
-        app.UseExceptionHandler(c => c.Run(async context =>
+        app.UseExceptionHandler(c => c.Run(context =>
         {
             var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
             throw exception;

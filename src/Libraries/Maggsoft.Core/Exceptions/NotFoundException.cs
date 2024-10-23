@@ -22,8 +22,7 @@ public class NotFoundException : Exception
         : base(message, innerException)
     { }
 
-    protected NotFoundException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
+    protected NotFoundException(SerializationInfo info, StreamingContext context) : base(info, context: context)
     { }
 
     /// <summary>
