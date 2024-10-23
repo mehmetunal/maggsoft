@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.HttpClientApi                   
 {
-    public class MaggsoftHttpClient : IMaggsoftHttpClient
+    public class MaggsoftHttpClient : IMaggsoftHttpClient 
     {
         #region Fields
 

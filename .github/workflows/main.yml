@@ -59,7 +59,7 @@ jobs:
         run: |
           for proj in $(find . -name '*.csproj'); do
            echo "projeeeeee: $proj"
-            if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
+            if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"* ]]; then
                 echo "projeeeeee find okey: $proj"
                 dotnet clean "$proj"
             fi
@@ -204,7 +204,7 @@ jobs:
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftTest" )
                 fi
                 
-                 if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
+                 if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"* ]]; then
 
                     echo "projeeeee: $file"
 
