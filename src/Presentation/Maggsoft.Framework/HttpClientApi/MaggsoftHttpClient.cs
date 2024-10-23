@@ -47,6 +47,8 @@ namespace Maggsoft.Framework.HttpClientApi
                 if (!string.IsNullOrEmpty(token))
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+                _httpClient.DefaultRequestHeaders.Add("X-Client-IP", GetClientIp());
+
                 var baseAddress = _configuration["HttpClientBaseAddress"];
                 if (string.IsNullOrEmpty(baseAddress))
                     throw new ArgumentNullException("HttpClientBaseAddress");
@@ -211,6 +213,19 @@ namespace Maggsoft.Framework.HttpClientApi
         }
 
         public virtual string GetToken() => _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
+
+        public virtual string GetClientIp(HttpContext httpContext = null)
+        {
+            httpContext ??= _httpContextAccessor.HttpContext;
+
+            var ipAddress = httpContext.Connection?.RemoteIpAddress?.ToString();
+
+            // Reverse proxy kullanıyorsanız X-Forwarded-For başlığını kontrol edin
+            if (httpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+                ipAddress = httpContext.Request.Headers["X-Forwarded-For"];
+
+            return ipAddress;
+        }
 
         public decimal? GetLang()
         {
