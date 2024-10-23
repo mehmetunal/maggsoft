@@ -58,6 +58,7 @@ jobs:
       - name: Clean All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
+           echo "projeeeeee: $proj"
             if [[ "${proj}" != *"src/Example"* && "${proj}" != *"src/Tools"*  && "${proj}" != *"src/.idea"* ]]; then
                 dotnet clean "$proj"
             fi
