@@ -227,8 +227,7 @@ jobs:
       - name: Restore,Build Packages Push All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-                echo "projeeeeee: $proj"
-            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+            if [[ "${proj}" == *"./src/Libraries"* && "${proj}" == *"./src/Presentation"* ]]; then
                 echo "projeeeeee find okey: $proj"    
                 dotnet restore "$proj"
                 dotnet build "$proj" --configuration Release
