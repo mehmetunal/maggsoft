@@ -55,6 +55,12 @@
 #       - name: Build the ConsoleProject
 #         run: dotnet build src/Tools/Maggsoft.VersioningTool --configuration Release
         
+#       - name: Clean All Projects
+#         run: |
+#           for proj in $(find . -name '*.csproj'); do
+#             dotnet clean "$proj"
+#           done
+
 #       - name: Get changed files
 #         id: changed-files
 #         uses: tj-actions/changed-files@v45
@@ -206,16 +212,24 @@
 #                           git config user.email "unal.m1991@gmail.com"
 #                           git add .
 #                           git commit -m "Add version file"
-#                           #git push origin main
 #                           git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
-                 
-#                           dotnet clean $PROJECT
-#                           dotnet restore $PROJECT
-#                           dotnet build $PROJECT --configuration Release
-#                           dotnet pack $PROJECT --configuration Release --output  ./nupkgs  /p:PackageVersion=$VERSION
-#                           dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
 
 #                  fi
             
 #             done
 #             echo "Finish..."
+
+#       - name: Restore ve Build All Projects
+#         run: |
+#           for proj in $(find . -name '*.csproj'); do
+#             dotnet restore "$proj"
+#             dotnet build "$proj" --configuration Release
+#           done
+
+#       - name: Restore ve Build All Projects
+#         run: |
+#           for proj in $(find . -name '*.csproj'); do
+#             dotnet pack $proj --configuration Release --output  ./nupkgs
+#             dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+#           done
+
