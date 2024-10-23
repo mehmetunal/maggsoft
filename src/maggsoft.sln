@@ -114,6 +114,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A7D6F502-1562-4DA5-9EF1-781CA222751C}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		..\.github\workflows\main.yml = ..\.github\workflows\main.yml
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
