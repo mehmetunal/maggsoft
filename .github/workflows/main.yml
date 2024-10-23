@@ -234,9 +234,9 @@ jobs:
       - name: Restore,Build Packages Push All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
+            echo "projeeeeee: $proj"      
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
-
-
+                echo "projeeeeee: $proj"    
                 if [ -f "$proj" ]; then
                     echo "projeeeeee find okey: $proj"    
                     dotnet restore "$proj"
@@ -246,10 +246,7 @@ jobs:
                 else
                     echo "File does not exist. :  $proj"
                 fi
-
-
             fi
           done
-          echo "Finish..."
         continue-on-error: true  # Hata olsa bile devam et
 
