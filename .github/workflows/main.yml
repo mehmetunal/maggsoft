@@ -198,7 +198,7 @@ jobs:
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
                     
 
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+                    sed -i "s|<Version>.*</Version>|<Version>1.0.6</Version>|" $PROJECT
 
                     #dotnet nuget locals all --clear
                    
