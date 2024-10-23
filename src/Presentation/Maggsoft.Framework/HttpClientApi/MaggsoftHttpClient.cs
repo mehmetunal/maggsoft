@@ -48,6 +48,8 @@ namespace Maggsoft.Framework.HttpClientApi
                     _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 _httpClient.DefaultRequestHeaders.Add("X-Client-IP", GetClientIp());
+                
+                _httpContextAccessor.HttpContext?.Request.Headers.Append("X-Client-IP", GetClientIp());
 
                 var baseAddress = _configuration["HttpClientBaseAddress"];
                 if (string.IsNullOrEmpty(baseAddress))
