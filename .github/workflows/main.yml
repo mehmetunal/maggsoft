@@ -58,9 +58,8 @@ jobs:
       - name: Clean All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-            if [[ "${file}" != *"src/Example"* && "${file}" != *"src/Tools"*  && "${file}" != *"src/.idea"* ]]; then
-                dotnet clean "$proj"
-            fi
+            echo "projeeee:   $proj"
+            dotnet clean "$proj"
           done
 
       - name: Get changed files
