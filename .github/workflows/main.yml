@@ -205,17 +205,19 @@ jobs:
                 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
 
-                          sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
-                          echo "This is a version file" > VERSION_$VFN.txt
-                          ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
-                  
-                          git status
+                    echo "projeeeee: $file"
 
-                          git config user.name "mehmetunal"
-                          git config user.email "unal.m1991@gmail.com"
-                          git add .
-                          git commit -m "Add version file"
-                          git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
+                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
+                    echo "This is a version file" > VERSION_$VFN.txt
+                    ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
+                  
+                    git status
+
+                    git config user.name "mehmetunal"
+                    git config user.email "unal.m1991@gmail.com"
+                    git add .
+                    git commit -m "Add version file"
+                    git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
 
                  fi
             
@@ -225,14 +227,20 @@ jobs:
       - name: Restore ve Build All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-            dotnet restore "$proj"
-            dotnet build "$proj" --configuration Release
+            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+                echo "projeeeeee: $proj"
+                dotnet restore "$proj"
+                dotnet build "$proj" --configuration Release
+            fi
           done
 
       - name: Restore ve Build All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-            dotnet pack $proj --configuration Release --output  ./nupkgs
-            dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+                echo "projeeeeee: $proj"
+                dotnet pack $proj --configuration Release --output  ./nupkgs
+                dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+            fi
           done
 
