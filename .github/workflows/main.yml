@@ -197,28 +197,32 @@ jobs:
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
                     
-                    sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
 
-                    dotnet nuget locals all --clear
+                    echo "s|<Version>.*</Version>|<Version>${VERSION}</Version>|"
 
-                    echo "$VFN package adı"
-                    echo "$VERSION version"
-                    echo "Version_$VFN.txt"
-                    ls -la  
 
-                    git status
-                    
-                    git config user.name "mehmetunal"
-                    git config user.email "unal.m1991@gmail.com"
-                    git add .
-                    git commit -m "Add version file" || echo "No changes to commit"
-                    git push origin main
+                   # sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
 
-                    dotnet clean $PROJECT
-                    dotnet restore $PROJECT
-                    dotnet build $PROJECT --configuration Release
-                    dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                   # dotnet nuget locals all --clear
+                   #
+                   # echo "$VFN package adı"
+                   # echo "$VERSION version"
+                   # echo "Version_$VFN.txt"
+                   # ls -la  
+                   #
+                   # git status
+                   # 
+                   # git config user.name "mehmetunal"
+                   # git config user.email "unal.m1991@gmail.com"
+                   # git add .
+                   # git commit -m "Add version file" || echo "No changes to commit"
+                   # git push origin main
+                   #
+                   # dotnet clean $PROJECT
+                   # dotnet restore $PROJECT
+                   # dotnet build $PROJECT --configuration Release
+                   # dotnet pack $PROJECT --configuration Release --output  ./nupkgs /p:PackageVersion=$VERSION
+                   # dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
                  fi
             
             done
