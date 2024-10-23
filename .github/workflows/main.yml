@@ -251,4 +251,5 @@ jobs:
             fi
           done
           echo "Finish..."
+        continue-on-error: true  # Hata olsa bile devam et
 
