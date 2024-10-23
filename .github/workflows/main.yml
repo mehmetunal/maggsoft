@@ -197,7 +197,6 @@ jobs:
 
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
 
-                          dotnet nuget locals all --clear
                           sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
                           echo "This is a version file" > VERSION_$VFN.txt
                           ls -la  # Dosyanın gerçekten var olup olmadığını görmek için ls komutu
