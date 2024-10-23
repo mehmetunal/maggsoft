@@ -60,6 +60,7 @@ jobs:
           for proj in $(find . -name '*.csproj'); do
            echo "projeeeeee: $proj"
             if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+                echo "projeeeeee find okey: $proj"
                 dotnet clean "$proj"
             fi
           done
@@ -227,8 +228,9 @@ jobs:
       - name: Restore ve Build All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
                 echo "projeeeeee: $proj"
+            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+                echo "projeeeeee find okey: $proj"
                 dotnet restore "$proj"
                 dotnet build "$proj" --configuration Release
             fi
@@ -237,8 +239,9 @@ jobs:
       - name: Restore ve Build All Projects
         run: |
           for proj in $(find . -name '*.csproj'); do
-            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
                 echo "projeeeeee: $proj"
+            if [[ "${proj}" == *"src/Libraries"* && "${proj}" == *"src/Presentation"* ]]; then
+                echo "projeeeeee find okey: $proj"    
                 dotnet pack $proj --configuration Release --output  ./nupkgs
                 dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
             fi
