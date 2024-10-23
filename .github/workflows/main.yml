@@ -198,7 +198,7 @@ jobs:
                  if [[ "${file}" == *"src/Libraries"* || "${file}" == *"src/Presentation"*  || "${file}" == *"src/Tools/Test"* ]]; then
                     
 
-                    echo "s|<Version>.*</Version>|<Version>${VERSION}</Version>|"
+                    echo "s|<Version>${VERSION}</Version>|"
 
 
                    # sed -i "s|<Version>.*</Version>|<Version>${VERSION}</Version>|" $PROJECT
