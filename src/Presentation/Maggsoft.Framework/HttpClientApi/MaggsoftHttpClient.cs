@@ -21,7 +21,7 @@ namespace Maggsoft.Framework.HttpClientApi
         #region Fields
 
         public readonly HttpClient _httpClient;
-        public readonly IHttpContextAccessor _httpContextAccessor; 
+        public readonly IHttpContextAccessor _httpContextAccessor;  
         private readonly IConfiguration _configuration;
         private decimal? _languageId = 0;
 

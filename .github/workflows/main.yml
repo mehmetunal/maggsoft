@@ -61,7 +61,7 @@ jobs:
 
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"* ]]; then
             
-                if [ -f "path/to/your/file.txt" ]; then
+                if [ -f "$proj" ]; then
                     echo "projeeeeee find okey: $proj"
                     dotnet clean "$proj"
                 else
@@ -237,7 +237,7 @@ jobs:
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
 
 
-                if [ -f "path/to/your/file.txt" ]; then
+                if [ -f "$proj" ]; then
                     echo "projeeeeee find okey: $proj"    
                     dotnet restore "$proj"
                     dotnet build "$proj" --configuration Release
