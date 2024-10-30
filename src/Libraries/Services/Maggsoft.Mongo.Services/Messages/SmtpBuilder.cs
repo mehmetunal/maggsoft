@@ -53,7 +53,11 @@ public class SmtpBuilder(EmailAccountSettings emailAccountSettings, IEmailAccoun
             await client.ConnectAsync(
                 emailAccount.Host,
                 emailAccount.Port,
-                emailAccount.EnableSsl ? SecureSocketOptions.SslOnConnect : SecureSocketOptions.StartTlsWhenAvailable);
+                emailAccount.EnableSsl ?
+                             (emailAccount.Port == 587
+                                    ? SecureSocketOptions.StartTls
+                                    : SecureSocketOptions.SslOnConnect)
+                             : SecureSocketOptions.StartTlsWhenAvailable);
 
             if (emailAccount.UseDefaultCredentials)
             {
