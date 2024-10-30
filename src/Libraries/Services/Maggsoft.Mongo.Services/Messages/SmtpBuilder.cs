@@ -57,7 +57,7 @@ public class SmtpBuilder(EmailAccountSettings emailAccountSettings, IEmailAccoun
                              (emailAccount.Port == 587
                                     ? SecureSocketOptions.StartTls
                                     : SecureSocketOptions.SslOnConnect)
-                             : SecureSocketOptions.StartTlsWhenAvailable); 
+                             : SecureSocketOptions.StartTlsWhenAvailable);  
 
             if (emailAccount.UseDefaultCredentials)
             {

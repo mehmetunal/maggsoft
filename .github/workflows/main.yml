@@ -7,7 +7,7 @@ on:
 
 jobs:
   changed_files:
-    runs-on: ubuntu-latest  # windows-latest || macos-latest
+    runs-on: windows-latest  # windows-latest || macos-latest
     env:
         MaggsoftAspectCore: "src/Libraries/Aspect/Maggsoft.Aspect.Core/Maggsoft.Aspect.Core.csproj"
         MaggsoftCache: "src/Libraries/Cache/Maggsoft.Cache/Maggsoft.Cache.csproj"
