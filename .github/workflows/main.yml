@@ -234,16 +234,15 @@ jobs:
 
       - name: Restore,Build Packages Push All Projects
         run: |
+          dotnet nuget locals all --clear
           for proj in $(find . -name '*.csproj'); do
             echo "projeeeeee: $proj"      
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
                 
-                if [[ "${proj}" != *"src/Libraries/EventBus"* ]]; then
-
                     echo "projeeeeee: $proj"    
+
                     if [ -f "$proj" ]; then
                         echo "projeeeeee find okey: $proj"
-                        dotnet nuget locals all --clear
                         dotnet restore "$proj"
                         dotnet build "$proj" --configuration Release
                         dotnet pack $proj --configuration Release --output  ./nupkgs
@@ -251,7 +250,6 @@ jobs:
                     else
                         echo "File does not exist. :  $proj"
                     fi
-                fi
             fi
           done
         continue-on-error: true  # Hata olsa bile devam et

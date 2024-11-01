@@ -13,7 +13,7 @@ namespace Maggsoft.Mssql.Services.Messages;
 /// <summary>
 /// SMTP Builder
 /// </summary>
-public class SmtpBuilder(EmailAccountSettings emailAccountSettings, IEmailAccountService emailAccountService) : ISmtpBuilder
+public class SmtpBuilder(EmailAccountSettings emailAccountSettings, IEmailAccountService emailAccountService) : ISmtpBuilder 
 {
     #region Fields
 
