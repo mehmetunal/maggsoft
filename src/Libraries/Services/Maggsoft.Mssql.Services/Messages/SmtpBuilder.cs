@@ -35,7 +35,7 @@ public class SmtpBuilder(EmailAccountSettings emailAccountSettings, IEmailAccoun
     /// A task that represents the asynchronous operation
     /// The task result contains the an SMTP client that can be used to send email messages
     /// </returns>
-    public virtual async Task<SmtpClient> BuildAsync(EmailAccount emailAccount = null) 
+    public virtual async Task<SmtpClient> BuildAsync(EmailAccount emailAccount = null)
     {
         if (emailAccount is null)
         {

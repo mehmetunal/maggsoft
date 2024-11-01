@@ -32,7 +32,6 @@ public class DependencyContainer
                 var factory = new ConnectionFactory()
                 {
                     HostName = Configuration["EventBus:EventBusConnection"],
-                    DispatchConsumersAsync = true
                 };
                 if (!string.IsNullOrEmpty(Configuration["EventBus:EventBusUserName"]))
                 {

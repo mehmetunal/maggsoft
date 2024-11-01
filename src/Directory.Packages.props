@@ -59,8 +59,8 @@
     <PackageVersion Include="Serilog.Settings.Configuration" Version="8.0.0" />
     <PackageVersion Include="Serilog.Sinks.Seq" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
-    <PackageVersion Include="Polly" Version="8.4.0" />
-    <PackageVersion Include="RabbitMQ.Client" Version="6.8.1" />
+    <PackageVersion Include="Polly" Version="8.4.2" />
+    <PackageVersion Include="RabbitMQ.Client" Version="7.0.0-rc.14" />
     <PackageVersion Include="Autofac" Version="8.0.0" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.17.5" />
     <PackageVersion Include="Microsoft.Extensions.DependencyModel" Version="8.0.0" />
