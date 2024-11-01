@@ -238,7 +238,7 @@ jobs:
             echo "projeeeeee: $proj"      
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
                 
-                if [[ "${proj}" != *"src/Libraries/EventBus"* ]]
+                if [[ "${proj}" != *"src/Libraries/EventBus"* ]]; then
 
                     echo "projeeeeee: $proj"    
                     if [ -f "$proj" ]; then
