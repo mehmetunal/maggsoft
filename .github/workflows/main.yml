@@ -237,16 +237,20 @@ jobs:
           for proj in $(find . -name '*.csproj'); do
             echo "projeeeeee: $proj"      
             if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
-                echo "projeeeeee: $proj"    
-                if [ -f "$proj" ]; then
-                    echo "projeeeeee find okey: $proj"
-                    dotnet nuget locals all --clear
-                    dotnet restore "$proj"
-                    dotnet build "$proj" --configuration Release
-                    dotnet pack $proj --configuration Release --output  ./nupkgs
-                    dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
-                else
-                    echo "File does not exist. :  $proj"
+                
+                if [[ "${proj}" != *"src/Libraries/EventBus"* ]]
+
+                    echo "projeeeeee: $proj"    
+                    if [ -f "$proj" ]; then
+                        echo "projeeeeee find okey: $proj"
+                        dotnet nuget locals all --clear
+                        dotnet restore "$proj"
+                        dotnet build "$proj" --configuration Release
+                        dotnet pack $proj --configuration Release --output  ./nupkgs
+                        dotnet nuget push ./nupkgs/*.nupkg --source https://nuget.pkg.github.com/mehmetunal/index.json --api-key ${{ secrets.PACKAGES_TOKEN }} --skip-duplicate
+                    else
+                        echo "File does not exist. :  $proj"
+                    fi
                 fi
             fi
           done
