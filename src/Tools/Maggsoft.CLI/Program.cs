@@ -5,13 +5,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        if (args.Length < 2)
+        if (args.Length < 3 || args.Length % 3 != 0)
         {
-            Console.WriteLine("Kullanım: maggsoft create-solution <SolutionName> <ProjectType1> <ProjectName1> [<ProjectType2> <ProjectName2> ...]");
+            Console.WriteLine("Kullanım: maggsoft create-solution <SolutionName> <ProjectType1> <ProjectName1> [<FolderPath1>] [<ProjectType2> <ProjectName2> [<FolderPath2>] ...]");
             return;
         }
 
-        string command = args[0].ToLower();
+        string command = args[0].ToLower(CultureInfo.CurrentCulture);
         if (command != "create-solution")
         {
             Console.WriteLine($"Bilinmeyen komut: {command}");
@@ -19,24 +19,26 @@ class Program
         }
 
         string solutionName = args[1];
-        string[] projectTypes = args[2..];
+        string[] projects = args[2..]; // Proje türleri, adları ve klasör yolları (isteğe bağlı)
 
-        CreateSolution(solutionName, projectTypes);
+        CreateSolution(solutionName, projects);
     }
-
     private static void CreateSolution(string solutionName, string[] projects)
     {
-
         try
         {
             // Çözüm oluştur
             Console.WriteLine($"Çözüm oluşturuluyor: {solutionName}");
             RunCommand($"dotnet new sln -n {solutionName}");
 
-            for (int i = 0; i < projects.Length; i += 2)
+            for (int i = 0; i < projects.Length; i += 3)
             {
                 string projectType = projects[i].ToLower(CultureInfo.CurrentCulture);
                 string projectName = projects[i + 1];
+                string folderPath = (i + 2 < projects.Length && !string.IsNullOrWhiteSpace(projects[i + 2]))
+                    ? projects[i + 2]
+                    : Path.Combine(solutionName, projectName); // Varsayılan klasör yolu
+
                 string template = GetTemplateFromType(projectType);
 
                 if (template == null)
@@ -45,13 +47,16 @@ class Program
                     continue;
                 }
 
+                // Proje oluşturma klasörü
+                Directory.CreateDirectory(folderPath); // Klasör oluşturulmazsa oluştur
+
                 // Proje oluştur
                 Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
-                RunCommand($"dotnet new {template} -n {projectName}");
+                RunCommand($"dotnet new {template} -n {projectName} -o {folderPath}");
 
                 // Projeyi çözüme ekle
                 Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
-                RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj");
+                RunCommand($"dotnet sln {solutionName}.sln add {Path.Combine(folderPath, $"{projectName}.csproj")}");
 
                 #region Add Nuget
                 //string projectPath = Path.Combine(projectName, $"{projectName}.csproj");
@@ -62,7 +67,7 @@ class Program
                 // Program.cs özelleştirme
                 if (projectType == "webapi")
                 {
-                    CustomizeWebApiProgramCs(projectName);
+                    CustomizeWebApiProgramCs(folderPath);
                 }
             }
 
@@ -73,11 +78,21 @@ class Program
             Console.WriteLine($"Hata: {ex.Message}");
         }
     }
-    private static void CustomizeWebApiProgramCs(string projectName)
+
+    private static string GetTemplateFromType(string projectType) => projectType switch
+    {
+        "webapi" => "webapi",
+        "classlibrary" => "classlib",
+        "console" => "console",
+        "xunit" => "xunit",
+        _ => null
+    };
+
+    private static void CustomizeWebApiProgramCs(string projectFullPath)
     {
         try
         {
-            string programFilePath = Path.Combine(projectName, "Program.cs");
+            string programFilePath = Path.Combine(projectFullPath, "Program.cs");
 
             if (File.Exists(programFilePath))
             {
@@ -94,15 +109,6 @@ class Program
             Console.WriteLine($"Program.cs güncellenirken hata oluştu: {ex.Message}");
         }
     }
-
-    private static string GetTemplateFromType(string projectType) => projectType switch
-    {
-        "webapi" => "webapi",
-        "classlibrary" => "classlib",
-        "console" => "console",
-        "xunit" => "xunit",
-        _ => null
-    };
 
     private static string GetPredefinedProgramCsContent()
         => @"
