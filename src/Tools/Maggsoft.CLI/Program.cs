@@ -42,13 +42,21 @@ class Program
                     continue;
                 }
 
+                string baseDirectory = Path.Combine(Directory.GetCurrentDirectory(), solutionName);
+
+                string srcFolder = Path.Combine(baseDirectory, "src");
+                Directory.CreateDirectory(srcFolder);
+
+                Console.WriteLine($"Klasör yapısı oluşturuldu:\n{baseDirectory}");
+
+
                 // 2. Proje Oluştur
                 Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
-                RunCommand($"dotnet new {template} -n {projectName}");
+                RunCommand($"dotnet new {template} -n {projectName}", srcFolder);
 
                 // 3. Projeyi Çözüme Ekle
                 Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
-                RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj");
+                RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj", baseDirectory);
 
                 #region Add Nuget
                 //string projectPath = Path.Combine(projectName, $"{projectName}.csproj");
@@ -93,6 +101,8 @@ class Program
         using Microsoft.Extensions.DependencyInjection;
         using Microsoft.Extensions.Hosting;
 
+        Console.WriteLine(""Çözüm ve projeler başarıyla oluşturuldu!"");
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -126,6 +136,35 @@ class Program
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
+            }
+        };
+
+        process.Start();
+
+        string output = process.StandardOutput.ReadToEnd();
+        string error = process.StandardError.ReadToEnd();
+
+        if (!string.IsNullOrEmpty(output))
+            Console.WriteLine(output);
+        if (!string.IsNullOrEmpty(error))
+            Console.WriteLine($"Hata: {error}");
+
+        process.WaitForExit();
+    }
+
+    static void RunCommand(string command, string workingDirectory)
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c {command}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = workingDirectory
             }
         };
 
