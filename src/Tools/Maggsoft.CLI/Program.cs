@@ -1,38 +1,78 @@
-﻿using System.Diagnostics;
+﻿//args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "src/api", "-p", "ClassLibrary", "Taksi.Library", "src/lib" };
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 class Program
 {
     static void Main(string[] args)
     {
+        //maggsoft cp -s TaksiSolution -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib
+        //args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "D:\\MyProjeler\\test/src/api", "-p", "ClassLibrary", "Taksi.Library", "D:\\MyProjeler\\test/src/lib" };
+
         if (args.Length < 4 || !args.Contains("-s") || !args.Contains("-p"))
         {
             Console.WriteLine("Kullanım: maggsoft cp -s <SolutionName> -p <ProjectType1> <ProjectName1> [<FolderPath1>] -p <ProjectType2> <ProjectName2> [<FolderPath2>] ...");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib -p WebApi Taksi.WebApi2 src/api");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library -p WebApi Taksi.WebApi2 src/api");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library -p WebApi Taksi.WebApi2");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library");
+            Console.WriteLine(@"maggsoft cp -s MySolution -p ClassLibrary Taksi.Library");
             return;
         }
 
-        string solutionName = args[Array.IndexOf(args, "-s") + 1];
-
-        List<Tuple<string, string, string>> projects = new List<Tuple<string, string, string>>();
-        int i = Array.IndexOf(args, "-p") + 1;
-
-        while (i < args.Length)
+        string command = args[0].ToLower();
+        if (command != "cp")
         {
-            string projectType = args[i];
-            string projectName = args[i + 1];
-            string folderPath = (i + 2 < args.Length && !args[i + 2].StartsWith("-")) ? args[i + 2] : null;
-
-            projects.Add(Tuple.Create(projectType, projectName, folderPath));
-            i += folderPath != null ? 3 : 2; // Eğer klasör yolu varsa 3, yoksa 2 adım ileri git
+            Console.WriteLine($"Bilinmeyen komut: {command}");
+            return;
         }
 
-        CreateSolution(solutionName, projects);
+        string solutionName = string.Empty;
+        List<Tuple<string, string, string>> projects = new List<Tuple<string, string, string>>();
+
+        try
+        {
+            int solutionIndex = Array.IndexOf(args, "-s") + 1;
+            if (solutionIndex < 1 || solutionIndex >= args.Length)
+                throw new ArgumentException("Çözüm adı (-s) parametresi eksik veya geçersiz.");
+            solutionName = args[solutionIndex];
+
+            int i = Array.IndexOf(args, "-p") + 1;
+
+            while (i < args.Length)
+            {
+                string projectType = args[i];
+                if (projectType == "-p")
+                {
+                    projectType = args[i + 1];
+                    i++;
+                }
+                if (i + 1 >= args.Length)
+                    throw new ArgumentException("Proje adı eksik.");
+                string projectName = args[i + 1];
+                string folderPath = (i + 2 < args.Length && !args[i + 2].StartsWith("-")) ? args[i + 2] : null;
+
+                projects.Add(Tuple.Create(projectType, projectName, folderPath));
+                i += folderPath != null ? 3 : 2; // Eğer klasör yolu varsa 3, yoksa 2 adım ileri git
+            }
+
+            CreateSolution(solutionName, projects);
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine($"Hata: {ex.Message}");
+        }
     }
 
     private static void CreateSolution(string solutionName, List<Tuple<string, string, string>> projects)
     {
         try
         {
-            // Çözüm oluştur
+            // Çözüm oluşturuluyor
             Console.WriteLine($"Çözüm oluşturuluyor: {solutionName}");
             RunCommand($"dotnet new sln -n {solutionName}");
 
@@ -53,7 +93,7 @@ class Program
                 // Proje oluşturma klasörü
                 Directory.CreateDirectory(folderPath);
 
-                // Proje oluştur
+                // Proje oluşturuluyor
                 Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
                 RunCommand($"dotnet new {template} -n {projectName} -o {folderPath}");
 
@@ -61,14 +101,8 @@ class Program
                 Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
                 RunCommand($"dotnet sln {solutionName}.sln add {Path.Combine(folderPath, $"{projectName}.csproj")}");
 
-                #region Add Nuget
-                //string projectPath = Path.Combine(projectName, $"{projectName}.csproj");
-                //AddNuGetPackage(projectPath, "Newtonsoft.Json");
-                //AddNuGetPackage(projectPath, "Swashbuckle.AspNetCore", "6.5.0");
-                #endregion
-
-                // Program.cs özelleştirme (WebAPI için)
-                if (projectType == "webapi")
+                // WebAPI projeleri için Program.cs özelleştirme
+                if (projectType.ToLower() == "webapi")
                 {
                     CustomizeWebApiProgramCs(folderPath);
                 }
@@ -158,7 +192,6 @@ class Program
         ";
     }
 }
-
 
 
 
