@@ -49,6 +49,22 @@ class Program
                 // 3. Projeyi Çözüme Ekle
                 Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
                 RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj");
+
+                #region Add Nuget
+                //string projectPath = Path.Combine(projectName, $"{projectName}.csproj");
+                //AddNuGetPackage(projectPath, "Newtonsoft.Json");
+                //AddNuGetPackage(projectPath, "Swashbuckle.AspNetCore", "6.5.0");
+                #endregion
+
+                if (projectType == "webapi")
+                {
+                    string programFilePath = Path.Combine(projectName, "Program.cs");
+                    if (File.Exists(programFilePath))
+                    {
+                        Console.WriteLine("Program.cs dosyası güncelleniyor...");
+                        File.WriteAllText(programFilePath, GetPredefinedProgramCsContent());
+                    }
+                }
             }
 
             Console.WriteLine("Çözüm ve projeler başarıyla oluşturuldu!");
@@ -69,6 +85,34 @@ class Program
             _ => null
         };
     }
+
+    static string GetPredefinedProgramCsContent()
+        => @"
+        using Microsoft.AspNetCore.Builder;
+        using Microsoft.AspNetCore.Hosting;
+        using Microsoft.Extensions.DependencyInjection;
+        using Microsoft.Extensions.Hosting;
+
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddControllers();
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+        ";
 
     static void RunCommand(string command)
     {
@@ -96,5 +140,21 @@ class Program
             Console.WriteLine($"Hata: {error}");
 
         process.WaitForExit();
+    }
+
+    static void AddNuGetPackage(string projectPath, string packageName, string version = null)
+    {
+        try
+        {
+            string versionArgument = version != null ? $"--version {version}" : "";
+            string command = $"dotnet add {projectPath} package {packageName} {versionArgument}";
+
+            Console.WriteLine($"NuGet paketi ekleniyor: {packageName}");
+            RunCommand(command);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Hata: {ex.Message}");
+        }
     }
 }
