@@ -42,36 +42,14 @@ class Program
                     continue;
                 }
 
-                string baseDirectory = Path.Combine(Directory.GetCurrentDirectory(), solutionName);
-
-                string srcFolder = Path.Combine(baseDirectory, "src");
-                Directory.CreateDirectory(srcFolder);
-
-                Console.WriteLine($"Klasör yapısı oluşturuldu:\n{baseDirectory}");
-
-
-
-                // Çözümü oluştur
-                RunCommand($"dotnet new sln -n {solutionName}", baseDirectory);
-
-                // WebApi projesini oluştur
-                string webApiProject = Path.Combine(srcFolder, $"{projectName}");
-                RunCommand($"dotnet new {template} -n {projectName}", srcFolder);
-
-
-                // Çözüm dosyasına projeleri ekle
-                RunCommand($"dotnet sln add {Path.Combine(webApiProject, $"{projectName}.csproj")}", baseDirectory);
-
-
-
 
                 // 2. Proje Oluştur
-                //Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
-                //RunCommand($"dotnet new {template} -n {projectName}", srcFolder);
+                Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
+                RunCommand($"dotnet new {template} -n {projectName}");
 
                 // 3. Projeyi Çözüme Ekle
-                //Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
-                //RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj", baseDirectory);
+                Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
+                RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj");
 
                 #region Add Nuget
                 //string projectPath = Path.Combine(projectName, $"{projectName}.csproj");
