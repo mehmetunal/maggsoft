@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>maggsoft</ToolCommandName>
+		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
+		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
+		<!-- CLI aracınızın terminaldeki adı -->
+	</PropertyGroup>
+
+</Project>
