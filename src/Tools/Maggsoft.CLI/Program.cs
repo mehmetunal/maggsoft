@@ -1,29 +1,34 @@
 ﻿using System.Diagnostics;
-using System.Globalization;
 
 class Program
 {
     static void Main(string[] args)
     {
-        if (args.Length < 3 || args.Length % 3 != 0)
+        if (args.Length < 4 || !args.Contains("-s") || !args.Contains("-p"))
         {
-            Console.WriteLine("Kullanım: maggsoft create-solution <SolutionName> <ProjectType1> <ProjectName1> [<FolderPath1>] [<ProjectType2> <ProjectName2> [<FolderPath2>] ...]");
+            Console.WriteLine("Kullanım: maggsoft cp -s <SolutionName> -p <ProjectType1> <ProjectName1> [<FolderPath1>] -p <ProjectType2> <ProjectName2> [<FolderPath2>] ...");
             return;
         }
 
-        string command = args[0].ToLower(CultureInfo.CurrentCulture);
-        if (command != "create-solution")
-        {
-            Console.WriteLine($"Bilinmeyen komut: {command}");
-            return;
-        }
+        string solutionName = args[Array.IndexOf(args, "-s") + 1];
 
-        string solutionName = args[1];
-        string[] projects = args[2..]; // Proje türleri, adları ve klasör yolları (isteğe bağlı)
+        List<Tuple<string, string, string>> projects = new List<Tuple<string, string, string>>();
+        int i = Array.IndexOf(args, "-p") + 1;
+
+        while (i < args.Length)
+        {
+            string projectType = args[i];
+            string projectName = args[i + 1];
+            string folderPath = (i + 2 < args.Length && !args[i + 2].StartsWith("-")) ? args[i + 2] : null;
+
+            projects.Add(Tuple.Create(projectType, projectName, folderPath));
+            i += folderPath != null ? 3 : 2; // Eğer klasör yolu varsa 3, yoksa 2 adım ileri git
+        }
 
         CreateSolution(solutionName, projects);
     }
-    private static void CreateSolution(string solutionName, string[] projects)
+
+    private static void CreateSolution(string solutionName, List<Tuple<string, string, string>> projects)
     {
         try
         {
@@ -31,13 +36,11 @@ class Program
             Console.WriteLine($"Çözüm oluşturuluyor: {solutionName}");
             RunCommand($"dotnet new sln -n {solutionName}");
 
-            for (int i = 0; i < projects.Length; i += 3)
+            foreach (var project in projects)
             {
-                string projectType = projects[i].ToLower(CultureInfo.CurrentCulture);
-                string projectName = projects[i + 1];
-                string folderPath = (i + 2 < projects.Length && !string.IsNullOrWhiteSpace(projects[i + 2]))
-                    ? projects[i + 2]
-                    : Path.Combine(solutionName, projectName); // Varsayılan klasör yolu
+                string projectType = project.Item1;
+                string projectName = project.Item2;
+                string folderPath = project.Item3 ?? Path.Combine(solutionName, projectName); // Klasör yolu belirtilmediyse varsayılan yol
 
                 string template = GetTemplateFromType(projectType);
 
@@ -48,7 +51,7 @@ class Program
                 }
 
                 // Proje oluşturma klasörü
-                Directory.CreateDirectory(folderPath); // Klasör oluşturulmazsa oluştur
+                Directory.CreateDirectory(folderPath);
 
                 // Proje oluştur
                 Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
@@ -64,7 +67,7 @@ class Program
                 //AddNuGetPackage(projectPath, "Swashbuckle.AspNetCore", "6.5.0");
                 #endregion
 
-                // Program.cs özelleştirme
+                // Program.cs özelleştirme (WebAPI için)
                 if (projectType == "webapi")
                 {
                     CustomizeWebApiProgramCs(folderPath);
@@ -79,64 +82,13 @@ class Program
         }
     }
 
-    private static string GetTemplateFromType(string projectType) => projectType switch
+    private static string GetTemplateFromType(string projectType) => projectType.ToLower() switch
     {
         "webapi" => "webapi",
         "classlibrary" => "classlib",
         "console" => "console",
-        "xunit" => "xunit",
         _ => null
     };
-
-    private static void CustomizeWebApiProgramCs(string projectFullPath)
-    {
-        try
-        {
-            string programFilePath = Path.Combine(projectFullPath, "Program.cs");
-
-            if (File.Exists(programFilePath))
-            {
-                Console.WriteLine($"Program.cs dosyası özelleştiriliyor: {programFilePath}");
-                File.WriteAllText(programFilePath, GetPredefinedProgramCsContent());
-            }
-            else
-            {
-                Console.WriteLine($"Program.cs bulunamadı: {programFilePath}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Program.cs güncellenirken hata oluştu: {ex.Message}");
-        }
-    }
-
-    private static string GetPredefinedProgramCsContent()
-        => @"
-        using Microsoft.AspNetCore.Builder;
-        using Microsoft.AspNetCore.Hosting;
-        using Microsoft.Extensions.DependencyInjection;
-        using Microsoft.Extensions.Hosting;
-
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-        builder.Services.AddControllers();
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
-
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.Run();
-        ";
 
     private static void RunCommand(string command)
     {
@@ -166,19 +118,63 @@ class Program
         process.WaitForExit();
     }
 
-    private static void AddNuGetPackage(string projectPath, string packageName, string version = null)
+    private static void CustomizeWebApiProgramCs(string folderPath)
     {
-        try
+        string programFilePath = Path.Combine(folderPath, "Program.cs");
+        if (File.Exists(programFilePath))
         {
-            string versionArgument = version != null ? $"--version {version}" : "";
-            string command = $"dotnet add {projectPath} package {packageName} {versionArgument}";
-
-            Console.WriteLine($"NuGet paketi ekleniyor: {packageName}");
-            RunCommand(command);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Hata: {ex.Message}");
+            Console.WriteLine("Program.cs dosyası güncelleniyor...");
+            File.WriteAllText(programFilePath, GetPredefinedProgramCsContent());
         }
     }
+
+    private static string GetPredefinedProgramCsContent()
+    {
+        return @"
+        using Microsoft.AspNetCore.Builder;
+        using Microsoft.AspNetCore.Hosting;
+        using Microsoft.Extensions.DependencyInjection;
+        using Microsoft.Extensions.Hosting;
+
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Add services to the container.
+        builder.Services.AddControllers();
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+        ";
+    }
 }
+
+
+
+
+
+//private static void AddNuGetPackage(string projectPath, string packageName, string version = null)
+//{
+//    try
+//    {
+//        string versionArgument = version != null ? $"--version {version}" : "";
+//        string command = $"dotnet add {projectPath} package {packageName} {versionArgument}";
+
+//        Console.WriteLine($"NuGet paketi ekleniyor: {packageName}");
+//        RunCommand(command);
+//    }
+//    catch (Exception ex)
+//    {
+//        Console.WriteLine($"Hata: {ex.Message}");
+//    }
+//}
