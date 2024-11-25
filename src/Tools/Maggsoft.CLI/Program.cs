@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 
 class Program
 {
@@ -6,7 +7,7 @@ class Program
     {
         if (args.Length < 2)
         {
-            Console.WriteLine("Kullanım: mycli create-solution <SolutionName> <Project1Type> [Project2Type] ...");
+            Console.WriteLine("Kullanım: maggsoft create-solution <SolutionName> <ProjectType1> <ProjectName1> [<ProjectType2> <ProjectName2> ...]");
             return;
         }
 
@@ -23,30 +24,32 @@ class Program
         CreateSolution(solutionName, projectTypes);
     }
 
-    static void CreateSolution(string solutionName, string[] projectTypes)
+    private static void CreateSolution(string solutionName, string[] projects)
     {
+
         try
         {
-            // 1. Çözüm (Solution) Oluştur
+            // Çözüm oluştur
             Console.WriteLine($"Çözüm oluşturuluyor: {solutionName}");
             RunCommand($"dotnet new sln -n {solutionName}");
 
-            foreach (var projectType in projectTypes)
+            for (int i = 0; i < projects.Length; i += 2)
             {
-                string projectName = $"{solutionName}.{projectType}";
+                string projectType = projects[i].ToLower(CultureInfo.CurrentCulture);
+                string projectName = projects[i + 1];
                 string template = GetTemplateFromType(projectType);
 
                 if (template == null)
                 {
-                    Console.WriteLine($"Geçersiz proje türü: {projectType}");
+                    Console.WriteLine($"Geçersiz proje türü: {projectType}. Atlanıyor.");
                     continue;
                 }
 
-                // 2. Proje Oluştur
+                // Proje oluştur
                 Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
                 RunCommand($"dotnet new {template} -n {projectName}");
 
-                // 3. Projeyi Çözüme Ekle
+                // Projeyi çözüme ekle
                 Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
                 RunCommand($"dotnet sln {solutionName}.sln add {projectName}/{projectName}.csproj");
 
@@ -56,14 +59,10 @@ class Program
                 //AddNuGetPackage(projectPath, "Swashbuckle.AspNetCore", "6.5.0");
                 #endregion
 
+                // Program.cs özelleştirme
                 if (projectType == "webapi")
                 {
-                    string programFilePath = Path.Combine(projectName, "Program.cs");
-                    if (File.Exists(programFilePath))
-                    {
-                        Console.WriteLine("Program.cs dosyası güncelleniyor...");
-                        File.WriteAllText(programFilePath, GetPredefinedProgramCsContent());
-                    }
+                    CustomizeWebApiProgramCs(projectName);
                 }
             }
 
@@ -74,19 +73,38 @@ class Program
             Console.WriteLine($"Hata: {ex.Message}");
         }
     }
-
-    static string GetTemplateFromType(string projectType)
+    private static void CustomizeWebApiProgramCs(string projectName)
     {
-        return projectType.ToLower() switch
+        try
         {
-            "webapi" => "webapi",
-            "classlibrary" => "classlib",
-            "console" => "console",
-            _ => null
-        };
+            string programFilePath = Path.Combine(projectName, "Program.cs");
+
+            if (File.Exists(programFilePath))
+            {
+                Console.WriteLine($"Program.cs dosyası özelleştiriliyor: {programFilePath}");
+                File.WriteAllText(programFilePath, GetPredefinedProgramCsContent());
+            }
+            else
+            {
+                Console.WriteLine($"Program.cs bulunamadı: {programFilePath}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Program.cs güncellenirken hata oluştu: {ex.Message}");
+        }
     }
 
-    static string GetPredefinedProgramCsContent()
+    private static string GetTemplateFromType(string projectType) => projectType switch
+    {
+        "webapi" => "webapi",
+        "classlibrary" => "classlib",
+        "console" => "console",
+        "xunit" => "xunit",
+        _ => null
+    };
+
+    private static string GetPredefinedProgramCsContent()
         => @"
         using Microsoft.AspNetCore.Builder;
         using Microsoft.AspNetCore.Hosting;
@@ -114,7 +132,7 @@ class Program
         app.Run();
         ";
 
-    static void RunCommand(string command)
+    private static void RunCommand(string command)
     {
         var process = new Process
         {
@@ -142,7 +160,7 @@ class Program
         process.WaitForExit();
     }
 
-    static void AddNuGetPackage(string projectPath, string packageName, string version = null)
+    private static void AddNuGetPackage(string projectPath, string packageName, string version = null)
     {
         try
         {
