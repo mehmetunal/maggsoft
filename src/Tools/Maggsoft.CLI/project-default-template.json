@@ -1,0 +1,54 @@
+{
+  "solutionName": "Maggsoft",
+  "projects": [
+    {
+      "name": "{prefix}.Data.Mssql",
+      "type": "ClassLibrary"
+    },
+    {
+      "name": "{prefix}.Dto.Mssql",
+      "type": "ClassLibrary"
+    },
+    {
+      "name": "{prefix}.Endpoints.Api",
+      "type": "ClassLibrary",
+      "references": [ "{prefix}.Mssql.Services" ]
+    },
+    {
+      "name": "{prefix}.IdentityManager",
+      "type": "ClassLibrary",
+      "references": [ "{prefix}.Data.Mssql" ]
+    },
+    {
+      "name": "{prefix}.Mssql",
+      "type": "ClassLibrary",
+      "references": [ "{prefix}.Data.Mssql" ]
+    },
+    {
+      "name": "{prefix}.Mssql.Services",
+      "type": "ClassLibrary",
+      "references": [ "{prefix}.Data.Mssql", "{prefix}.Dto.Mssql", "{prefix}.Mssql" ]
+    },
+    {
+      "name": "{prefix}.Api",
+      "type": "WebApi",
+      "references": [
+        "{prefix}.IdentityManager",
+        "{prefix}.Mssql.Services",
+        "{prefix}.Mssql",
+        "{prefix}.Data.Mssql",
+        "{prefix}.Dto.Mssql",
+        "{prefix}.Endpoints.Api"
+      ]
+    },
+    {
+      "name": "{prefix}.Web",
+      "type": "AspNetMvc",
+      "references": [ "{prefix}.Dto.Mssql", "{prefix}.Web.Framework" ]
+    },
+    {
+      "name": "{prefix}.Web.Framework",
+      "type": "ClassLibrary"
+    }
+  ]
+}
