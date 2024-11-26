@@ -13,13 +13,7 @@ class Program
         //maggsoft cp -s TaksiSolution -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib
         //args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "D:\\MyProjeler\\test/src/api", "-p", "ClassLibrary", "Taksi.Library", "D:\\MyProjeler\\test/src/lib" };
         //args = new string[] { "cp", "--template", "tt.json", "-name", "MySolution", "-prefix", "SSA" };
-
-        string command = args[0].ToLower();
-        if (command != "cp")
-        {
-            Console.WriteLine($"Bilinmeyen komut: {command}");
-            return;
-        }
+        //args = new string[] { "cp", "--template" };
 
         if (args.Contains("--template"))
         {
@@ -44,11 +38,69 @@ class Program
                 Console.WriteLine("Şablon yok o yüzden default template kullanılacak");
             }
 
-            templatePath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..", "project-default-template.json"));
-
             try
             {
-                var template = JsonSerializer.Deserialize<ProjectTemplate>(File.ReadAllText(templatePath));
+                var templateTxt = @"{
+  ""solutionName"": ""Maggsoft"",
+  ""projects"": [
+    {
+      ""name"": ""{prefix}.Data.Mssql"",
+      ""type"": ""ClassLibrary""
+    },
+    {
+      ""name"": ""{prefix}.Dto.Mssql"",
+      ""type"": ""ClassLibrary""
+    },
+    {
+      ""name"": ""{prefix}.Endpoints.Api"",
+      ""type"": ""ClassLibrary"",
+      ""references"": [ ""{prefix}.Mssql.Services"" ]
+    },
+    {
+      ""name"": ""{prefix}.IdentityManager"",
+      ""type"": ""ClassLibrary"",
+      ""references"": [ ""{prefix}.Data.Mssql"" ]
+    },
+    {
+      ""name"": ""{prefix}.Mssql"",
+      ""type"": ""ClassLibrary"",
+      ""references"": [ ""{prefix}.Data.Mssql"" ]
+    },
+    {
+      ""name"": ""{prefix}.Mssql.Services"",
+      ""type"": ""ClassLibrary"",
+      ""references"": [ ""{prefix}.Data.Mssql"", ""{prefix}.Dto.Mssql"", ""{prefix}.Mssql"" ]
+    },
+    {
+      ""name"": ""{prefix}.Api"",
+      ""type"": ""WebApi"",
+      ""references"": [
+        ""{prefix}.IdentityManager"",
+        ""{prefix}.Mssql.Services"",
+        ""{prefix}.Mssql"",
+        ""{prefix}.Data.Mssql"",
+        ""{prefix}.Dto.Mssql"",
+        ""{prefix}.Endpoints.Api""
+      ]
+    },
+    {
+      ""name"": ""{prefix}.Web"",
+      ""type"": ""AspNetMvc"",
+      ""references"": [ ""{prefix}.Dto.Mssql"", ""{prefix}.Web.Framework"" ]
+    },
+    {
+      ""name"": ""{prefix}.Web.Framework"",
+      ""type"": ""ClassLibrary""
+    }
+  ]
+}
+";
+                var template = JsonSerializer.Deserialize<ProjectTemplate>(templateTxt);
+                if (templatePath != null)
+                {
+                    template = JsonSerializer.Deserialize<ProjectTemplate>(File.ReadAllText(templatePath));
+                }
+
                 if (template == null || string.IsNullOrEmpty(template.SolutionName))
                 {
                     throw new ArgumentException("Geçersiz şablon dosyası.");
@@ -91,6 +143,13 @@ class Program
                 Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p ClassLibrary Taksi.Library");
                 Console.WriteLine(@"maggsoft cp --template template.json");
                 Console.WriteLine(@"maggsoft cp --template template.json -name SolutionName -prefix SSA");
+                return;
+            }
+
+            string command = args[0].ToLower();
+            if (command != "cp")
+            {
+                Console.WriteLine($"Bilinmeyen komut: {command}");
                 return;
             }
 
