@@ -11,7 +11,7 @@ class Program
     static void Main(string[] args)
     {
         //maggsoft cp -s TaksiSolution -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib
-        args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "D:\\MyProjeler\\test/src/api", "-p", "ClassLibrary", "Taksi.Library", "D:\\MyProjeler\\test/src/lib" };
+        //args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "D:\\MyProjeler\\test/src/api", "-p", "ClassLibrary", "Taksi.Library", "D:\\MyProjeler\\test/src/lib" };
         //args = new string[] { "cp", "--template", "tt.json", "-name", "MySolution", "-prefix", "SSA" };
 
         string command = args[0].ToLower();
