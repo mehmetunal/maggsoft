@@ -1,75 +1,46 @@
-﻿//args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "src/api", "-p", "ClassLibrary", "Taksi.Library", "src/lib" };
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 class Program
 {
-    static void Main(string[] args)
-    {
-        //maggsoft cp -s TaksiSolution -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib
-        //args = new string[] { "cp", "-s", "TaksiSolution", "-p", "WebApi", "Taksi.WebApi", "D:\\MyProjeler\\test/src/api", "-p", "ClassLibrary", "Taksi.Library", "D:\\MyProjeler\\test/src/lib" };
-        //args = new string[] { "cp", "--template", "tt.json", "-name", "MySolution", "-prefix", "SSA" };
-        //args = new string[] { "cp", "--template" };
-
-        if (args.Contains("--template"))
-        {
-            string solutionName = null;
-            string templatePath = null;
-            string prefix = null;
-
-            int templateIndex = Array.IndexOf(args, "--template");
-            if (templateIndex > -1 && templateIndex + 1 < args.Length)
-                templatePath = args[templateIndex + 1];
-
-            int solutionNameIndex = Array.IndexOf(args, "-name");
-            if (solutionNameIndex > -1 && solutionNameIndex + 1 < args.Length)
-                solutionName = args[solutionNameIndex + 1];
-
-            int prefixIndex = Array.IndexOf(args, "-prefix");
-            if (prefixIndex > -1 && prefixIndex + 1 < args.Length)
-                prefix = args[prefixIndex + 1];
-
-            if (!File.Exists(templatePath))
-            {
-                Console.WriteLine("Şablon yok o yüzden default template kullanılacak");
-            }
-
-            try
-            {
-                var templateTxt = @"{
+    static string DefaultTemplate => @"{
   ""solutionName"": ""Maggsoft"",
+  ""prefix"": ""MAG"",
   ""projects"": [
     {
       ""name"": ""{prefix}.Data.Mssql"",
-      ""type"": ""ClassLibrary""
+      ""type"": ""ClassLibrary"",
+      ""folderPath"": ""src/Libraries/Data""
     },
     {
       ""name"": ""{prefix}.Dto.Mssql"",
-      ""type"": ""ClassLibrary""
+      ""type"": ""ClassLibrary"",
+      ""folderPath"": ""src/Libraries/Dto""
     },
     {
       ""name"": ""{prefix}.Endpoints.Api"",
       ""type"": ""ClassLibrary"",
-      ""references"": [ ""{prefix}.Mssql.Services"" ]
+      ""references"": [ ""{prefix}.Mssql.Services"" ],
+      ""folderPath"": ""src/Libraries/Endpoints""
     },
     {
       ""name"": ""{prefix}.IdentityManager"",
       ""type"": ""ClassLibrary"",
-      ""references"": [ ""{prefix}.Data.Mssql"" ]
+      ""references"": [ ""{prefix}.Data.Mssql"" ],
+      ""folderPath"": ""src/Libraries""
     },
     {
       ""name"": ""{prefix}.Mssql"",
       ""type"": ""ClassLibrary"",
-      ""references"": [ ""{prefix}.Data.Mssql"" ]
+      ""references"": [ ""{prefix}.Data.Mssql"" ],
+      ""folderPath"": ""src/Libraries""
     },
     {
       ""name"": ""{prefix}.Mssql.Services"",
       ""type"": ""ClassLibrary"",
-      ""references"": [ ""{prefix}.Data.Mssql"", ""{prefix}.Dto.Mssql"", ""{prefix}.Mssql"" ]
+      ""references"": [ ""{prefix}.Data.Mssql"", ""{prefix}.Dto.Mssql"", ""{prefix}.Mssql"" ],
+      ""folderPath"": ""src/Libraries""
     },
     {
       ""name"": ""{prefix}.Api"",
@@ -81,234 +52,153 @@ class Program
         ""{prefix}.Data.Mssql"",
         ""{prefix}.Dto.Mssql"",
         ""{prefix}.Endpoints.Api""
-      ]
+      ],
+      ""folderPath"": ""src/Presentation""
     },
     {
       ""name"": ""{prefix}.Web"",
       ""type"": ""AspNetMvc"",
-      ""references"": [ ""{prefix}.Dto.Mssql"", ""{prefix}.Web.Framework"" ]
+      ""references"": [ ""{prefix}.Dto.Mssql"", ""{prefix}.Web.Framework"" ],
+      ""folderPath"": ""src/Presentation""
     },
     {
       ""name"": ""{prefix}.Web.Framework"",
-      ""type"": ""ClassLibrary""
+      ""type"": ""ClassLibrary"",
+      ""folderPath"": ""src/Presentation""
     }
   ]
-}
-";
-                var template = JsonSerializer.Deserialize<ProjectTemplate>(templateTxt);
-                if (templatePath != null)
-                {
-                    template = JsonSerializer.Deserialize<ProjectTemplate>(File.ReadAllText(templatePath));
-                }
+}";
 
-                if (template == null || string.IsNullOrEmpty(template.SolutionName))
-                {
-                    throw new ArgumentException("Geçersiz şablon dosyası.");
-                }
-
-                if (!string.IsNullOrEmpty(solutionName))
-                {
-                    template.SolutionName = solutionName;
-                }
-
-                if (!string.IsNullOrEmpty(prefix))
-                {
-                    template.Prefix = prefix;
-                }
-                else
-                {
-                    template.Prefix = template.SolutionName;
-                }
-
-                CreateSolutionFromTemplate(template);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-            }
-
-        }
-        else
-        {
-            if (args.Length < 4 || !args.Contains("-s") || !args.Contains("-p"))
-            {
-                Console.WriteLine("Kullanım: maggsoft cp -s <SolutionName> [-db <DatabaseType>] -p <ProjectType1> <ProjectName1> [<FolderPath1>] -p <ProjectType2> <ProjectName2> [<FolderPath2>] ...");
-                //          Console.WriteLine("Kullanım: maggsoft cp -s <SolutionName> -p <ProjectType1> <ProjectName1> [<FolderPath1>] -p <ProjectType2> <ProjectName2> [<FolderPath2>] ...");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi src/api -p ClassLibrary Taksi.Library src/lib -p WebApi Taksi.WebApi2 src/api");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library -p WebApi Taksi.WebApi2 src/api");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library -p WebApi Taksi.WebApi2");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p WebApi Taksi.WebApi -p ClassLibrary Taksi.Library");
-                Console.WriteLine(@"maggsoft cp -s MySolution -db <DatabaseType>] -p ClassLibrary Taksi.Library");
-                Console.WriteLine(@"maggsoft cp --template template.json");
-                Console.WriteLine(@"maggsoft cp --template template.json -name SolutionName -prefix SSA");
-                return;
-            }
-
-            string command = args[0].ToLower();
-            if (command != "cp")
-            {
-                Console.WriteLine($"Bilinmeyen komut: {command}");
-                return;
-            }
-
-            string solutionName = string.Empty;
-            string databaseType = null; // Veritabanı tipi için değişken
-
-            List<Tuple<string, string, string>> projects = [];
-
-            try
-            {
-                int solutionIndex = Array.IndexOf(args, "-s") + 1;
-                if (solutionIndex < 1 || solutionIndex >= args.Length)
-                    throw new ArgumentException("Çözüm adı (-s) parametresi eksik veya geçersiz.");
-                solutionName = args[solutionIndex];
-
-                // Veritabanı tipini kontrol et
-                int dbIndex = Array.IndexOf(args, "-db");
-                if (dbIndex > -1 && dbIndex + 1 < args.Length)
-                    databaseType = args[dbIndex + 1];
-
-                int i = Array.IndexOf(args, "-p") + 1;
-                while (i < args.Length)
-                {
-                    string projectType = args[i];
-                    if (projectType == "-p")
-                    {
-                        projectType = args[i + 1];
-                        i++;
-                    }
-                    if (i + 1 >= args.Length)
-                        throw new ArgumentException("Proje adı eksik.");
-                    string projectName = args[i + 1];
-                    string folderPath = (i + 2 < args.Length && !args[i + 2].StartsWith("-")) ? args[i + 2] : null;
-
-                    projects.Add(Tuple.Create(projectType, projectName, folderPath));
-                    i += folderPath != null ? 3 : 2; // Eğer klasör yolu varsa 3, yoksa 2 adım ileri git
-                }
-
-                CreateSolution(solutionName, databaseType, projects);
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"Hata: {ex.Message}");
-            }
-        }
-    }
-
-    private static void CreateSolution(string solutionName, string databaseType, List<Tuple<string, string, string>> projects)
+    static void Main(string[] args)
     {
         try
         {
-            // Çözüm oluşturuluyor
-            Console.WriteLine($"Çözüm oluşturuluyor: {solutionName}");
-            RunCommand($"dotnet new sln -n {solutionName}");
+            //args = new string[] { "cp", "--template" };
 
-            foreach (var project in projects)
+            if (args.Contains("--template"))
             {
-                string projectType = project.Item1;
-                string projectName = project.Item2;
-                string folderPath = project.Item3 ?? Path.Combine(solutionName, projectName); // Klasör yolu belirtilmediyse varsayılan yol
-
-                string template = GetTemplateFromType(projectType);
-
-                if (template == null)
-                {
-                    Console.WriteLine($"Geçersiz proje türü: {projectType}. Atlanıyor.");
-                    continue;
-                }
-
-                // Proje oluşturma klasörü
-                Directory.CreateDirectory(folderPath);
-
-                // Proje oluşturuluyor
-                Console.WriteLine($"Proje oluşturuluyor: {projectName} ({template})");
-                RunCommand($"dotnet new {template} -n {projectName} -o {folderPath}");
-
-                // Projeyi çözüme ekle
-                Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
-                RunCommand($"dotnet sln {solutionName}.sln add {Path.Combine(folderPath, $"{projectName}.csproj")}");
-
-                // WebAPI projeleri için Program.cs özelleştirme
-                if (projectType.ToLower() == "webapi")
-                {
-                    CustomizeWebApiProgramCs(folderPath, databaseType);
-                    AddDatabaseConfig(folderPath, databaseType);
-                }
+                HandleTemplateMode(args);
             }
-
-            Console.WriteLine("Çözüm ve projeler başarıyla oluşturuldu!");
+            else
+            {
+                Console.WriteLine("Şablon dışındaki mod henüz desteklenmiyor.");
+            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Hata: {ex.Message}");
         }
     }
+
+    private static void HandleTemplateMode(string[] args)
+    {
+        string solutionName = GetArgument(args, "-name");
+        string prefix = GetArgument(args, "-prefix") ?? "MAG";
+        string templatePath = GetArgument(args, "--template");
+
+        ProjectTemplate template = null;
+
+        if (templatePath != null && File.Exists(templatePath))
+        {
+            template = JsonSerializer.Deserialize<ProjectTemplate>(File.ReadAllText(templatePath));
+        }
+
+        template ??= JsonSerializer.Deserialize<ProjectTemplate>(DefaultTemplate);
+
+        if (!string.IsNullOrEmpty(solutionName))
+        {
+            template.SolutionName = solutionName;
+        }
+
+        if (!string.IsNullOrEmpty(prefix))
+        {
+            template.Prefix = prefix;
+        }
+
+        CreateSolutionFromTemplate(template);
+    }
+
+    private static string GetArgument(string[] args, string option)
+    {
+        int index = Array.IndexOf(args, option);
+        return (index > -1 && index + 1 < args.Length) ? args[index + 1] : null;
+    }
+
     private static void CreateSolutionFromTemplate(ProjectTemplate template)
     {
+        string solutionPath = Path.Combine(Directory.GetCurrentDirectory(), template.SolutionName);
+        Directory.CreateDirectory(solutionPath);
+
         Console.WriteLine($"Çözüm oluşturuluyor: {template.SolutionName}");
-        RunCommand($"dotnet new sln -n {template.SolutionName}");
+        RunCommand($"dotnet new sln -n {template.SolutionName} -o {solutionPath}");
+
+        CreateDirectoryPackagesProps(solutionPath);
 
         var projectPaths = new Dictionary<string, string>();
 
         foreach (var project in template.Projects)
         {
-            var projectName = project.Name.Replace("{prefix}", template.Prefix);
-            string projectFolder = Path.Combine(template.SolutionName, projectName);
+            string projectName = project.Name.Replace("{prefix}", template.Prefix);
+            string projectFolder = Path.Combine(solutionPath, project.FolderPath, projectName);
+
             Directory.CreateDirectory(projectFolder);
 
-            Console.WriteLine($"Proje oluşturuluyor: {projectName} ({project.Type})");
-            string projectTypeTemplate = GetTemplateFromType(project.Type);
-            if (projectTypeTemplate == null)
-            {
-                Console.WriteLine($"Geçersiz proje türü: {project.Type}");
-                continue;
-            }
-
-            RunCommand($"dotnet new {projectTypeTemplate} -n {projectName} -o {projectFolder}");
+            Console.WriteLine($"Proje oluşturuluyor: {projectName}");
+            string projectType = GetTemplateFromType(project.Type);
+            RunCommand($"dotnet new {projectType} -n {projectName} -o {projectFolder}");
 
             projectPaths[projectName] = projectFolder;
 
-            Console.WriteLine($"Proje çözüm dosyasına ekleniyor: {projectName}");
-            RunCommand($"dotnet sln {template.SolutionName}.sln add {Path.Combine(projectFolder, $"{projectName}.csproj")}");
+            RunCommand($"dotnet sln {Path.Combine(solutionPath, template.SolutionName)}.sln add {Path.Combine(projectFolder, $"{projectName}.csproj")}");
         }
 
         foreach (var project in template.Projects)
         {
             if (project.References == null || project.References.Count == 0) continue;
 
-
-            var projectName = project.Name.Replace("{prefix}", template.Prefix);
+            string projectName = project.Name.Replace("{prefix}", template.Prefix);
+            string projectFolder = projectPaths[projectName];
 
             foreach (var reference in project.References)
             {
-                var rf = reference.Replace("{prefix}", template.Prefix);
-
-                if (projectPaths.ContainsKey(rf))
+                string referencedProjectName = reference.Replace("{prefix}", template.Prefix);
+                if (projectPaths.ContainsKey(referencedProjectName))
                 {
-                    string projectPath = Path.Combine(projectPaths[projectName], $"{projectName}.csproj");
-                    string referencePath = Path.Combine(projectPaths[rf], $"{rf}.csproj");
-
-                    Console.WriteLine($"Proje referansı ekleniyor: {projectName} -> {rf}");
-                    RunCommand($"dotnet add {projectPath} reference {referencePath}");
+                    RunCommand($"dotnet add {Path.Combine(projectFolder, $"{projectName}.csproj")} reference {Path.Combine(projectPaths[referencedProjectName], $"{referencedProjectName}.csproj")}");
                 }
             }
         }
 
-        Console.WriteLine("Tüm projeler ve referanslar başarıyla oluşturuldu!");
+        Console.WriteLine("Tüm projeler ve çözüm başarıyla oluşturuldu.");
     }
+
+    private static void CreateDirectoryPackagesProps(string solutionPath)
+    {
+        string propsFilePath = Path.Combine(solutionPath, "Directory.Packages.props");
+
+        string propsContent = @"
+<Project>
+  <ItemGroup>
+    <PackageVersion Include=""Newtonsoft.Json"" Version=""13.0.3"" />
+    <PackageVersion Include=""Serilog"" Version=""2.12.0"" />
+  </ItemGroup>
+</Project>";
+
+        File.WriteAllText(propsFilePath, propsContent);
+        RunCommand($"dotnet sln {Path.Combine(solutionPath, Path.GetFileName(solutionPath))}.sln add {propsFilePath}");
+    }
+
     private static string GetTemplateFromType(string projectType) => projectType.ToLower() switch
     {
         "webapi" => "webapi",
         "classlibrary" => "classlib",
-        "console" => "console",
         "aspnetmvc" => "mvc",
-        _ => null
+        _ => throw new ArgumentException($"Geçersiz proje türü: {projectType}")
     };
+
     private static void RunCommand(string command)
     {
-        var process = new Process
+        using var process = new Process
         {
             StartInfo = new ProcessStartInfo
             {
@@ -322,81 +212,9 @@ class Program
         };
 
         process.Start();
-
-        string output = process.StandardOutput.ReadToEnd();
-        string error = process.StandardError.ReadToEnd();
-
-        if (!string.IsNullOrEmpty(output))
-            Console.WriteLine(output);
-        if (!string.IsNullOrEmpty(error))
-            Console.WriteLine($"Hata: {error}");
-
+        Console.WriteLine(process.StandardOutput.ReadToEnd());
+        Console.WriteLine(process.StandardError.ReadToEnd());
         process.WaitForExit();
-    }
-    private static void CustomizeWebApiProgramCs(string folderPath, string databaseType)
-    {
-        string programFilePath = Path.Combine(folderPath, "Program.cs");
-        if (File.Exists(programFilePath))
-        {
-            Console.WriteLine("Program.cs dosyası güncelleniyor...");
-            File.WriteAllText(programFilePath, GetPredefinedProgramCsContent(databaseType));
-        }
-    }
-    private static void AddDatabaseConfig(string folderPath, string databaseType)
-    {
-        string appSettingsPath = Path.Combine(folderPath, "appsettings.json");
-        if (!File.Exists(appSettingsPath)) return;
-
-        string dbConnectionString = databaseType?.ToLower() switch
-        {
-            "sqlserver" => "Server=localhost;Database=MyDatabase;User Id=myUsername;Password=myPassword;",
-            "mysql" => "Server=localhost;Database=MyDatabase;User=myUsername;Password=myPassword;",
-            "postgresql" => "Host=localhost;Database=MyDatabase;Username=myUsername;Password=myPassword;",
-            _ => null
-        };
-
-        if (dbConnectionString != null)
-        {
-            Console.WriteLine($"Veritabanı bağlantı dizesi ekleniyor: {databaseType}");
-            File.WriteAllText(appSettingsPath, $@"
-{{
-  ""ConnectionStrings"": {{
-    ""DefaultConnection"": ""{dbConnectionString}""
-  }}
-}}");
-        }
-    }
-    private static string GetPredefinedProgramCsContent(string databaseType)
-    {
-        return $@"
-        using Microsoft.AspNetCore.Builder;
-        using Microsoft.Extensions.DependencyInjection;
-        using Microsoft.Extensions.Hosting;
-
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-        builder.Services.AddControllers();
-
-        // Add database configuration here
-        builder.Services.AddDbContext<MyDbContext>(options =>
-            options.Use{databaseType ?? "SqlServer"}(builder.Configuration.GetConnectionString(""DefaultConnection"")));
-
-        var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {{
-            app.UseDeveloperExceptionPage();
-        }}
-
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
-
-        app.MapControllers();
-
-        app.Run();
-        ";
     }
 
     public class ProjectTemplate
@@ -404,6 +222,7 @@ class Program
         [JsonPropertyName("solutionName")]
         public string SolutionName { get; set; }
 
+        [JsonPropertyName("prefix")]
         public string Prefix { get; set; }
 
         [JsonPropertyName("projects")]
@@ -414,25 +233,14 @@ class Program
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
         [JsonPropertyName("type")]
         public string Type { get; set; }
+
         [JsonPropertyName("references")]
         public List<string> References { get; set; }
+
+        [JsonPropertyName("folderPath")]
+        public string FolderPath { get; set; }
     }
 }
-
-//private static void AddNuGetPackage(string projectPath, string packageName, string version = null)
-//{
-//    try
-//    {
-//        string versionArgument = version != null ? $"--version {version}" : "";
-//        string command = $"dotnet add {projectPath} package {packageName} {versionArgument}";
-
-//        Console.WriteLine($"NuGet paketi ekleniyor: {packageName}");
-//        RunCommand(command);
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Hata: {ex.Message}");
-//    }
-//}

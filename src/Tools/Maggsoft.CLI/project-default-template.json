@@ -1,33 +1,40 @@
 {
   "solutionName": "Maggsoft",
+  "prefix": "MAG",
   "projects": [
     {
       "name": "{prefix}.Data.Mssql",
-      "type": "ClassLibrary"
+      "type": "ClassLibrary",
+      "folderPath": "src/Libraries/Data"
     },
     {
       "name": "{prefix}.Dto.Mssql",
-      "type": "ClassLibrary"
+      "type": "ClassLibrary",
+      "folderPath": "src/Libraries/Dto"
     },
     {
       "name": "{prefix}.Endpoints.Api",
       "type": "ClassLibrary",
-      "references": [ "{prefix}.Mssql.Services" ]
+      "references": [ "{prefix}.Mssql.Services" ],
+      "folderPath": "src/Libraries/Endpoints"
     },
     {
       "name": "{prefix}.IdentityManager",
       "type": "ClassLibrary",
-      "references": [ "{prefix}.Data.Mssql" ]
+      "references": [ "{prefix}.Data.Mssql" ],
+      "folderPath": "src/Libraries"
     },
     {
       "name": "{prefix}.Mssql",
       "type": "ClassLibrary",
-      "references": [ "{prefix}.Data.Mssql" ]
+      "references": [ "{prefix}.Data.Mssql" ],
+      "folderPath": "src/Libraries"
     },
     {
       "name": "{prefix}.Mssql.Services",
       "type": "ClassLibrary",
-      "references": [ "{prefix}.Data.Mssql", "{prefix}.Dto.Mssql", "{prefix}.Mssql" ]
+      "references": [ "{prefix}.Data.Mssql", "{prefix}.Dto.Mssql", "{prefix}.Mssql" ],
+      "folderPath": "src/Libraries"
     },
     {
       "name": "{prefix}.Api",
@@ -39,16 +46,19 @@
         "{prefix}.Data.Mssql",
         "{prefix}.Dto.Mssql",
         "{prefix}.Endpoints.Api"
-      ]
+      ],
+      "folderPath": "src/Presentation/Api"
     },
     {
       "name": "{prefix}.Web",
       "type": "AspNetMvc",
-      "references": [ "{prefix}.Dto.Mssql", "{prefix}.Web.Framework" ]
+      "references": [ "{prefix}.Dto.Mssql", "{prefix}.Web.Framework" ],
+      "folderPath": "src/Presentation/Web"
     },
     {
       "name": "{prefix}.Web.Framework",
-      "type": "ClassLibrary"
+      "type": "ClassLibrary",
+      "folderPath": "src/Presentation/Web"
     }
   ]
 }
