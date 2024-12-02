@@ -225,8 +225,9 @@ jobs:
                     git config user.name "mehmetunal"
                     git config user.email "unal.m1991@gmail.com"
                     git add .
+
                     git commit -m "Add version file"
-                    git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git
+                    git push https://x-access-token:${{ secrets.PACKAGES_TOKEN }}@github.com/${{ github.repository }}.git --force
 
                  fi
             
