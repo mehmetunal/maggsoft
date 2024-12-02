@@ -16,7 +16,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Mssql.Services 
+namespace Maggsoft.Mssql.Services  
 {
     public partial class MssqlBaseServices<TTable, TResultDto, TEditDto, TAddDto> : BaseService where TTable : BaseEntity,
         new()

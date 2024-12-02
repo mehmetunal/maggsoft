@@ -16,7 +16,7 @@ public class MaggsoftDistributedCache(IDistributedCache cache, IServiceProvider 
     private readonly IServiceProvider _serviceProvider = serviceProvider;
     private readonly IDistributedCache _cache = cache ?? throw new ArgumentNullException(nameof(cache));
 
-    #endregion
+    #endregion 
 
     #region Method
     public object Get(string cacheKey)

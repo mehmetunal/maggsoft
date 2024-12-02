@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Maggsoft.Mongo.Repository;
 
 
-public interface IMongoRepository<T> : IRepository<T> where T : BaseEntity, IEntity
+public interface IMongoRepository<T> : IRepository<T> where T : BaseEntity, IEntity 
 {
     #region Collection
     IMongoCollection<T> Collection { get; }

@@ -9,7 +9,7 @@ namespace Maggsoft.Npgsql.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    INpgsqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity;
+    INpgsqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity; 
 
     bool BeginNewTransaction();
     Task<bool> BeginNewTransactionAsync();

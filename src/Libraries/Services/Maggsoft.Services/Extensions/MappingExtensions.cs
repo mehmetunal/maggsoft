@@ -12,7 +12,7 @@ namespace Maggsoft.Services.Extensions;
 /// <summary>
 /// Represents the extensions to map entity to model and vise versa
 /// </summary>
-public static class MappingExtensions
+public static class MappingExtensions 
 {
     #region Configuration
 

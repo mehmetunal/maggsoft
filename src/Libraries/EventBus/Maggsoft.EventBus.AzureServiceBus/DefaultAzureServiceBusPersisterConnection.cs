@@ -7,7 +7,7 @@ public class DefaultAzureServiceBusPersisterConnection : IAzureServiceBusPersist
 {
     private readonly string _serviceBusConnectionString;
     private ServiceBusClient _topicClient;
-    private ServiceBusAdministrationClient _subscriptionClient; 
+    private ServiceBusAdministrationClient _subscriptionClient;  
 
     bool _disposed;
 

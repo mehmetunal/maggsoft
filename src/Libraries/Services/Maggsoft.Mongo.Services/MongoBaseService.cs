@@ -11,7 +11,7 @@ using MongoDB.Driver.Linq;
 using System;
 using System.Threading.Tasks;
 
-namespace Maggsoft.Services;
+namespace Maggsoft.Services; 
 
 public partial class MongoBaseService<TTable, TResultDto, TEditDto, TAddDto> where TTable : BaseEntity,
     new()

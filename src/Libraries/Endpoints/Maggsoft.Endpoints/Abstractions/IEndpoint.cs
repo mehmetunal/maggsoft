@@ -4,5 +4,5 @@ namespace Maggsoft.Endpoints.Abstractions;
 
 public interface IEndpoint
 { 
-    void MapEndpoint(IEndpointRouteBuilder app);
+    void MapEndpoint(IEndpointRouteBuilder app); 
 }

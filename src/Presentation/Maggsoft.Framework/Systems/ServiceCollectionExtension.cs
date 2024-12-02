@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Systems;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtension 
 {
     static ApiTokenOptions TokenOptions;
 

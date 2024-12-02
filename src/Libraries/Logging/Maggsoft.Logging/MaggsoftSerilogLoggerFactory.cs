@@ -6,7 +6,7 @@ namespace Maggsoft.Logging.Logging;
 
 public class MaggsoftSerilogLoggerFactory
 {
-    public static ILogger CreateSerilogLogger()  
+    public static ILogger CreateSerilogLogger()   
     {
         return new LoggerConfiguration()
             .WriteTo.Seq("http://localhost:5341")

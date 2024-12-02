@@ -10,5 +10,5 @@ public interface IRabbitMQPersistentConnection
 
     bool TryConnect();
 
-    IModel CreateModel();
+    IModel CreateModel(); 
 }

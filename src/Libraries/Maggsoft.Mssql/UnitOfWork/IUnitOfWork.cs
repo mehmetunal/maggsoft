@@ -9,7 +9,7 @@ namespace Maggsoft.Mssql.UnitOfWork;
 
 public interface IUnitOfWork : IDisposable
 {
-    IMssqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity;
+    IMssqlRepository<T> GetRepository<T>() where T : BaseEntity, IEntity; 
 
     bool BeginNewTransaction();
     Task<bool> BeginNewTransactionAsync(); 

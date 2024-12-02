@@ -7,7 +7,7 @@ using Ocelot.Middleware;
 using Ocelot.Cache.CacheManager;
 using MMLib.Ocelot.Provider.AppConfiguration;
 
-namespace Maggsoft.Ocelot.Core;
+namespace Maggsoft.Ocelot.Core; 
 
 public static class ServiceCollectionExtension 
 {

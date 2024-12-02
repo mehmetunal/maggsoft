@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Maggsoft.Aspect.Core;
 
-public class MethodExecutionArgs
+public class MethodExecutionArgs 
 { 
     public MethodExecutionArgs()
     {  

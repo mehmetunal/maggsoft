@@ -5,7 +5,7 @@ using System;
 
 namespace Maggsoft.Sqlite.Services
 {
-    public class BaseService
+    public class BaseService 
     {
         private string currentUserId => GetClaim(ClaimTypes.NameIdentifier); 
 
