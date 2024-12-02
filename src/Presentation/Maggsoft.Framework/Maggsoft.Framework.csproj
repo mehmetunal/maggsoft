@@ -15,16 +15,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentFormat.OpenXml"/>
-		<PackageReference Include="FastMember"/>
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core"/>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning"/>
-		<PackageReference Include="Swashbuckle.AspNetCore"/>
+		<PackageReference Include="DocumentFormat.OpenXml" />
+		<PackageReference Include="FastMember" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" />
+		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Azure.Extensions.AspNetCore.DataProtection.Keys" />
-		<PackageReference Include="Azure.Identity"/>
+		<PackageReference Include="Azure.Identity" />
 		<PackageReference Include="Azure.Security.KeyVault.Certificates" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" />
 	</ItemGroup>
 
 	<ItemGroup>

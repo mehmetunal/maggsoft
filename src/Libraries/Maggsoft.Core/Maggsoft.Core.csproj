@@ -25,10 +25,9 @@
 
 	<ItemGroup>
 	  <PackageReference Include="AutoMapper" />
-	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
 	  <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core"/>
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" />
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" />
 	  <PackageReference Include="Microsoft.Win32.Registry" />
