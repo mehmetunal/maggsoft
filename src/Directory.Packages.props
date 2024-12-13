@@ -34,7 +34,7 @@
     <PackageVersion Include="FluentMigrator.Runner.Postgres" Version="6.2.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.1" />
     <PackageVersion Include="FluentMigrator.Runner.SqlServer" Version="6.2.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageVersion Include="MongoDB.Driver" Version="2.25.0" />
     <PackageVersion Include="MongoDB.Driver.GridFS" Version="2.25.0" />
     <PackageVersion Include="AutoMapper" Version="13.0.1" />

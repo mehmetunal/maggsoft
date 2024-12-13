@@ -28,7 +28,7 @@ public static class MssqlExtensions
         return services;
     }
     public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration) 
     {
         var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
