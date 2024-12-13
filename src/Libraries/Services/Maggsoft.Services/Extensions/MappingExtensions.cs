@@ -64,7 +64,7 @@ public static class MappingExtensions
     private static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination)
     {
         //use AutoMapper for mapping objects
-        return AutoMapperConfiguration.Mapper.Map(source, destination);
+        return AutoMapperConfiguration.Mapper.Map(source, destination); 
     }
 
     #endregion
