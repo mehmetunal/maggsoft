@@ -17,7 +17,99 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Framework.Middleware;
-public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHostEnvironment environment, IConfiguration configuration) : IExceptionHandler
+public sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger,
+    IHostEnvironment environment,
+    IConfiguration configuration) : IExceptionHandler
+{
+    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    {
+        logger.LogError(
+            exception,
+            exception.Message,
+            exception.InnerException,
+            exception.InnerException?.Message);
+
+        var response = new Result<object>();
+        httpContext.Response.StatusCode = GetStatusCodeForException(exception);
+
+        if (exception is ModelStateException modelStateException)
+        {
+            response.ValidationMessages = GetValidationMessages(modelStateException);
+        }
+        else if (response.ValidationMessages.Count == 0)
+        {
+            response.Message = GetErrorMessage(exception);
+        }
+
+        response.ApiVersion = GetApiVersion();
+        response.StatusCode = httpContext.Response.StatusCode;
+        response.IsSuccess = false;
+
+        await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
+
+        return true;
+    }
+
+    private int GetStatusCodeForException(Exception exception)
+    {
+        return exception switch
+        {
+            ArgumentException or ArgumentNullException => StatusCodes.Status404NotFound,
+            ModelStateException => StatusCodes.Status200OK,
+            ApiVersioningException => StatusCodes.Status400BadRequest,
+            NotFoundException or KeyNotFoundException => StatusCodes.Status404NotFound,
+            ForbiddenExtension => StatusCodes.Status403Forbidden,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            FileLoadException or MaggsoftException => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError
+        };
+    }
+
+    private List<string> GetValidationMessages(ModelStateException exception)
+    {
+        var messages = new List<string>();
+        if (!string.IsNullOrEmpty(exception.Message))
+        {
+            try
+            {
+                var deserializedMessages = JsonSerializer.Deserialize<List<string>>(exception.Message);
+                if (deserializedMessages != null)
+                {
+                    messages.AddRange(deserializedMessages);
+                }
+            }
+            catch
+            {
+                messages.Add(exception.Message);
+            }
+        }
+        return messages;
+    }
+
+    private object GetErrorMessage(Exception exception)
+    {
+        var errorMessage = environment.IsDevelopment()
+            ? exception.InnerException?.Message ?? exception.Message
+            : exception.Message;
+
+        if (errorMessage.TryParseJson(out Error error))
+        {
+            return error;
+        }
+        return errorMessage;
+    }
+
+    private string GetApiVersion()
+    {
+        var majorVersion = configuration["ApiVersion:MajorVersion"];
+        var minorVersion = configuration["ApiVersion:MinorVersion"];
+        return $"{majorVersion}.{minorVersion}";
+    }
+}
+
+/*Old
+ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IHostEnvironment environment, IConfiguration configuration) : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger = logger;
     private readonly IHostEnvironment _environment = environment;
@@ -91,3 +183,5 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
         return true;
     }
 }
+ 
+ */
