@@ -5,7 +5,7 @@ using System;
 
 namespace Maggsoft.Mssql.Services
 {
-    public class BaseService
+    public class BaseService 
     {
         private string currentUserId => GetClaim(ClaimTypes.NameIdentifier);
 
