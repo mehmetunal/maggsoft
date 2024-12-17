@@ -12,5 +12,4 @@
 		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 		<!-- CLI aracınızın terminaldeki adı -->
 	</PropertyGroup>
-
 </Project>

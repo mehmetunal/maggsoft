@@ -13,7 +13,7 @@
 		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
 		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
 	  <Compile Remove="Events\**" />
 	  <Compile Remove="JsonConverters\**" />
@@ -24,10 +24,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="AutoMapper" />
-	  <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http" />
-	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" />
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" />
 	  <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" />
 	  <PackageReference Include="Microsoft.Win32.Registry" />

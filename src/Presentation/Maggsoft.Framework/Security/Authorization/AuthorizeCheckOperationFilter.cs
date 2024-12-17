@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Maggsoft.Framework.Security.Authorization;
+namespace Maggsoft.Framework.Security.Authorization; 
 
 public class AuthorizeCheckOperationFilter : IOperationFilter
 {

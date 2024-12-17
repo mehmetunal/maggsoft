@@ -6,7 +6,7 @@ namespace Maggsoft.Core;
 /// <summary>
 /// Hash helper class
 /// </summary>   
-public partial class HashHelper   
+public partial class HashHelper    
 {
     /// <summary>
     /// Create a data hash
