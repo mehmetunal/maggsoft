@@ -33,6 +33,18 @@
 
         patch++; // Patch versiyonunu artır
 
+        if (patch >= 10) // Patch 10 olduğunda Minor'u artır
+        {
+            patch = 0; // Patch'i sıfırla
+            minor++;
+        }
+
+        if (minor >= 10) // Minor 10 olduğunda Major'u artır
+        {
+            minor = 0; // Minor'u sıfırla
+            major++;
+        }
+
         string newVersion = $"{major}.{minor}.{patch}";
 
         File.WriteAllText(filePath, newVersion);
