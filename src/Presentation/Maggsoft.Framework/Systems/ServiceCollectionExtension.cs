@@ -53,7 +53,7 @@ public static class ServiceCollectionExtension
 
         services.AddLogging();
 
-        services.AddExceptionHandler<GlobalExceptionHandler>();
+        services.AddExceptionHandler<ExceptionMiddleware>();
 
         services.AddProblemDetails();
 
@@ -110,7 +110,7 @@ public static class ServiceCollectionExtension
 
         app.UseCorsConfig();
 
-        app.UseMiddleware<GlobalResponseHandlingMiddleware>();
+        app.UseMiddleware<ApiResponseMiddleware>();
 
         app.UseExceptionHandler(c => c.Run(context =>
         {
