@@ -45,7 +45,8 @@ public partial class Result<T> : Result where T : class
     public static Result<T> Success(T data) => new(data, SuccessMessage.None);
     public static Result<T> Success(T data, int statusCode, SuccessMessage message) => new(data, statusCode, message);
     public static Result<T> Success(T data, int statusCode) => new(data, statusCode, SuccessMessage.None);
-    public static new Result<T> Failure(Error error) => Failure(error);
+    public static Result<T> Failure(Error error) => new(null, false, error);
+
 }
 
 public class Result : IResult
