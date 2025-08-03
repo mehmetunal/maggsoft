@@ -817,7 +817,7 @@ public static class StringExtensions
         {
             JsonSerializerOptions jsonSettings = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = null, AllowTrailingCommas = true };
             JsonNode jsonNode = JsonNode.Parse(obj);
-            if (jsonNode[nameof(Result.TimeStamp)] != null)
+            if (jsonNode[nameof(Result.TimeStamp)] != null || jsonNode["timeStamp"] != null)
             {
                 result = JsonSerializer.Deserialize<T>(obj, jsonSettings);
                 return true;

@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
 namespace Maggsoft.Framework.Systems;
 
