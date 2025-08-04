@@ -21,9 +21,9 @@ namespace Maggsoft.Data.Mssql
         public DateTime CreatedDate { get; set; } 
         public string CreatorIP { get; set; }
         public Guid CreatorUserId { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ModifierIP { get; set; }
-        public Guid? ModifierUserId { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public string UpdatedIP { get; set; }
+        public Guid? UpdatedByUserId { get; set; }
         public int DisplayOrder { get; set; }
 
         public void SoftDelete()

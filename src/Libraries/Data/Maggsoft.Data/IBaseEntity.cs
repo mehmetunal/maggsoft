@@ -34,15 +34,15 @@ public interface IBaseEntity<TKey> : IBaseEntity
 
     [DataMember]
     [Column(Order = 4)]
-    DateTime? ModifiedDate { get; set; }
+    DateTime? UpdatedDate { get; set; }
 
     [DataMember]
     [StringLength(50)]
     [Column(Order = 5)]
-    string ModifierIP { get; set; }
+    string UpdatedIP { get; set; }
 
     [DataMember]
     [MaxLength(18)]
     [Column(Order = 6)]
-    Guid? ModifierUserId { get; set; }
+    Guid? UpdatedByUserId { get; set; }
 }

@@ -30,7 +30,7 @@ public static class ModelBuilderExtensions
         builder.Entity<Table>()
             .HasIndex(p => p.IsDeleted, name: $"IX_{nameof(Table)}_IsDeleted");
         builder.Entity<Table>()
-            .HasIndex(p => p.IsPublish, name: $"IX_{nameof(Table)}_IsPublish");
+            .HasIndex(p => p.IsActive, name: $"IX_{nameof(Table)}_IsActive");
 
 
         builder.Entity<Table>().Property(p => p.Id).HasDefaultValue()
@@ -46,18 +46,18 @@ public static class ModelBuilderExtensions
         builder.Entity<Table>().Property(p => p.CreatorUserId)
             .IsRequired();
 
-        builder.Entity<Table>().Property(p => p.ModifiedDate);
+        builder.Entity<Table>().Property(p => p.UpdatedDate);
 
-        builder.Entity<Table>().Property(p => p.ModifierIP)
+        builder.Entity<Table>().Property(p => p.UpdatedIP)
             .HasMaxLength(50);
 
-        builder.Entity<Table>().Property(p => p.ModifierUserId);
+        builder.Entity<Table>().Property(p => p.UpdatedByUserId);
 
         builder.Entity<Table>()
             .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsDeleted)) == false);
 
         builder.Entity<Table>()
-            .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsPublish)) == true);
+            .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsActive)) == true);
 
         return builder;
 

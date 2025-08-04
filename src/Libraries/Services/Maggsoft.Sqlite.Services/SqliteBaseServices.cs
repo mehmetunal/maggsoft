@@ -134,8 +134,8 @@ namespace Maggsoft.Sqlite.Services
 
             var mapperData = Mapper.Map(domainEntity, dbData);
 
-            mapperData.ModifiedDate = DateTime.UtcNow;
-            mapperData.ModifierIP = RemoteIp;
+            mapperData.UpdatedDate = DateTime.UtcNow;
+            mapperData.UpdatedIP = RemoteIp;
 
             if (string.IsNullOrEmpty(mapperData.CreatorIP))
                 mapperData.CreatorIP = RemoteIp;

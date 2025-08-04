@@ -49,14 +49,14 @@ public static class ModelBuilderExtensions
         builder.Entity<Table>().Property(p => p.CreatorUserId)
             .IsRequired();
 
-        builder.Entity<Table>().Property(p => p.ModifiedDate)
+        builder.Entity<Table>().Property(p => p.UpdatedDate)
             .HasColumnType(ColumnType.Timestamp);
 
-        builder.Entity<Table>().Property(p => p.ModifierIP)
+        builder.Entity<Table>().Property(p => p.UpdatedIP)
             .HasColumnType(ColumnType.Varchar)
             .HasMaxLength(50);
 
-        builder.Entity<Table>().Property(p => p.ModifierUserId);
+        builder.Entity<Table>().Property(p => p.UpdatedByUserId);
 
         builder.Entity<Table>()
             .HasQueryFilter(m => EF.Property<bool>(m, nameof(m.IsDeleted)) == false);

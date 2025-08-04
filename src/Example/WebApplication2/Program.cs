@@ -2,6 +2,7 @@
 using Maggsoft.Core.Base;
 using Maggsoft.Core.Model;
 using Maggsoft.Framework.Middleware;
+using Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -62,7 +62,7 @@ namespace Maggsoft.Mssql.Services
             var query = Repository.Table;
 
             if (!showHidden)
-                query = query.Where(p => p.IsPublish);
+                query = query.Where(p => p.IsActive);
 
             query = query.Where(p => !p.IsDeleted);
 
@@ -82,7 +82,7 @@ namespace Maggsoft.Mssql.Services
             var query = Repository.Table;
 
             if (!showHidden)
-                query = query.Where(p => p.IsPublish);
+                query = query.Where(p => p.IsActive);
 
             query = query.Where(p => !p.IsDeleted);
 
@@ -134,8 +134,8 @@ namespace Maggsoft.Mssql.Services
 
             var mapperData = Mapper.Map(domainEntity, dbData);
 
-            mapperData.ModifiedDate = DateTime.UtcNow;
-            mapperData.ModifierIP = RemoteIp;
+            mapperData.UpdatedDate = DateTime.UtcNow;
+            mapperData.UpdatedIP = RemoteIp;
 
             if (string.IsNullOrEmpty(mapperData.CreatorIP))
                 mapperData.CreatorIP = RemoteIp;

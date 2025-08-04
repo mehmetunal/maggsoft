@@ -45,7 +45,7 @@ public class UserService : IUserService
         var query = Repository.Table;
 
         if (!showHidden)
-            query = query.Where(p => p.IsPublish);
+            query = query.Where(p => p.IsActive);
 
         query = query.Where(p => !p.IsDeleted);
 
@@ -72,7 +72,7 @@ public class UserService : IUserService
         user.CreatedDate = DateTime.UtcNow;
         var result = await Repository.AddAsync(user);
 
-        var logEntity = new UserLog { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsPublish = true, Text = "dsdfasd", UserId = user.Id };
+        var logEntity = new UserLog { CreatedDate = DateTime.UtcNow, CreatorIP = "asd", CreatorUserId = Guid.Empty, IsActive = true, Text = "dsdfasd", UserId = user.Id };
         await LogRepository.AddAsync(logEntity);
 
         //await LogRepository.SaveChangesAsync();
