@@ -13,7 +13,7 @@ namespace Maggsoft.Data.Mssql
     { 
         public BaseEntity()
         { 
-            CreatedDate = DateTime.UtcNow; 
+            CreatedDate = DateTime.UtcNow;  
         }
         public virtual TKey Id { get; set; }
         public bool IsActive { get; set; }
