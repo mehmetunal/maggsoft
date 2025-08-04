@@ -18,7 +18,7 @@ namespace Maggsoft.Data.Mssql
         public virtual TKey Id { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } 
         public string CreatorIP { get; set; }
         public Guid CreatorUserId { get; set; }
         public DateTime? ModifiedDate { get; set; }
