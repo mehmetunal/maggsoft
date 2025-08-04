@@ -16,7 +16,7 @@ namespace Maggsoft.Data.Mssql
             CreatedDate = DateTime.UtcNow;
         }
         public virtual TKey Id { get; set; }
-        public bool IsPublish { get; set; }
+        public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatorIP { get; set; }
@@ -28,7 +28,7 @@ namespace Maggsoft.Data.Mssql
 
         public void SoftDelete()
         {
-            IsPublish = false;
+            IsActive = false;
             IsDeleted = true;
         }
     }
