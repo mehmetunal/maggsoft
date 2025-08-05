@@ -4,7 +4,7 @@ using Maggsoft.Core.Model;
 
 namespace Maggsoft.Core.Base;
 
-public partial class Result<T> : Result where T : class
+public partial class Result<T> : Result
 {
     private T _data;
 
