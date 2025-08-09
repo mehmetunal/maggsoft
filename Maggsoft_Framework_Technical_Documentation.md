@@ -1,418 +1,26 @@
-# Maggsoft Framework
+# Maggsoft Framework - Teknik Dokümantasyon
 
-![maggsoft](https://user-images.githubusercontent.com/3499783/235142530-b76cbf78-71ba-40fa-acea-e154c518f894.jpg)
-
-[![.NET](https://img.shields.io/badge/.NET-8.0-blue.svg)](https://dotnet.microsoft.com/download/dotnet/8.0)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![NuGet](https://img.shields.io/badge/NuGet-Ready-orange.svg)](https://www.nuget.org/)
-
-## 📖 Genel Bakış
+## Genel Bakış
 
 Maggsoft Framework, ASP.NET Core 8 tabanlı modern web uygulamaları geliştirmek için tasarlanmış kapsamlı bir framework'tür. Clean Architecture prensiplerini takip eden, modüler yapıda ve çoklu veritabanı desteği sunan bir çözümdür.
 
-### 🎯 Framework'ün Ana Amaçları
-
-- **🚀 Hızlı Geliştirme**: Hazır bileşenler ve extension'lar ile hızlı proje geliştirme
-- **🧩 Modüler Yapı**: Bağımsız ve yeniden kullanılabilir modüller
-- **🗄️ Çoklu Veritabanı Desteği**: MSSQL, PostgreSQL, SQLite, MongoDB desteği
-- **📡 Event-Driven Architecture**: Mikroservis mimarisi için event bus desteği
-- **⚡ Caching**: Memory ve Redis cache desteği
-- **🔧 AOP (Aspect-Oriented Programming)**: Cross-cutting concerns için aspect desteği
-- **🏗️ Clean Architecture**: Katmanlı mimari ve dependency injection
-
-## 🏗️ Mimari Yapı
-
-```
-Maggsoft Framework/
-├── Libraries/                    # Core kütüphaneler
-│   ├── Maggsoft.Core/           # Temel sınıflar ve extension'lar
-│   ├── Data/                    # Veritabanı katmanı
-│   │   ├── Maggsoft.Data/       # Base entity'ler
-│   │   ├── Maggsoft.Mssql/      # MSSQL desteği
-│   │   ├── Maggsoft.Npgsql/     # PostgreSQL desteği
-│   │   ├── Maggsoft.Sqlite/     # SQLite desteği
-│   │   └── Maggsoft.Mongo/      # MongoDB desteği
-│   ├── Cache/                   # Cache katmanı
-│   │   ├── Maggsoft.Cache.MemoryCache/
-│   │   └── Maggsoft.Cache.Redis/
-│   ├── EventBus/                # Event bus sistemi
-│   ├── Aspect/                  # AOP desteği
-│   └── Services/                # Servis katmanı
-├── Presentation/                # Sunum katmanı
-│   └── Maggsoft.Framework/      # Web framework bileşenleri
-└── Example/                     # Örnek projeler
-```
-
-## 🚀 Hızlı Başlangıç
-
-### 1. Proje Oluşturma
-
-```bash
-# Yeni bir ASP.NET Core Web API projesi oluştur
-dotnet new webapi -n MyMaggsoftProject
-
-# Proje dizinine git
-cd MyMaggsoftProject
-```
-
-### 2. NuGet Paketlerini Ekleme
-
-```xml
-<!-- Core paketler -->
-<PackageReference Include="Maggsoft.Core" Version="2.1.3" />
-<PackageReference Include="Maggsoft.Data" Version="1.0.0" />
-<PackageReference Include="Maggsoft.Mssql" Version="1.0.0" />
-<PackageReference Include="Maggsoft.Framework" Version="2.3.9" />
-
-<!-- Cache paketleri -->
-<PackageReference Include="Maggsoft.Cache.MemoryCache" Version="1.0.0" />
-<PackageReference Include="Maggsoft.Cache.Redis" Version="1.0.0" />
-
-<!-- Event Bus paketleri -->
-<PackageReference Include="Maggsoft.EventBus" Version="1.0.0" />
-<PackageReference Include="Maggsoft.EventBus.RabbitMQ" Version="1.0.0" />
-
-<!-- AOP paketi -->
-<PackageReference Include="Maggsoft.Aspect.Core" Version="1.0.0" />
-```
-
-### 3. Program.cs Konfigürasyonu
-
-```csharp
-using Maggsoft.Framework.Systems;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Infrastructure konfigürasyonu (tüm konfigürasyonları tek seferde yapar)
-builder.Services.AddInfrastructure(builder.Configuration);
-
-// Veritabanı konfigürasyonu
-builder.Services.AddMssqlConfig<AppContext>(builder.Configuration)
-    .AddFluentMigratorConfig(builder.Configuration);
-
-// Cache konfigürasyonu
-builder.Services.AddMaggsoftDistributedMemoryCache(typeof(IService));
-
-// Event bus konfigürasyonu
-builder.Services.AddEventBus(builder.Configuration);
-builder.Services.RegisterEventConsumer();
-
-var app = builder.Build();
-
-// Infrastructure middleware'leri
-app.AddInfrastructure();
-
-// Veritabanı migration
-app.AddUpMigrate();
-
-app.Run();
-```
-
-### 4. Entity Tanımlama
-
-```csharp
-public class User : IBaseEntity<int>
-{
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public DateTime CreatedDate { get; set; }
-    public string CreatorIP { get; set; }
-    public Guid CreatorUserId { get; set; }
-    public DateTime? UpdatedDate { get; set; }
-    public string UpdatedIP { get; set; }
-    public Guid? UpdatedByUserId { get; set; }
-}
-```
-
-### 5. Service Oluşturma
-
-```csharp
-public interface IUserService : IService
-{
-    Task<User> GetUserAsync(int id);
-    Task<List<User>> GetAllUsersAsync();
-    Task<User> CreateUserAsync(User user);
-}
-
-public class UserService : IUserService
-{
-    private readonly IMssqlRepository<User> _userRepository;
-    private readonly ICache _cache;
-    
-    public UserService(IMssqlRepository<User> userRepository, ICache cache)
-    {
-        _userRepository = userRepository;
-        _cache = cache;
-    }
-    
-    public async Task<User> GetUserAsync(int id)
-    {
-        var cacheKey = $"user_{id}";
-        
-        return await _cache.GetAsync<User>(cacheKey, TimeSpan.FromMinutes(30), async () =>
-        {
-            return await _userRepository.FindByIdAsync(id);
-        });
-    }
-    
-    // Diğer metodlar...
-}
-```
-
-### 6. Controller Oluşturma
-
-```csharp
-[ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
-{
-    private readonly IUserService _userService;
-    
-    public UserController(IUserService userService)
-    {
-        _userService = userService;
-    }
-    
-    [HttpGet]
-    public async Task<IActionResult> GetUsers()
-    {
-        var users = await _userService.GetAllUsersAsync();
-        return Ok(Result<List<User>>.Success(users));
-    }
-    
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser(int id)
-    {
-        var user = await _userService.GetUserAsync(id);
-        if (user == null)
-            return NotFound(Result<User>.Failure(new Error("USER_NOT_FOUND", "Kullanıcı bulunamadı")));
-        
-        return Ok(Result<User>.Success(user));
-    }
-}
-```
-
-## ⚙️ Konfigürasyon
-
-### appsettings.json
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=MyProject;Trusted_Connection=true;MultipleActiveResultSets=true"
-  },
-  "TokenOptions": {
-    "AccessTokenExpiration": 60,
-    "ApiName": "Maggsoft API",
-    "ApiVersion": "v1",
-    "ApiBaseUrl": "https://localhost:5001",
-    "IdentityServerBaseUrl": "https://identity.example.com",
-    "OidcSwaggerUIClientId": "maggsoft_api_swaggerui",
-    "OidcApiName": "maggsoft_api",
-    "AdministrationRole": "Administrator",
-    "RequireHttpsMetadata": true,
-    "CorsAllowAnyOrigin": true,
-    "CorsAllowOrigins": [],
-    "IgnoreUrls": [],
-    "SecurityKey": "your-secret-key-here"
-  },
-  "ApiVersion": {
-    "MajorVersion": "1",
-    "MinorVersion": "0"
-  },
-  "IPFilter": {
-    "WhitelistedIPs": ["192.168.1.1"],
-    "BlockedIPs": [],
-    "AllowedIPRanges": ["192.168.1.0/24"],
-    "BlockedIPRanges": [],
-    "MaxRequestsPerMinute": 100,
-    "DefaultAllow": true,
-    "ExemptPaths": ["/health", "/metrics"]
-  },
-  "Logging": {
-    "LogLevel": {
-      "Default": "Information",
-      "Microsoft": "Warning"
-    }
-  },
-  "AllowedHosts": "*"
-}
-```
-
-## 🔧 Özellikler
-
-### ✅ Core Katmanı
-- **Result Pattern**: Standart API yanıt formatı
-- **Repository Pattern**: Generic repository implementasyonu
-- **Extension Methods**: String, DateTime, Enumerable extension'ları
-- **Error Handling**: Merkezi hata yönetimi
-
-### ✅ Data Katmanı
-- **Base Entity**: Audit bilgileri ile temel entity sınıfı
-- **Multi-Database Support**: MSSQL, PostgreSQL, SQLite, MongoDB
-- **Migration System**: FluentMigrator entegrasyonu
-- **Unit of Work**: Transaction yönetimi
-
-### ✅ Cache Katmanı
-- **Memory Cache**: In-memory caching
-- **Redis Cache**: Distributed caching
-- **Cache Patterns**: Get-or-set, sliding expiration
-- **Cache Invalidation**: Pattern-based invalidation
-
-### ✅ Event Bus
-- **Integration Events**: Mikroservisler arası iletişim
-- **Event Handlers**: Async event processing
-- **Event Publishing**: Publish-subscribe pattern
-- **Multiple Transport**: RabbitMQ, Azure Service Bus
-
-### ✅ AOP (Aspect-Oriented Programming)
-- **Logging Aspects**: Otomatik loglama
-- **Cache Aspects**: Method-level caching
-- **Validation Aspects**: Cross-cutting validation
-- **Custom Aspects**: Özelleştirilebilir aspect'ler
-
-### ✅ Framework Katmanı
-- **Infrastructure Setup**: Tek seferde tüm konfigürasyon
-- **Middleware Pipeline**: Exception, API Response, IP Filter
-- **Security**: JWT Authentication, IP Filtering
-- **API Documentation**: Swagger entegrasyonu
-- **Validation**: FluentValidation auto-validation
-- **Compression**: Response compression (Brotli, Gzip)
-- **Excel Export**: OpenXML tabanlı Excel export
-
-## 📚 Örnekler
-
-### Event Bus Kullanımı
-
-```csharp
-// Event tanımlama
-public class UserCreatedEvent : IntegrationEvent
-{
-    public int UserId { get; set; }
-    public string Email { get; set; }
-}
-
-// Event handler
-public class UserCreatedEventHandler : IIntegrationEventHandler<UserCreatedEvent>
-{
-    public async Task HandleAsync(UserCreatedEvent @event)
-    {
-        // Email gönderme, bildirim gönderme vb.
-        await SendWelcomeEmailAsync(@event.Email);
-    }
-}
-
-// Event publishing
-await _eventPublisher.PublishAsync(new UserCreatedEvent 
-{ 
-    UserId = user.Id, 
-    Email = user.Email 
-});
-```
-
-### AOP Kullanımı
-
-```csharp
-public class UserService
-{
-    [LoggingAspect]
-    [CacheAspect]
-    public async Task<User> GetUserAsync(int id)
-    {
-        return await _userRepository.FindByIdAsync(id);
-    }
-}
-```
-
-### Excel Export
-
-```csharp
-[HttpGet("export")]
-public IActionResult ExportUsers()
-{
-    var users = _userService.GetAllUsers();
-    var excelData = ExcelOperations.ExportToExcel(users, "Kullanıcılar");
-    
-    return File(excelData, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "users.xlsx");
-}
-```
-
-## 🛠️ Geliştirme
-
-### Proje Yapısı
-
-```
-MyProject/
-├── src/
-│   ├── MyProject.Domain/           # Domain entities, interfaces
-│   ├── MyProject.Application/      # Use cases, DTOs, validators
-│   ├── MyProject.Infrastructure/   # Data access, external services
-│   └── MyProject.Api/             # Web API controllers
-├── tests/
-│   ├── MyProject.UnitTests/
-│   └── MyProject.IntegrationTests/
-└── MyProject.sln
-```
-
-### Best Practices
-
-- **Dependency Injection**: Interface-based programming
-- **Error Handling**: Custom exceptions ve global exception handling
-- **Validation**: FluentValidation ile input validation
-- **Logging**: Structured logging ile detaylı loglama
-- **Caching**: Stratejik cache kullanımı
-- **Security**: JWT authentication ve IP filtering
-
-## 📦 NuGet Paketleri
-
-| Paket | Açıklama | Versiyon |
-|-------|----------|----------|
-| `Maggsoft.Core` | Temel sınıflar ve extension'lar | 2.1.3 |
-| `Maggsoft.Data` | Base entity'ler ve data katmanı | 1.0.0 |
-| `Maggsoft.Mssql` | MSSQL desteği | 1.0.0 |
-| `Maggsoft.Npgsql` | PostgreSQL desteği | 1.0.0 |
-| `Maggsoft.Sqlite` | SQLite desteği | 1.0.0 |
-| `Maggsoft.Mongo` | MongoDB desteği | 1.0.0 |
-| `Maggsoft.Cache.MemoryCache` | Memory cache | 1.0.0 |
-| `Maggsoft.Cache.Redis` | Redis cache | 1.0.0 |
-| `Maggsoft.EventBus` | Event bus core | 1.0.0 |
-| `Maggsoft.EventBus.RabbitMQ` | RabbitMQ transport | 1.0.0 |
-| `Maggsoft.Aspect.Core` | AOP desteği | 1.0.0 |
-| `Maggsoft.Framework` | Web framework | 2.3.9 |
-
-## 🤝 Katkıda Bulunma
-
-1. Bu repository'yi fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add amazing feature'`)
-4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
-5. Pull Request oluşturun
-
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 🙏 Teşekkürler
-
-- **FileManager** ve **DrivingLicenseExamSystem** projelerinden esinlenilmiştir
-- ASP.NET Core ekibine teşekkürler
-- Topluluk katkılarına teşekkürler
-
-## 📞 İletişim
-
-- **GitHub**: [maggsoft](https://github.com/maggsoft)
-- **Issues**: [GitHub Issues](https://github.com/maggsoft/maggsoft/issues)
+### Framework'ün Ana Amaçları
+
+1. **Hızlı Geliştirme**: Hazır bileşenler ve extension'lar ile hızlı proje geliştirme
+2. **Modüler Yapı**: Bağımsız ve yeniden kullanılabilir modüller
+3. **Çoklu Veritabanı Desteği**: MSSQL, PostgreSQL, SQLite, MongoDB desteği
+4. **Event-Driven Architecture**: Mikroservis mimarisi için event bus desteği
+5. **Caching**: Memory ve Redis cache desteği
+6. **AOP (Aspect-Oriented Programming)**: Cross-cutting concerns için aspect desteği
+7. **Clean Architecture**: Katmanlı mimari ve dependency injection
 
 ---
 
-## 📚 Detaylı Teknik Dokümantasyon
+## 1. Core Katmanı (Maggsoft.Core)
 
-### 1. Core Katmanı (Maggsoft.Core)
+### 1.1 Base Sınıfları
 
-#### 1.1 Base Sınıfları
-
-##### Result<T> ve Result Sınıfları
+#### Result<T> ve Result Sınıfları
 
 API yanıtlarını standartlaştırmak için kullanılan generic result sınıfları.
 
@@ -428,13 +36,13 @@ public async Task<Result<User>> GetUserByIdAsync(int id)
 {
     var user = await _userRepository.FindByIdAsync(id);
     if (user == null)
-        return Result<User>.Failure(new Error("USER_NOT_FOUND", "Kullanıcı bulunamadı"));
+        return Result<User>.Failure(new Error("400", "Kullanıcı bulunamadı"));
     
-    return Result<User>.Success(user, new SuccessMessage("USER_FOUND", "Kullanıcı başarıyla getirildi"));
+    return Result<User>.Success(user, new SuccessMessage("200", "Kullanıcı başarıyla getirildi"));
 }
 ```
 
-##### Error ve SuccessMessage
+#### Error ve SuccessMessage
 
 Hata ve başarı mesajlarını standartlaştırmak için kullanılan record'lar.
 
@@ -450,9 +58,9 @@ public sealed record SuccessMessage(string Code, string Description)
 }
 ```
 
-#### 1.2 Repository Pattern
+### 1.2 Repository Pattern
 
-##### IRepository<T> Interface
+#### IRepository<T> Interface
 
 Generic repository pattern implementasyonu.
 
@@ -464,14 +72,10 @@ public interface IRepository<T> where T : IEntity
     Task<IEnumerable<T>> GetAsync();
     T Find(Expression<Func<T, bool>> where);
     Task<T> FindAsync(Expression<Func<T, bool>> where);
-    T FindById(object id);
-    Task<T> FindByIdAsync(object id);
     
     // WRITE Operations
     T Add(T entity);
     Task<T> AddAsync(T entity);
-    void AddRange(IEnumerable<T> entities);
-    Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
     T Update(T entity);
     Task<T> UpdateAsync(T entity);
     T Delete(T entity);
@@ -479,21 +83,17 @@ public interface IRepository<T> where T : IEntity
     
     // Utility Operations
     int Count();
-    int Count(Expression<Func<T, bool>> @where);
-    Task<int> CountAsync();
-    Task<int> CountAsync(Expression<Func<T, bool>> @where);
     bool Any();
-    bool Any(Expression<Func<T, bool>> @where);
+    Task<int> CountAsync();
     Task<bool> AnyAsync();
-    Task<bool> AnyAsync(Expression<Func<T, bool>> @where);
 }
 ```
 
-#### 1.3 Extension Methods
+### 1.3 Extension Methods
 
 Framework'te birçok extension method bulunmaktadır:
 
-##### StringExtensions
+#### StringExtensions
 ```csharp
 // String işlemleri için extension'lar
 var slug = "Merhaba Dünya".ToSlug(); // merhaba-dunya
@@ -501,7 +101,7 @@ var isEmail = "test@example.com".IsEmail(); // true
 var isPhone = "+905551234567".IsPhone(); // true
 ```
 
-##### DateTimeExtensions
+#### DateTimeExtensions
 ```csharp
 // Tarih işlemleri için extension'lar
 var startOfWeek = DateTime.Now.StartOfWeek();
@@ -509,27 +109,18 @@ var endOfMonth = DateTime.Now.EndOfMonth();
 var isWeekend = DateTime.Now.IsWeekend();
 ```
 
-##### EnumerableExtensions
+#### EnumerableExtensions
 ```csharp
 // Koleksiyon işlemleri için extension'lar
 var distinctBy = users.DistinctBy(x => x.Email);
 var chunked = users.Chunk(10);
 ```
 
-##### GlobalExtensions
-```csharp
-// Genel extension method'lar
-var isDefault = value.IsDefault<T>();
-var alphaLengthWise = data.AlphaLengthWise();
-var isNotNull = obj.IsNotNull();
-var hasFilter = filters.HasFilter();
-var isGreaterThanZero = count.IsGreaterThanZero();
-var cloned = list.Clone<T>();
-```
+---
 
-### 2. Data Katmanı
+## 2. Data Katmanı
 
-#### 2.1 Base Entity
+### 2.1 Base Entity
 
 Tüm entity'ler için temel sınıf.
 
@@ -556,9 +147,9 @@ public interface IBaseEntity<TKey> : IBaseEntity
 }
 ```
 
-#### 2.2 Veritabanı Desteği
+### 2.2 Veritabanı Desteği
 
-##### MSSQL Desteği (Maggsoft.Mssql)
+#### MSSQL Desteği (Maggsoft.Mssql)
 ```csharp
 // Startup.cs'de konfigürasyon
 services.AddMssqlConfig<AppContext>(Configuration)
@@ -569,7 +160,7 @@ services.AddScoped<IMssqlRepository<User>, Repository<User>>();
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 ```
 
-##### PostgreSQL Desteği (Maggsoft.Npgsql)
+#### PostgreSQL Desteği (Maggsoft.Npgsql)
 ```csharp
 // Startup.cs'de konfigürasyon
 services.AddNpgsqlConfig<AppContext>(Configuration);
@@ -578,7 +169,7 @@ services.AddNpgsqlConfig<AppContext>(Configuration);
 services.AddScoped<INpgsqlRepository<User>, NpgsqlRepository<User>>();
 ```
 
-##### SQLite Desteği (Maggsoft.Sqlite)
+#### SQLite Desteği (Maggsoft.Sqlite)
 ```csharp
 // Startup.cs'de konfigürasyon
 services.AddSqliteConfig<AppContext>(Configuration);
@@ -587,7 +178,7 @@ services.AddSqliteConfig<AppContext>(Configuration);
 services.AddScoped<ISqliteRepository<User>, SqliteRepository<User>>();
 ```
 
-##### MongoDB Desteği (Maggsoft.Mongo)
+#### MongoDB Desteği (Maggsoft.Mongo)
 ```csharp
 // Startup.cs'de konfigürasyon
 services.AddMongoConfig(Configuration);
@@ -596,9 +187,11 @@ services.AddMongoConfig(Configuration);
 services.AddScoped<IMongoRepository<User>, MongoRepository<User>>();
 ```
 
-### 3. Cache Katmanı
+---
 
-#### 3.1 Memory Cache (Maggsoft.Cache.MemoryCache)
+## 3. Cache Katmanı
+
+### 3.1 Memory Cache (Maggsoft.Cache.MemoryCache)
 
 ```csharp
 // Startup.cs'de konfigürasyon
@@ -636,20 +229,10 @@ public class UserService
         var cacheKey = $"user_{id}";
         await _cache.RemoveAsync(cacheKey);
     }
-    
-    public async Task RemoveByPatternAsync(string pattern)
-    {
-        await _cache.RemoveByPatternAsync(pattern);
-    }
-    
-    public async Task ClearAsync()
-    {
-        await _cache.ClearAsync();
-    }
 }
 ```
 
-#### 3.2 Redis Cache (Maggsoft.Cache.Redis)
+### 3.2 Redis Cache (Maggsoft.Cache.Redis)
 
 ```csharp
 // Startup.cs'de konfigürasyon
@@ -658,9 +241,11 @@ services.AddMaggsoftDistributedRedisCache(Configuration);
 // Kullanım Memory Cache ile aynıdır
 ```
 
-### 4. Event Bus Sistemi
+---
 
-#### 4.1 Event Tanımlama
+## 4. Event Bus Sistemi
+
+### 4.1 Event Tanımlama
 
 ```csharp
 // Integration Event
@@ -691,7 +276,7 @@ public class UserCreatedEventHandler : IIntegrationEventHandler<UserCreatedEvent
 }
 ```
 
-#### 4.2 Event Publishing
+### 4.2 Event Publishing
 
 ```csharp
 public class UserService
@@ -723,7 +308,7 @@ public class UserService
 }
 ```
 
-#### 4.3 Event Bus Konfigürasyonu
+### 4.3 Event Bus Konfigürasyonu
 
 ```csharp
 // Startup.cs'de
@@ -733,9 +318,11 @@ services.AddEventBus(Configuration);
 services.RegisterEventConsumer();
 ```
 
-### 5. Aspect-Oriented Programming (AOP)
+---
 
-#### 5.1 Aspect Tanımlama
+## 5. Aspect-Oriented Programming (AOP)
+
+### 5.1 Aspect Tanımlama
 
 ```csharp
 [AttributeUsage(AttributeTargets.Method)]
@@ -779,7 +366,7 @@ public class LoggingAspect : IAspect
 }
 ```
 
-#### 5.2 Aspect Kullanımı
+### 5.2 Aspect Kullanımı
 
 ```csharp
 public class UserService
@@ -799,9 +386,11 @@ public class UserService
 }
 ```
 
-### 6. Framework Katmanı (Maggsoft.Framework)
+---
 
-#### 6.1 Infrastructure Konfigürasyonu
+## 6. Framework Katmanı (Maggsoft.Framework)
+
+### 6.1 Infrastructure Konfigürasyonu
 
 Framework'te tüm konfigürasyonları tek seferde yapmak için `AddInfrastructure` extension method'u bulunmaktadır:
 
@@ -825,9 +414,9 @@ services.AddInfrastructure(configuration);
 app.AddInfrastructure();
 ```
 
-#### 6.2 Middleware'ler
+### 6.2 Middleware'ler
 
-##### Exception Middleware
+#### Exception Middleware
 
 Global exception handling için kullanılır.
 
@@ -839,7 +428,7 @@ app.UseExceptionHandler("/Error");
 builder.Services.AddExceptionHandler<ExceptionMiddleware>();
 ```
 
-##### API Response Middleware
+#### API Response Middleware
 
 API yanıtlarını standartlaştırmak için kullanılır.
 
@@ -848,7 +437,7 @@ API yanıtlarını standartlaştırmak için kullanılır.
 app.UseMiddleware<ApiResponseMiddleware>();
 ```
 
-##### IP Filter Middleware
+#### IP Filter Middleware
 
 IP bazlı erişim kontrolü için kullanılır.
 
@@ -857,9 +446,9 @@ IP bazlı erişim kontrolü için kullanılır.
 app.UseMiddleware<IPFilterMiddleware>();
 ```
 
-#### 6.3 Security
+### 6.2 Security
 
-##### JWT Authentication
+#### JWT Authentication
 
 ```csharp
 // Startup.cs'de konfigürasyon
@@ -878,7 +467,7 @@ public class UserController : ControllerBase
 }
 ```
 
-#### 6.4 CORS Konfigürasyonu
+### 6.3 CORS Konfigürasyonu
 
 ```csharp
 // Startup.cs'de CORS konfigürasyonu
@@ -900,7 +489,7 @@ app.UseCorsConfig();
 // - AllowCredentials()
 ```
 
-#### 6.5 API Versioning
+### 6.4 API Versioning
 
 ```csharp
 // Startup.cs'de API Versioning konfigürasyonu
@@ -916,7 +505,7 @@ services.AddApiVersioningConfig(configuration);
 }
 ```
 
-#### 6.6 Swagger Konfigürasyonu
+### 6.5 Swagger Konfigürasyonu
 
 ```csharp
 // Startup.cs'de
@@ -936,7 +525,7 @@ services.AddSwaggerGen(c =>
 });
 ```
 
-#### 6.7 FluentValidation Auto Validation
+### 6.6 FluentValidation Auto Validation
 
 ```csharp
 // Startup.cs'de FluentValidation konfigürasyonu
@@ -958,7 +547,7 @@ public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
 }
 ```
 
-#### 6.8 Problem Details
+### 6.7 Problem Details
 
 ```csharp
 // Startup.cs'de Problem Details konfigürasyonu
@@ -976,7 +565,7 @@ services.AddProblemDetails();
 }
 ```
 
-#### 6.9 Global Response Middleware
+### 6.8 Global Response Middleware
 
 ```csharp
 // Startup.cs'de Global Response Middleware konfigürasyonu
@@ -992,7 +581,7 @@ public class IgnoreResponseOption
 }
 ```
 
-#### 6.10 Exception Handler
+### 6.9 Exception Handler
 
 ```csharp
 // Program.cs'de Exception Handler konfigürasyonu
@@ -1002,7 +591,7 @@ builder.Services.AddExceptionHandler<ExceptionMiddleware>();
 // Tüm yakalanmamış exception'ları yakalar ve standart formatta yanıt döner
 ```
 
-#### 6.11 JSON Konfigürasyonu
+### 6.10 JSON Konfigürasyonu
 
 ```csharp
 // Startup.cs'de JSON konfigürasyonu
@@ -1032,7 +621,7 @@ public class DecimalToStringConverter : JsonConverter<decimal>
 }
 ```
 
-#### 6.12 Response Compression
+### 6.11 Response Compression
 
 ```csharp
 // Startup.cs'de Response Compression konfigürasyonu
@@ -1055,7 +644,7 @@ services.Configure<GzipCompressionProviderOptions>(options =>
 });
 ```
 
-#### 6.13 Model State Response Factory
+### 6.12 Model State Response Factory
 
 ```csharp
 // Startup.cs'de Model State Response Factory konfigürasyonu
@@ -1075,7 +664,7 @@ public class ModelStateFeatureFilter : IActionResult
 }
 ```
 
-#### 6.14 IP Filter Middleware
+### 6.13 IP Filter Middleware
 
 ```csharp
 // Startup.cs'de IP Filter konfigürasyonu
@@ -1110,7 +699,7 @@ public class IPFilterOptions
 }
 ```
 
-#### 6.15 Request Pipeline Konfigürasyonu
+### 6.14 Request Pipeline Konfigürasyonu
 
 ```csharp
 // Startup.cs'de Request Pipeline konfigürasyonu
@@ -1120,7 +709,7 @@ app.ConfigureRequestPipeline();
 // Özelleştirilmiş middleware'ler ve pipeline ayarları için kullanılır
 ```
 
-#### 6.16 HTTP Request Extensions
+### 6.15 HTTP Request Extensions
 
 ```csharp
 // HTTP Request için extension method'lar
@@ -1140,7 +729,7 @@ public static class HttpRequestExtensions
 }
 ```
 
-#### 6.17 API Token Options
+### 6.16 API Token Options
 
 ```csharp
 // appsettings.json'da API Token ayarları:
@@ -1181,7 +770,7 @@ public class ApiTokenOptions
 }
 ```
 
-#### 6.18 Excel Operations
+### 6.17 Excel Operations
 
 ```csharp
 // Excel export işlemleri için helper sınıfı
@@ -1212,7 +801,7 @@ public IActionResult ExportUsers()
 }
 ```
 
-#### 6.19 API Versioning Error Response Provider
+### 6.18 API Versioning Error Response Provider
 
 ```csharp
 // API versioning hatalarını özelleştirmek için
@@ -1227,7 +816,7 @@ public class ApiVersioningErrorResponseProvider : DefaultErrorResponseProvider
 // Bu provider, API versioning hatalarını standart exception formatında döner
 ```
 
-#### 6.20 Shell Helpers
+### 6.19 Shell Helpers
 
 ```csharp
 // Linux/Unix shell komutlarını çalıştırmak için
@@ -1262,7 +851,7 @@ public static class ShellHelpers
 var result = "ls -la".Bash();
 ```
 
-#### 6.21 Status Code Pages
+### 6.20 Status Code Pages
 
 ```csharp
 // Startup.cs'de Status Code Pages konfigürasyonu
@@ -1281,7 +870,7 @@ app.UseStatusCodePages(new StatusCodePagesOptions()
 // Bu konfigürasyon, 404 gibi HTTP hata kodlarını yakalar ve standart exception formatında döner
 ```
 
-#### 6.22 Local Request Filtering
+### 6.21 Local Request Filtering
 
 ```csharp
 // Production ortamında local request'leri engelleme
@@ -1306,9 +895,11 @@ else
 // Bu middleware, production ortamında local request'leri güvenlik için engeller
 ```
 
-### 7. Services Katmanı
+---
 
-#### 7.1 Service Registration
+## 7. Services Katmanı
+
+### 7.1 Service Registration
 
 ```csharp
 // Startup.cs'de
@@ -1345,101 +936,26 @@ public class UserService : IUserService
 }
 ```
 
-### 8. Best Practices
+---
 
-#### 8.1 Dependency Injection
+## 8. Örnek Proje Yapısı
 
-```csharp
-// Interface-based programming
-public interface IUserService
-{
-    Task<User> GetUserAsync(int id);
-}
+### 8.1 Clean Architecture ile Proje Yapısı
 
-public class UserService : IUserService
-{
-    // Implementation
-}
-
-// Service registration
-services.AddScoped<IUserService, UserService>();
+```
+MyProject/
+├── src/
+│   ├── MyProject.Domain/           # Domain entities, interfaces
+│   ├── MyProject.Application/      # Use cases, DTOs, validators
+│   ├── MyProject.Infrastructure/   # Data access, external services
+│   └── MyProject.Api/             # Web API controllers
+├── tests/
+│   ├── MyProject.UnitTests/
+│   └── MyProject.IntegrationTests/
+└── MyProject.sln
 ```
 
-#### 8.2 Error Handling
-
-```csharp
-// Custom exceptions
-public class UserNotFoundException : NotFoundException
-{
-    public UserNotFoundException(int userId) 
-        : base($"Kullanıcı bulunamadı: {userId}")
-    {
-    }
-}
-
-// Exception handling in service
-public async Task<User> GetUserAsync(int id)
-{
-    var user = await _userRepository.FindByIdAsync(id);
-    if (user == null)
-        throw new UserNotFoundException(id);
-    
-    return user;
-}
-```
-
-#### 8.3 Validation
-
-```csharp
-// FluentValidation kullanımı
-public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
-{
-    public CreateUserDtoValidator()
-    {
-        RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("İsim boş olamaz")
-            .MaximumLength(100).WithMessage("İsim 100 karakterden uzun olamaz");
-        
-        RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email boş olamaz")
-            .EmailAddress().WithMessage("Geçerli bir email adresi giriniz");
-    }
-}
-```
-
-#### 8.4 Logging
-
-```csharp
-// Structured logging
-public class UserService
-{
-    private readonly ILogger<UserService> _logger;
-    
-    public UserService(ILogger<UserService> logger)
-    {
-        _logger = logger;
-    }
-    
-    public async Task<User> CreateUserAsync(User user)
-    {
-        _logger.LogInformation("Kullanıcı oluşturuluyor: {Email}", user.Email);
-        
-        try
-        {
-            var createdUser = await _userRepository.AddAsync(user);
-            _logger.LogInformation("Kullanıcı başarıyla oluşturuldu: {UserId}", createdUser.Id);
-            return createdUser;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Kullanıcı oluşturulurken hata oluştu: {Email}", user.Email);
-            throw;
-        }
-    }
-}
-```
-
-### 9. Tam Startup.cs Örneği
+### 8.2 Startup.cs Örneği
 
 ```csharp
 public class Startup
@@ -1503,7 +1019,7 @@ public class Startup
 }
 ```
 
-### 10. Tam Controller Örneği
+### 8.3 Controller Örneği
 
 ```csharp
 [ApiController]
@@ -1553,7 +1069,7 @@ public class UserController : ControllerBase
     {
         var user = await _userService.GetUserAsync(id);
         if (user == null)
-            return NotFound(Result<User>.Failure(new Error("200", "Kullanıcı bulunamadı")));
+            return NotFound(Result<User>.Failure(new Error("400", "Kullanıcı bulunamadı")));
         
         user.Name = dto.Name;
         user.Email = dto.Email;
@@ -1566,11 +1082,168 @@ public class UserController : ControllerBase
     public async Task<IActionResult> DeleteUser(int id)
     {
         await _userService.DeleteUserAsync(id);
-        return Ok(Result.Success(new SuccessMessage("200", "Kullanıcı başarıyla silindi")));
+        return Ok(Result.Success(new SuccessMessage("USER_DELETED", "Kullanıcı başarıyla silindi")));
     }
 }
 ```
 
 ---
 
-**Maggsoft Framework** ile modern ASP.NET Core uygulamaları geliştirin! 🚀
+## 9. Best Practices
+
+### 9.1 Dependency Injection
+
+```csharp
+// Interface-based programming
+public interface IUserService
+{
+    Task<User> GetUserAsync(int id);
+}
+
+public class UserService : IUserService
+{
+    // Implementation
+}
+
+// Service registration
+services.AddScoped<IUserService, UserService>();
+```
+
+### 9.2 Error Handling
+
+```csharp
+// Custom exceptions
+public class UserNotFoundException : NotFoundException
+{
+    public UserNotFoundException(int userId) 
+        : base($"Kullanıcı bulunamadı: {userId}")
+    {
+    }
+}
+
+// Exception handling in service
+public async Task<User> GetUserAsync(int id)
+{
+    var user = await _userRepository.FindByIdAsync(id);
+    if (user == null)
+        throw new UserNotFoundException(id);
+    
+    return user;
+}
+```
+
+### 9.3 Validation
+
+```csharp
+// FluentValidation kullanımı
+public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
+{
+    public CreateUserDtoValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty().WithMessage("İsim boş olamaz")
+            .MaximumLength(100).WithMessage("İsim 100 karakterden uzun olamaz");
+        
+        RuleFor(x => x.Email)
+            .NotEmpty().WithMessage("Email boş olamaz")
+            .EmailAddress().WithMessage("Geçerli bir email adresi giriniz");
+    }
+}
+```
+
+### 9.4 Logging
+
+```csharp
+// Structured logging
+public class UserService
+{
+    private readonly ILogger<UserService> _logger;
+    
+    public UserService(ILogger<UserService> logger)
+    {
+        _logger = logger;
+    }
+    
+    public async Task<User> CreateUserAsync(User user)
+    {
+        _logger.LogInformation("Kullanıcı oluşturuluyor: {Email}", user.Email);
+        
+        try
+        {
+            var createdUser = await _userRepository.AddAsync(user);
+            _logger.LogInformation("Kullanıcı başarıyla oluşturuldu: {UserId}", createdUser.Id);
+            return createdUser;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Kullanıcı oluşturulurken hata oluştu: {Email}", user.Email);
+            throw;
+        }
+    }
+}
+```
+
+---
+
+## 10. Konfigürasyon
+
+### 10.1 appsettings.json
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=MyProject;Trusted_Connection=true;MultipleActiveResultSets=true"
+  },
+  "JwtSettings": {
+    "SecretKey": "your-secret-key-here",
+    "Issuer": "your-issuer",
+    "Audience": "your-audience",
+    "ExpirationInMinutes": 60
+  },
+  "CacheSettings": {
+    "DefaultExpirationMinutes": 30,
+    "SlidingExpiration": true
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "ApiVersion": {
+    "MajorVersion": "1",
+    "MinorVersion": "0"
+  },
+  "TokenOptions": {
+    "AccessTokenExpiration": 60,
+    "ApiName": "Maggsoft API",
+    "ApiVersion": "v1",
+    "ApiBaseUrl": "https://localhost:5001",
+    "IdentityServerBaseUrl": "https://identity.example.com",
+    "OidcSwaggerUIClientId": "maggsoft_api_swaggerui",
+    "OidcApiName": "maggsoft_api",
+    "AdministrationRole": "Administrator",
+    "RequireHttpsMetadata": true,
+    "CorsAllowAnyOrigin": true,
+    "CorsAllowOrigins": [],
+    "IgnoreUrls": [],
+    "SecurityKey": "your-secret-key-here"
+  }
+}
+```
+
+---
+
+## Sonuç
+
+Maggsoft Framework, modern ASP.NET Core uygulamaları geliştirmek için kapsamlı bir çözüm sunmaktadır. Clean Architecture prensiplerini takip eden, modüler yapıda ve çoklu veritabanı desteği olan bu framework ile:
+
+- Hızlı proje geliştirme
+- Standart kod yapısı
+- Kolay bakım ve genişletme
+- Yüksek performans
+- Güvenlik odaklı geliştirme
+
+mümkün olmaktadır. Framework'ün sunduğu hazır bileşenler ve extension'lar sayesinde geliştiriciler temel altyapı ile uğraşmak yerine iş mantığına odaklanabilirler. 
