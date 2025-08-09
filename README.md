@@ -23,24 +23,36 @@ Maggsoft Framework, ASP.NET Core 8 tabanlı modern web uygulamaları geliştirme
 ## 🏗️ Mimari Yapı
 
 ```
-Maggsoft Framework/
-├── Libraries/                    # Core kütüphaneler
-│   ├── Maggsoft.Core/           # Temel sınıflar ve extension'lar
-│   ├── Data/                    # Veritabanı katmanı
-│   │   ├── Maggsoft.Data/       # Base entity'ler
-│   │   ├── Maggsoft.Mssql/      # MSSQL desteği
-│   │   ├── Maggsoft.Npgsql/     # PostgreSQL desteği
-│   │   ├── Maggsoft.Sqlite/     # SQLite desteği
-│   │   └── Maggsoft.Mongo/      # MongoDB desteği
-│   ├── Cache/                   # Cache katmanı
-│   │   ├── Maggsoft.Cache.MemoryCache/
-│   │   └── Maggsoft.Cache.Redis/
-│   ├── EventBus/                # Event bus sistemi
-│   ├── Aspect/                  # AOP desteği
-│   └── Services/                # Servis katmanı
-├── Presentation/                # Sunum katmanı
-│   └── Maggsoft.Framework/      # Web framework bileşenleri
-└── Example/                     # Örnek projeler
+maggsoft-framework-project (13 projects)
+├── Libraries/                           # Core kütüphaneler (9 projects)
+│   ├── Data/                           # Veritabanı katmanı (1 project)
+│   │   └── Maggsoft.Data.Mssql/        # MSSQL desteği
+│   ├── Dto/                            # DTO katmanı (1 project)
+│   │   └── Maggsoft.Dto.Mssql/         # MSSQL DTO'ları
+│   ├── Endpoints/                      # Endpoint katmanı (2 projects)
+│   │   ├── Maggsoft.Endpoints.Api/     # API Endpoints
+│   │   └── Maggsoft.Endpoints.BackgroundServicesApi/ # Background Services API
+│   ├── SmsProvider/                    # SMS Provider (1 project)
+│   │   └── Maggsoft.SmsProviders/      # SMS servis sağlayıcıları
+│   ├── Maggsoft.BackgroundServices/    # Background Services
+│   ├── Maggsoft.IdentityManager/       # Identity Management
+│   ├── Maggsoft.Mssql/                 # MSSQL Repository
+│   └── Maggsoft.Mssql.Services/        # MSSQL Services
+├── Presentation/                       # Sunum katmanı (4 projects)
+│   ├── Api/                           # API projeleri (2 projects)
+│   │   ├── Maggsoft.Api/              # Ana API projesi
+│   │   └── Maggsoft.BackgroundServices.API/ # Background Services API
+│   └── Web/                           # Web projeleri (2 projects)
+│       ├── Maggsoft.Web/              # Ana Web projesi
+│       └── Maggsoft.Web.Framework/    # Web Framework
+└── Solution Items/                     # Konfigürasyon dosyaları
+    ├── api-deploy.yml                 # API deployment
+    ├── api-deploy-stage.yml           # API staging deployment
+    ├── Directory.Packages.props       # NuGet paket yönetimi
+    ├── job-deploy.yml                 # Background job deployment
+    ├── nuget.config                   # NuGet konfigürasyonu
+    ├── web-deploy.yml                 # Web deployment
+    └── web-deploy-stage.yml           # Web staging deployment
 ```
 
 ## 🚀 Hızlı Başlangıç
@@ -60,20 +72,25 @@ cd MyMaggsoftProject
 ```xml
 <!-- Core paketler -->
 <PackageReference Include="Maggsoft.Core" Version="2.1.3" />
-<PackageReference Include="Maggsoft.Data" Version="1.0.0" />
-<PackageReference Include="Maggsoft.Mssql" Version="1.0.0" />
+<PackageReference Include="Maggsoft.Data" Version="2.1.7" />
+<PackageReference Include="Maggsoft.Mssql" Version="2.1.0" />
 <PackageReference Include="Maggsoft.Framework" Version="2.3.9" />
 
 <!-- Cache paketleri -->
-<PackageReference Include="Maggsoft.Cache.MemoryCache" Version="1.0.0" />
-<PackageReference Include="Maggsoft.Cache.Redis" Version="1.0.0" />
+<PackageReference Include="Maggsoft.Cache.MemoryCache" Version="2.0.7" />
+<PackageReference Include="Maggsoft.Cache.Redis" Version="2.0.3" />
 
 <!-- Event Bus paketleri -->
-<PackageReference Include="Maggsoft.EventBus" Version="1.0.0" />
-<PackageReference Include="Maggsoft.EventBus.RabbitMQ" Version="1.0.0" />
+<PackageReference Include="Maggsoft.EventBus" Version="1.1.0" />
+<PackageReference Include="Maggsoft.EventBus.RabbitMQ" Version="1.0.17" />
 
 <!-- AOP paketi -->
-<PackageReference Include="Maggsoft.Aspect.Core" Version="1.0.0" />
+<PackageReference Include="Maggsoft.Aspect.Core" Version="1.0.15" />
+
+<!-- Servis paketleri -->
+<PackageReference Include="Maggsoft.Services" Version="2.0.8" />
+<PackageReference Include="Maggsoft.Endpoints" Version="2.0.7" />
+<PackageReference Include="Maggsoft.Logging" Version="1.0.6" />
 ```
 
 ### 3. Program.cs Konfigürasyonu
@@ -343,16 +360,36 @@ public IActionResult ExportUsers()
 ### Proje Yapısı
 
 ```
-MyProject/
-├── src/
-│   ├── MyProject.Domain/           # Domain entities, interfaces
-│   ├── MyProject.Application/      # Use cases, DTOs, validators
-│   ├── MyProject.Infrastructure/   # Data access, external services
-│   └── MyProject.Api/             # Web API controllers
-├── tests/
-│   ├── MyProject.UnitTests/
-│   └── MyProject.IntegrationTests/
-└── MyProject.sln
+maggsoft-framework-project/
+├── Libraries/                           # Core kütüphaneler
+│   ├── Data/                           # Veritabanı katmanı
+│   │   └── Maggsoft.Data.Mssql/        # MSSQL desteği
+│   ├── Dto/                            # DTO katmanı
+│   │   └── Maggsoft.Dto.Mssql/         # MSSQL DTO'ları
+│   ├── Endpoints/                      # Endpoint katmanı
+│   │   ├── Maggsoft.Endpoints.Api/     # API Endpoints
+│   │   └── Maggsoft.Endpoints.BackgroundServicesApi/ # Background Services API
+│   ├── SmsProvider/                    # SMS Provider
+│   │   └── Maggsoft.SmsProviders/      # SMS servis sağlayıcıları
+│   ├── Maggsoft.BackgroundServices/    # Background Services
+│   ├── Maggsoft.IdentityManager/       # Identity Management
+│   ├── Maggsoft.Mssql/                 # MSSQL Repository
+│   └── Maggsoft.Mssql.Services/        # MSSQL Services
+├── Presentation/                       # Sunum katmanı
+│   ├── Api/                           # API projeleri
+│   │   ├── Maggsoft.Api/              # Ana API projesi
+│   │   └── Maggsoft.BackgroundServices.API/ # Background Services API
+│   └── Web/                           # Web projeleri
+│       ├── Maggsoft.Web/              # Ana Web projesi
+│       └── Maggsoft.Web.Framework/    # Web Framework
+└── Solution Items/                     # Konfigürasyon dosyaları
+    ├── api-deploy.yml                 # API deployment
+    ├── api-deploy-stage.yml           # API staging deployment
+    ├── Directory.Packages.props       # NuGet paket yönetimi
+    ├── job-deploy.yml                 # Background job deployment
+    ├── nuget.config                   # NuGet konfigürasyonu
+    ├── web-deploy.yml                 # Web deployment
+    └── web-deploy-stage.yml           # Web staging deployment
 ```
 
 ### Best Practices
@@ -369,17 +406,20 @@ MyProject/
 | Paket | Açıklama | Versiyon |
 |-------|----------|----------|
 | `Maggsoft.Core` | Temel sınıflar ve extension'lar | 2.1.3 |
-| `Maggsoft.Data` | Base entity'ler ve data katmanı | 1.0.0 |
-| `Maggsoft.Mssql` | MSSQL desteği | 1.0.0 |
-| `Maggsoft.Npgsql` | PostgreSQL desteği | 1.0.0 |
-| `Maggsoft.Sqlite` | SQLite desteği | 1.0.0 |
-| `Maggsoft.Mongo` | MongoDB desteği | 1.0.0 |
-| `Maggsoft.Cache.MemoryCache` | Memory cache | 1.0.0 |
-| `Maggsoft.Cache.Redis` | Redis cache | 1.0.0 |
-| `Maggsoft.EventBus` | Event bus core | 1.0.0 |
-| `Maggsoft.EventBus.RabbitMQ` | RabbitMQ transport | 1.0.0 |
-| `Maggsoft.Aspect.Core` | AOP desteği | 1.0.0 |
+| `Maggsoft.Data` | Base entity'ler ve data katmanı | 2.1.7 |
+| `Maggsoft.Mssql` | MSSQL desteği | 2.1.0 |
+| `Maggsoft.Npgsql` | PostgreSQL desteği | 1.0.6 |
+| `Maggsoft.Sqlite` | SQLite desteği | 2.0.9 |
+| `Maggsoft.Mongo` | MongoDB desteği | 1.0.5 |
+| `Maggsoft.Cache.MemoryCache` | Memory cache | 2.0.7 |
+| `Maggsoft.Cache.Redis` | Redis cache | 2.0.3 |
+| `Maggsoft.EventBus` | Event bus core | 1.1.0 |
+| `Maggsoft.EventBus.RabbitMQ` | RabbitMQ transport | 1.0.17 |
+| `Maggsoft.Aspect.Core` | AOP desteği | 1.0.15 |
 | `Maggsoft.Framework` | Web framework | 2.3.9 |
+| `Maggsoft.Services` | Servis katmanı | 2.0.8 |
+| `Maggsoft.Endpoints` | Endpoint katmanı | 2.0.7 |
+| `Maggsoft.Logging` | Logging sistemi | 1.0.6 |
 
 ## 🤝 Katkıda Bulunma
 

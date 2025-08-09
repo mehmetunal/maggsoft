@@ -940,19 +940,39 @@ public class UserService : IUserService
 
 ## 8. Örnek Proje Yapısı
 
-### 8.1 Clean Architecture ile Proje Yapısı
+### 8.1 Maggsoft Framework Proje Yapısı
 
 ```
-MyProject/
-├── src/
-│   ├── MyProject.Domain/           # Domain entities, interfaces
-│   ├── MyProject.Application/      # Use cases, DTOs, validators
-│   ├── MyProject.Infrastructure/   # Data access, external services
-│   └── MyProject.Api/             # Web API controllers
-├── tests/
-│   ├── MyProject.UnitTests/
-│   └── MyProject.IntegrationTests/
-└── MyProject.sln
+maggsoft-framework-project (13 projects)
+├── Libraries/                           # Core kütüphaneler (9 projects)
+│   ├── Data/                           # Veritabanı katmanı (1 project)
+│   │   └── Maggsoft.Data.Mssql/        # MSSQL desteği
+│   ├── Dto/                            # DTO katmanı (1 project)
+│   │   └── Maggsoft.Dto.Mssql/         # MSSQL DTO'ları
+│   ├── Endpoints/                      # Endpoint katmanı (2 projects)
+│   │   ├── Maggsoft.Endpoints.Api/     # API Endpoints
+│   │   └── Maggsoft.Endpoints.BackgroundServicesApi/ # Background Services API
+│   ├── SmsProvider/                    # SMS Provider (1 project)
+│   │   └── Maggsoft.SmsProviders/      # SMS servis sağlayıcıları
+│   ├── Maggsoft.BackgroundServices/    # Background Services
+│   ├── Maggsoft.IdentityManager/       # Identity Management
+│   ├── Maggsoft.Mssql/                 # MSSQL Repository
+│   └── Maggsoft.Mssql.Services/        # MSSQL Services
+├── Presentation/                       # Sunum katmanı (4 projects)
+│   ├── Api/                           # API projeleri (2 projects)
+│   │   ├── Maggsoft.Api/              # Ana API projesi
+│   │   └── Maggsoft.BackgroundServices.API/ # Background Services API
+│   └── Web/                           # Web projeleri (2 projects)
+│       ├── Maggsoft.Web/              # Ana Web projesi
+│       └── Maggsoft.Web.Framework/    # Web Framework
+└── Solution Items/                     # Konfigürasyon dosyaları
+    ├── api-deploy.yml                 # API deployment
+    ├── api-deploy-stage.yml           # API staging deployment
+    ├── Directory.Packages.props       # NuGet paket yönetimi
+    ├── job-deploy.yml                 # Background job deployment
+    ├── nuget.config                   # NuGet konfigürasyonu
+    ├── web-deploy.yml                 # Web deployment
+    └── web-deploy-stage.yml           # Web staging deployment
 ```
 
 ### 8.2 Startup.cs Örneği
