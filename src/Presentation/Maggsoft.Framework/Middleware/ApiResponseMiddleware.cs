@@ -1,9 +1,6 @@
 ﻿using Maggsoft.Core.Base;
-using Maggsoft.Core.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -247,6 +244,14 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
 
     private bool IsMaggsoftResultFormat(JsonElement root)
     {
+        // Array ise Maggsoft Result formatında değildir
+        if (root.ValueKind == JsonValueKind.Array)
+            return false;
+            
+        // Object değilse Maggsoft Result formatında değildir
+        if (root.ValueKind != JsonValueKind.Object)
+            return false;
+            
         // Maggsoft Result formatının özelliklerini kontrol et
         return root.TryGetProperty("timeStamp", out _) ||
                root.TryGetProperty("TimeStamp", out _) ||
