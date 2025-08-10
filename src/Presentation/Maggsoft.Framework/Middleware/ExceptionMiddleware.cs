@@ -26,6 +26,7 @@ public sealed class ExceptionMiddleware(
     {
         logger.LogError(
             exception,
+            "Hata oluştu: {Message}, İç Hata: {InnerMessage}, Stack Trace: {StackTrace}",
             exception.Message,
             exception.InnerException,
             exception.InnerException?.Message);
@@ -40,6 +41,18 @@ public sealed class ExceptionMiddleware(
         else if (response.ValidationMessages.Count == 0)
         {
             response.Message = GetErrorMessage(exception);
+
+            // Hata detaylarını ekle (geliştirme ortamında)
+            if (environment.IsDevelopment())
+            {
+                response.Data = new 
+                {
+                    ExceptionType = exception.GetType().FullName,
+                    ExceptionMessage = exception.Message,
+                    InnerExceptionMessage = exception.InnerException?.Message,
+                    StackTrace = exception.StackTrace
+                };
+            }
         }
 
         response.ApiVersion = GetApiVersion();

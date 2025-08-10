@@ -190,18 +190,19 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     private bool ShouldIgnoreResponse(HttpContext context, StringValues acceptHeaders)
     {
         // IgnoreResponseRewindMiddlewareAttribute kontrolü
-        if (context.GetEndpoint()?.Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0)
+        var endpoint = context.GetEndpoint();
+        if (endpoint != null && endpoint.Metadata.GetOrderedMetadata<IgnoreResponseRewindMiddlewareAttribute>().Count > 0)
             return true;
 
         // Image dosyaları kontrolü
-        if (!string.IsNullOrEmpty(acceptHeaders) && acceptHeaders.Any(h => h.Contains("image/")))
+        if (!string.IsNullOrEmpty(acceptHeaders) && acceptHeaders.Any(h => h != null && h.Contains("image/")))
             return true;
 
         // Custom ignore options kontrolü
         if (_options?.IgnoreAcceptHeader != null && !string.IsNullOrEmpty(acceptHeaders))
         {
             return _options.IgnoreAcceptHeader.Any(opt =>
-                acceptHeaders.Any(h => h.Contains(opt)));
+                opt != null && acceptHeaders.Any(h => h != null && h.Contains(opt)));
         }
 
         return false;
