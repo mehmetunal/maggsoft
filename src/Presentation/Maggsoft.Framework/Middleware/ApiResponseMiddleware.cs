@@ -21,6 +21,7 @@ public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
 public class IgnoreResponseOption
 {
     public string[] IgnoreAcceptHeader { get; set; } = ["image/"];
+    public bool UseCamelCase { get; set; } = false;
 }
 
 /*
@@ -144,7 +145,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     private readonly JsonSerializerOptions _jsonSettings = new()
     {
         PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = null,
+        PropertyNamingPolicy = options?.Value?.UseCamelCase == true ? JsonNamingPolicy.CamelCase : null,
         AllowTrailingCommas = true
     };
     private readonly IgnoreResponseOption? _options = options?.Value;
