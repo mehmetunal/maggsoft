@@ -3,6 +3,7 @@ using Maggsoft.Core.Model;
 using Maggsoft.Framework.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Maggsoft.Core.Infrastructure;
 
 namespace WebApplication1.Controllers
 {
@@ -19,6 +20,7 @@ namespace WebApplication1.Controllers
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
+            var asd = MaggsoftContext.Current.Resolve<ILogger<WeatherForecastController>>();
             _logger = logger;
         }
 

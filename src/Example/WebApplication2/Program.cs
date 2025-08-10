@@ -1,6 +1,8 @@
 
 using Maggsoft.Core.Base;
+using Maggsoft.Core.Infrastructure;
 using Maggsoft.Core.Model;
+using Maggsoft.Framework.Extensions;
 using Maggsoft.Framework.Middleware;
 using Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
@@ -47,7 +49,9 @@ app.MapGet("/text", () =>
 
 
 app.MapGet("/weatherforecast", () =>
-{
+    {
+        var a = MaggsoftContext.Current.Resolve<ILogger<bool>>();
+    
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
         (
@@ -84,6 +88,8 @@ app.MapGet("/weatherforecast1", () =>
     return forecast;
 }).WithName("GetWeatherForecast1")
 .WithOpenApi();
+
+app.ConfigureRequestPipeline();
 
 app.Run();
 

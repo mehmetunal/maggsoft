@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Maggsoft.Core.Infrastructure;
 
 namespace Maggsoft.ExampleTest.Controllers
 {
@@ -35,6 +36,9 @@ namespace Maggsoft.ExampleTest.Controllers
         [HttpGet]
         public async Task<int> Get()
         {
+
+            var user2 = MaggsoftContext.Current.Resolve<IUserService>();
+            
 
             var asd = await Cache.GetAsync(cacheKey: $"{UsersInRoleAsync}", TimeSpan.FromDays(1), async () =>
             {
