@@ -215,6 +215,12 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     {
         try
         {
+            // Boş yanıt kontrolü
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return CreateEmptyResponse(statusCode);
+            }
+            
             // JSON'ı parse et
             using var jsonDocument = JsonDocument.Parse(json);
             var root = jsonDocument.RootElement;
@@ -251,6 +257,20 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                 Message = $"Response parse hatası: {ex.Message}"
             };
         }
+    }
+    
+    /// <summary>
+    /// Boş yanıt için standart bir Result oluşturur
+    /// </summary>
+    private Result<object> CreateEmptyResponse(int statusCode)
+    {
+        return new Result<object>
+        {
+            IsSuccess = statusCode == StatusCodes.Status200OK,
+            StatusCode = statusCode,
+            Data = new object(),
+            Message = statusCode == StatusCodes.Status200OK ? string.Empty : "No content"
+        };
     }
 
     private bool IsMaggsoftResultFormat(JsonElement root)
