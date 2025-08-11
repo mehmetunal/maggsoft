@@ -4,12 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
@@ -136,7 +138,8 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     }
 }*/
 
-public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration configuration, 
+public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration configuration,
+    IHostEnvironment environment,
     IOptions<IgnoreResponseOption>? options = null)
 {
     private readonly JsonSerializerOptions _jsonSettings = new()
@@ -216,6 +219,13 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             using var jsonDocument = JsonDocument.Parse(json);
             var root = jsonDocument.RootElement;
 
+            // ProblemDetails formatında mı kontrol et
+            if (IsProblemDetailsFormat(root))
+            {
+                // ProblemDetails'i Result formatına dönüştür
+                return CreateResultFromProblemDetails(json, statusCode);
+            }
+
             // Maggsoft Result formatında mı kontrol et
             if (IsMaggsoftResultFormat(root))
             {
@@ -230,7 +240,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             // Normal response formatında ise Result<object>'e çevir
             return CreateResultFromResponse(json, statusCode);
         }
-        catch
+        catch (Exception ex)
         {
             // Parse hatası durumunda basit bir Result oluştur
             return new Result<object>
@@ -238,7 +248,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                 IsSuccess = statusCode == StatusCodes.Status200OK,
                 StatusCode = statusCode,
                 Data = json,
-                Message = "Response parse hatası"
+                Message = $"Response parse hatası: {ex.Message}"
             };
         }
     }
@@ -248,11 +258,11 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
         // Array ise Maggsoft Result formatında değildir
         if (root.ValueKind == JsonValueKind.Array)
             return false;
-            
+
         // Object değilse Maggsoft Result formatında değildir
         if (root.ValueKind != JsonValueKind.Object)
             return false;
-            
+
         // Maggsoft Result formatının özelliklerini kontrol et
         return root.TryGetProperty("timeStamp", out _) ||
                root.TryGetProperty("TimeStamp", out _) ||
@@ -260,6 +270,138 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                root.TryGetProperty("IsSuccess", out _) ||
                root.TryGetProperty("statusCode", out _) ||
                root.TryGetProperty("StatusCode", out _);
+    }
+    
+    /// <summary>
+    /// ProblemDetails formatında olup olmadığını kontrol eder
+    /// </summary>
+    private bool IsProblemDetailsFormat(JsonElement root)
+    {
+        // Array ise ProblemDetails formatında değildir
+        if (root.ValueKind == JsonValueKind.Array)
+            return false;
+
+        // Object değilse ProblemDetails formatında değildir
+        if (root.ValueKind != JsonValueKind.Object)
+            return false;
+
+        // ValidationProblemDetails formatını kontrol et (errors property'si var mı?)
+        if (root.TryGetProperty("errors", out _) && 
+            root.TryGetProperty("type", out _) && 
+            root.TryGetProperty("title", out _) && 
+            root.TryGetProperty("status", out _))
+        {
+            return true;
+        }
+
+        // ProblemDetails formatının özelliklerini kontrol et
+        // RFC 7807 standardına göre ProblemDetails formatı
+        return root.TryGetProperty("type", out _) &&
+               root.TryGetProperty("title", out _) &&
+               root.TryGetProperty("status", out _) &&
+               root.TryGetProperty("detail", out _);
+    }
+    
+    /// <summary>
+    /// ProblemDetails formatındaki yanıtı Result formatına dönüştürür
+    /// </summary>
+    private Result<object> CreateResultFromProblemDetails(string json, int statusCode)
+    {
+        try
+        {
+            using var jsonDocument = JsonDocument.Parse(json);
+            var root = jsonDocument.RootElement;
+            
+            // ProblemDetails alanlarını al
+            string? title = null;
+            string? detail = null;
+            string? type = null;
+            object? exception = null;
+            object? errors = null;
+            
+            if (root.TryGetProperty("title", out var titleElement))
+                title = titleElement.GetString();
+                
+            if (root.TryGetProperty("detail", out var detailElement))
+                detail = detailElement.GetString();
+                
+            if (root.TryGetProperty("type", out var typeElement))
+                type = typeElement.GetString();
+                
+            // ValidationProblemDetails için errors alanını al
+            if (root.TryGetProperty("errors", out var errorsElement))
+            {
+                errors = JsonSerializer.Deserialize<Dictionary<string, string[]>>(errorsElement.GetRawText(), _jsonSettings);
+                
+                // Validation mesajlarını birleştirerek message oluştur
+                if (errors is Dictionary<string, string[]> errorDict && errorDict.Count > 0)
+                {
+                    var validationMessages = 
+                        (from error in errorDict 
+                            from message in error.Value select $"{error.Key}: {message}")
+                        .ToList();
+
+                    // Validation mesajlarını detail olarak kullan
+                    if (validationMessages.Count > 0)
+                    {
+                        detail = string.Join(", ", validationMessages);
+                    }
+                }
+            }
+                
+            // Exception bilgisi varsa al
+            if (root.TryGetProperty("exception", out var exceptionElement))
+                exception = JsonSerializer.Deserialize<object>(exceptionElement.GetRawText(), _jsonSettings);
+            
+            // Result oluştur
+            var result = new Result<object>
+            {
+                IsSuccess = false,
+                StatusCode = statusCode,
+                Message = !string.IsNullOrEmpty(detail) ? detail : title,
+                ValidationMessages = errors != null ? ExtractValidationMessages(errors) : new List<string>(),
+            };
+
+            if (environment.IsDevelopment())
+            {
+                result. Data = new
+                {
+                    Type = type,
+                    Title = title,
+                    Errors = errors,
+                    Exception = exception
+                };
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            // ProblemDetails parse edilemezse orijinal JSON'ı kullan
+            return new Result<object>
+            {
+                IsSuccess = false,
+                StatusCode = statusCode,
+                Data = json,
+                Message = $"ProblemDetails parse hatası: {ex.Message}"
+            };
+        }
+    }
+    
+    /// <summary>
+    /// Validation errors'dan mesajları çıkarır
+    /// </summary>
+    private List<string> ExtractValidationMessages(object errors)
+    {
+        var messages = new List<string>();
+        
+        if (errors is Dictionary<string, string[]> errorDict)
+        {
+            messages.AddRange(from error in errorDict 
+                from message in error.Value select $"{error.Key}: {message}");
+        }
+        
+        return messages;
     }
 
     private Result<object> CreateResultFromResponse(string json, int statusCode)
