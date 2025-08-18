@@ -251,7 +251,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             // Parse hatası durumunda basit bir Result oluştur
             return new Result<object>
             {
-                IsSuccess = statusCode == StatusCodes.Status200OK,
+                IsSuccess = statusCode is >= 200 and < 300,
                 StatusCode = statusCode,
                 Data = json,
                 Message = $"Response parse hatası: {ex.Message}"
@@ -266,10 +266,10 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     {
         return new Result<object>
         {
-            IsSuccess = statusCode == StatusCodes.Status200OK,
+            IsSuccess = statusCode is >= 200 and < 300,
             StatusCode = statusCode,
             Data = new object(),
-            Message = statusCode == StatusCodes.Status200OK ? string.Empty : "No content"
+            Message = statusCode is >= 200 and < 300 ? string.Empty : "No content"
         };
     }
 
@@ -441,7 +441,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
 
         return new Result<object>
         {
-            IsSuccess = statusCode == StatusCodes.Status200OK,
+            IsSuccess = statusCode is >= 200 and < 300,
             StatusCode = statusCode,
             Data = data,
             ApiVersion = !string.IsNullOrEmpty(majorVersion) && !string.IsNullOrEmpty(minorVersion)
