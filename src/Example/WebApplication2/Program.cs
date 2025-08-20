@@ -70,7 +70,7 @@ app.MapGet("/weatherforecast", () =>
         ))
         .ToArray();
 
-    return Result.Failure(error: Error.None);
+    return Result.Failure(["asdasd"]);
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
