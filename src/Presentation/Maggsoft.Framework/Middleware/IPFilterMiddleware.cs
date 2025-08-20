@@ -60,6 +60,10 @@ public class IPFilterMiddleware
             return false;
 
         // IP adresi direkt olarak izin verilen listede mi?
+        if (_options.WhitelistedIPs.Contains(ipAddress))
+            return true;
+        
+        // IP adresi direkt olarak izin verilen listede mi?
         if (_options.AllowedIPs.Contains(ipAddress))
             return true;
 

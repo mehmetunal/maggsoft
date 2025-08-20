@@ -17,6 +17,11 @@ builder.Services.AddLogging();
 builder.Services.AddExceptionHandler<ExceptionMiddleware>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddIPFilter(options =>
+{
+   options.MaxRequestsPerMinute = 60;
+   options.WhitelistedIPs = ["127.0.0.1"];
+});
 
 var app = builder.Build();
 
@@ -33,6 +38,9 @@ app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
 
+// IP Filter
+app.UseIPFilter();
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -41,7 +49,8 @@ var summaries = new[]
 
 app.MapGet("/text", () =>
 {
-    throw new KeyNotFoundException("NotFound");
+    //throw new KeyNotFoundException("NotFound");
+    return false;
 })
 .WithName("GetTest")
 .WithOpenApi();
