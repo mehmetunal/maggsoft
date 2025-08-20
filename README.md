@@ -203,7 +203,7 @@ public class UserController : ControllerBase
     {
         var user = await _userService.GetUserAsync(id);
         if (user == null)
-            return NotFound(Result<User>.Failure(new Error("USER_NOT_FOUND", "Kullanıcı bulunamadı")));
+            return NotFound(Result<User>.Failure("Kullanıcı bulunamadı"));
         
         return Ok(Result<User>.Success(user));
     }
@@ -458,36 +458,38 @@ API yanıtlarını standartlaştırmak için kullanılan generic result sınıfl
 
 ```csharp
 // Başarılı yanıt örneği
-var result = Result<User>.Success(user, SuccessMessage.None);
+var result = Result<User>.Success(user);
+var resultWithMessage = Result<User>.Success(user, "Kullanıcı başarıyla getirildi");
 
 // Hata yanıtı örneği
-var errorResult = Result<User>.Failure(Error.None);
+var errorResult = Result<User>.Failure("Kullanıcı bulunamadı");
+var multipleErrors = Result<User>.Failure(["Hata 1", "Hata 2"]);
 
 // Kullanım örneği
 public async Task<Result<User>> GetUserByIdAsync(int id)
 {
     var user = await _userRepository.FindByIdAsync(id);
     if (user == null)
-        return Result<User>.Failure(new Error("USER_NOT_FOUND", "Kullanıcı bulunamadı"));
+        return Result<User>.Failure("Kullanıcı bulunamadı");
     
-    return Result<User>.Success(user, new SuccessMessage("USER_FOUND", "Kullanıcı başarıyla getirildi"));
+    return Result<User>.Success(user, "Kullanıcı başarıyla getirildi");
 }
 ```
 
-##### Error ve SuccessMessage
+##### Result Interface ve Properties
 
-Hata ve başarı mesajlarını standartlaştırmak için kullanılan record'lar.
+Result sınıfları şu temel interface'i implement eder:
 
 ```csharp
-public sealed record Error(string Code, string Description)
+public interface IResult  
 {
-    public static readonly Error None = new(string.Empty, string.Empty);
+    string Message { get; set; }      // Başarı veya hata mesajı
+    List<string> Errors { get; set; } // Hata listesi
+    bool IsSuccess { get; set; }      // İşlem başarı durumu
 }
 
-public sealed record SuccessMessage(string Code, string Description)
-{
-    public static readonly SuccessMessage None = new(string.Empty, string.Empty);
-}
+// Result<T> için ek property
+public T Data { get; set; }           // İşlem sonucu data
 ```
 
 #### 1.2 Repository Pattern
@@ -1625,14 +1627,14 @@ public class UserNotFoundException : NotFoundException
     }
 }
 
-// Exception handling in service
-public async Task<User> GetUserAsync(int id)
+// Exception handling in service  
+public async Task<Result<User>> GetUserAsync(int id)
 {
     var user = await _userRepository.FindByIdAsync(id);
     if (user == null)
-        throw new UserNotFoundException(id);
+        return Result<User>.Failure("Kullanıcı bulunamadı");
     
-    return user;
+    return Result<User>.Success(user);
 }
 ```
 
@@ -1668,7 +1670,7 @@ public class UserService
         _logger = logger;
     }
     
-    public async Task<User> CreateUserAsync(User user)
+    public async Task<Result<User>> CreateUserAsync(User user)
     {
         _logger.LogInformation("Kullanıcı oluşturuluyor: {Email}", user.Email);
         
@@ -1676,12 +1678,12 @@ public class UserService
         {
             var createdUser = await _userRepository.AddAsync(user);
             _logger.LogInformation("Kullanıcı başarıyla oluşturuldu: {UserId}", createdUser.Id);
-            return createdUser;
+            return Result<User>.Success(createdUser, "Kullanıcı başarıyla oluşturuldu");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Kullanıcı oluşturulurken hata oluştu: {Email}", user.Email);
-            throw;
+            return Result<User>.Failure("Kullanıcı oluşturulurken hata oluştu");
         }
     }
 }
@@ -1777,7 +1779,7 @@ public class UserController : ControllerBase
     {
         var user = await _userService.GetUserAsync(id);
         if (user == null)
-            return NotFound(Result<User>.Failure(new Error("400", "Kullanıcı bulunamadı")));
+            return NotFound(Result<User>.Failure("Kullanıcı bulunamadı"));
         
         return Ok(Result<User>.Success(user));
     }
@@ -1801,7 +1803,7 @@ public class UserController : ControllerBase
     {
         var user = await _userService.GetUserAsync(id);
         if (user == null)
-            return NotFound(Result<User>.Failure(new Error("200", "Kullanıcı bulunamadı")));
+            return NotFound(Result<User>.Failure("Kullanıcı bulunamadı"));
         
         user.Name = dto.Name;
         user.Email = dto.Email;
@@ -1814,7 +1816,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> DeleteUser(int id)
     {
         await _userService.DeleteUserAsync(id);
-        return Ok(Result.Success(new SuccessMessage("200", "Kullanıcı başarıyla silindi")));
+        return Ok(Result.Success("Kullanıcı başarıyla silindi"));
     }
 }
 ```

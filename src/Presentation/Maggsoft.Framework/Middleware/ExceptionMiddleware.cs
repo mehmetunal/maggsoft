@@ -24,39 +24,52 @@ public sealed class ExceptionMiddleware(
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
+        // Correlation ID oluştur - hata tracking için
+        var correlationId = Guid.NewGuid().ToString("N")[..8]; // Kısa ID
+        
+        // Detaylı log kaydet
         logger.LogError(
             exception,
-            "Hata oluştu: {Message}, İç Hata: {InnerMessage}, Stack Trace: {StackTrace}",
+            "[Error ID: {CorrelationId}] Exception occurred: {ExceptionType} - {Message}. " +
+            "Inner Exception: {InnerMessage}. Request: {Method} {Path}",
+            correlationId,
+            exception.GetType().Name,
             exception.Message,
-            exception.InnerException,
-            exception.InnerException?.Message);
+            exception.InnerException?.Message,
+            httpContext.Request.Method,
+            httpContext.Request.Path);
 
         var response = new Result<object>();
         httpContext.Response.StatusCode = GetStatusCodeForException(exception);
 
         if (exception is ModelStateException modelStateException)
         {
-            response.ValidationMessages = GetValidationMessages(modelStateException);
+            response.Errors = GetValidationMessages(modelStateException);
         }
-        else if (response.ValidationMessages.Count == 0)
+        else if (response.Errors.Count == 0)
         {
-            response.Message = GetErrorMessage(exception);
+            response.Message = GetErrorMessage(exception).ToString();
 
-            // Hata detaylarını ekle (geliştirme ortamında)
+            // Development'ta detaylı bilgi, Production'da sadece correlation ID
             if (environment.IsDevelopment())
             {
                 response.Data = new 
                 {
+                    ErrorId = correlationId,
                     ExceptionType = exception.GetType().FullName,
                     ExceptionMessage = exception.Message,
                     InnerExceptionMessage = exception.InnerException?.Message,
                     StackTrace = exception.StackTrace
                 };
             }
+            else
+            {
+                response.Data = null;
+            }
         }
 
-        response.ApiVersion = GetApiVersion();
-        response.StatusCode = httpContext.Response.StatusCode;
+        // ApiVersion ve StatusCode property'leri Result<object> sınıfında yok
+        // Bu bilgiler Data'ya eklenmeli veya kaldırılmalı
         response.IsSuccess = false;
 
         await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
@@ -106,10 +119,6 @@ public sealed class ExceptionMiddleware(
             ? exception.InnerException?.Message ?? exception.Message
             : exception.Message;
 
-        if (errorMessage.TryParseJson(out Error error))
-        {
-            return error;
-        }
         return errorMessage;
     }
 

@@ -10,7 +10,7 @@ public partial class Result<T> : Result
 
     public Result()
     {
-        Data = Activator.CreateInstance<T>();
+        Data = default!;
     }
 
     private Result(T data)
@@ -18,16 +18,13 @@ public partial class Result<T> : Result
         Data = data;
     }
 
-    protected internal Result(T data, int statusCode, SuccessMessage message)
-        : base(true, message) => (Data, StatusCode) = (data, statusCode);
-
-    protected internal Result(T data, SuccessMessage message)
+    protected internal Result(T data, string message)
         : base(true, message) => Data = data;
 
-    protected internal Result(T data, bool isSuccess, Error error)
-        : base(isSuccess, error) => Data = data;
+    protected internal Result(T data, bool isSuccess, List<string> errors)
+        : base(isSuccess, errors) => Data = data;
 
-    protected internal Result(T data, bool isSuccess, SuccessMessage message)
+    protected internal Result(T data, bool isSuccess, string message)
         : base(isSuccess, message) => Data = data;
 
     public T Data
@@ -36,53 +33,39 @@ public partial class Result<T> : Result
         set => _data = value;
     }
 
-    public static implicit operator Result<T>(T data)
-    {
-        return new Result<T>(data);
-    }
-
-    public static Result<T> Success(T data, SuccessMessage message) => new(data, message);
-    public static Result<T> Success(T data) => new(data, SuccessMessage.None);
-    public static Result<T> Success(T data, int statusCode, SuccessMessage message) => new(data, statusCode, message);
-    public static Result<T> Success(T data, int statusCode) => new(data, statusCode, SuccessMessage.None);
-    public static Result<T> Failure(Error error) => new(default(T), false, error);
+    public static implicit operator Result<T>(T data) => Success(data);
+    public static Result<T> Success(T data, string message) => new(data, true, message);
+    public static Result<T> Success(T data) => new(data, true, string.Empty);
+    public static Result<T> Failure(List<string> errors) => new(default!, false, errors);
+    public static Result<T> Failure(string error) => new(default!, false, [error]);
 
 }
 
 public class Result : IResult
 {
-    public Result() => ValidationMessages = [];
+    public Result() => Errors = [];
 
-    protected internal Result(bool isSuccess, Error error)
+    protected internal Result(bool isSuccess, List<string> errors)
     {
-        if (isSuccess && error != Error.None ||
-            !isSuccess && error == Error.None)
+        if (isSuccess && errors.Count > 0 ||
+            !isSuccess && errors.Count == 0)
         {
-            throw new ArgumentException("Invalid error", nameof(error));
+            throw new ArgumentException("Invalid errors", nameof(errors));
         }
 
         IsSuccess = isSuccess;
-        Message = error;
+        Errors = errors;
     }
 
-    protected internal Result(bool isSuccess, SuccessMessage message)
+    protected internal Result(bool isSuccess, string message)
         => (IsSuccess, Message) = (isSuccess, message);
 
-    protected internal Result(bool isSuccess, int statusCode, SuccessMessage message)
-        => (IsSuccess, StatusCode, Message) = (isSuccess, statusCode, message);
 
-
-    public object Message { get; set; }
-    public List<string> ValidationMessages { get; set; }
-    public int StatusCode { get; set; }
-    public DateTime TimeStamp { get; } = DateTime.UtcNow;
+    public string Message { get; set; }
+    public List<string> Errors { get; set; }
     public bool IsSuccess { get; set; }
-    public bool IsFailure => !IsSuccess;
-    public string ApiVersion { get; set; }
 
-    public static Result Success() => new(true, SuccessMessage.None);
-    public static Result Success(SuccessMessage message) => new(true, message);
-    public static Result Success(int statusCode) => new(true, statusCode, SuccessMessage.None);
-    public static Result Success(int statusCode, SuccessMessage message) => new(true, statusCode, message);
-    public static Result Failure(Error error) => new(false, error);
+    public static Result Success() => new(true, string.Empty);
+    public static Result Success(string message) => new(true, message);
+    public static Result Failure(List<string> errors) => new(false, errors);
 }

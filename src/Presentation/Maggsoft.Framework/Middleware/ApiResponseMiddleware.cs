@@ -238,7 +238,27 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                 var result = JsonSerializer.Deserialize<Result<object>>(json, _jsonSettings);
                 if (result != null)
                 {
-                    result.StatusCode = statusCode;
+                    // Eğer Errors dolu ama Message boş ise, Message'ı doldur
+                    if (!result.IsSuccess && 
+                        string.IsNullOrEmpty(result.Message) && 
+                        result.Errors != null && 
+                        result.Errors.Count > 0)
+                    {
+                        // Validation hatalarını tespit et
+                        bool isValidationError = IsValidationError(result.Errors, statusCode);
+                        
+                        if (isValidationError)
+                        {
+                            result.Message = "Validation failed. Please check your input data.";
+                        }
+                        else
+                        {
+                            result.Message = result.Errors.Count == 1 
+                                ? "An error occurred" 
+                                : "Multiple errors occurred";
+                        }
+                    }
+                    
                     return result;
                 }
             }
@@ -248,13 +268,19 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
         }
         catch (Exception ex)
         {
-            // Parse hatası durumunda basit bir Result oluştur
+            // Parse hatası durumında basit bir Result oluştur
+            var isSuccess = statusCode is >= 200 and < 300;
+            var userMessage = "An error occurred while processing the response";
+            var technicalError = environment.IsDevelopment() 
+                ? $"JSON Parse Error: {ex.Message}" 
+                : "Response format validation failed";
+                
             return new Result<object>
             {
-                IsSuccess = statusCode is >= 200 and < 300,
-                StatusCode = statusCode,
-                Data = json,
-                Message = $"Response parse hatası: {ex.Message}"
+                IsSuccess = isSuccess,
+                Data = isSuccess ? json : null, // Hata durumlarında her zaman null
+                Message = isSuccess ? string.Empty : userMessage,
+                Errors = isSuccess ? [] : [technicalError]
             };
         }
     }
@@ -264,12 +290,13 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     /// </summary>
     private Result<object> CreateEmptyResponse(int statusCode)
     {
+        var isSuccess = statusCode is >= 200 and < 300;
         return new Result<object>
         {
-            IsSuccess = statusCode is >= 200 and < 300,
-            StatusCode = statusCode,
-            Data = new object(),
-            Message = statusCode is >= 200 and < 300 ? string.Empty : "No content"
+            IsSuccess = isSuccess,
+            Data = isSuccess ? new object() : null, // Başarılıysa empty object, hatalıysa null
+            Message = isSuccess ? string.Empty : GetUserFriendlyMessage(statusCode),
+            Errors = isSuccess ? [] : [GetStatusCodeMessage(statusCode)]
         };
     }
 
@@ -284,12 +311,12 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             return false;
 
         // Maggsoft Result formatının özelliklerini kontrol et
-        return root.TryGetProperty("timeStamp", out _) ||
-               root.TryGetProperty("TimeStamp", out _) ||
-               root.TryGetProperty("isSuccess", out _) ||
+        return root.TryGetProperty("isSuccess", out _) ||
                root.TryGetProperty("IsSuccess", out _) ||
-               root.TryGetProperty("statusCode", out _) ||
-               root.TryGetProperty("StatusCode", out _);
+               root.TryGetProperty("message", out _) ||
+               root.TryGetProperty("Message", out _) ||
+               root.TryGetProperty("errors", out _) ||
+               root.TryGetProperty("Errors", out _);
     }
     
     /// <summary>
@@ -374,36 +401,38 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                 exception = JsonSerializer.Deserialize<object>(exceptionElement.GetRawText(), _jsonSettings);
             
             // Result oluştur
+            var validationErrors = errors != null ? ExtractValidationMessages(errors) : [];
+            var userMessage = validationErrors.Count > 0 
+                ? "Validation failed. Please check your input data."
+                : (!string.IsNullOrEmpty(detail) ? detail : title);
+                
             var result = new Result<object>
             {
                 IsSuccess = false,
-                StatusCode = statusCode,
-                Message = !string.IsNullOrEmpty(detail) ? detail : title,
-                ValidationMessages = errors != null ? ExtractValidationMessages(errors) : new List<string>(),
+                Message = userMessage,
+                Errors = validationErrors.Count > 0 ? validationErrors : [!string.IsNullOrEmpty(detail) ? detail : title ?? "An error occurred"],
+                Data = null // Hata durumlarında Data her zaman null olmalı
             };
 
-            if (environment.IsDevelopment())
-            {
-                result. Data = new
-                {
-                    Type = type,
-                    Title = title,
-                    Errors = errors,
-                    Exception = exception
-                };
-            }
-
+            // Hata durumlarında Data her zaman null kalır
+            // Exception detayları sadece loglarda görünür
+            
             return result;
         }
         catch (Exception ex)
         {
-            // ProblemDetails parse edilemezse orijinal JSON'ı kullan
+            // ProblemDetails parse edilemezse sadece hata mesajı döner
+            var userMessage = "An error occurred while processing your request";
+            var technicalError = environment.IsDevelopment() 
+                ? $"ProblemDetails Parse Error: {ex.Message}" 
+                : "Error details processing failed";
+                
             return new Result<object>
             {
                 IsSuccess = false,
-                StatusCode = statusCode,
-                Data = json,
-                Message = $"ProblemDetails parse hatası: {ex.Message}"
+                Data = null, // Hata durumlarında her zaman null
+                Message = userMessage,
+                Errors = [technicalError]
             };
         }
     }
@@ -426,27 +455,27 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
 
     private Result<object> CreateResultFromResponse(string json, int statusCode)
     {
-        object data;
-        try
+        var isSuccess = statusCode is >= 200 and < 300;
+        object? data = null;
+        
+        if (isSuccess)
         {
-            data = JsonSerializer.Deserialize<object>(json, _jsonSettings) ?? json;
+            try
+            {
+                data = JsonSerializer.Deserialize<object>(json, _jsonSettings) ?? json;
+            }
+            catch
+            {
+                data = json;
+            }
         }
-        catch
-        {
-            data = json;
-        }
-
-        var majorVersion = configuration.GetSection("ApiVersion:MajorVersion")?.Value;
-        var minorVersion = configuration.GetSection("ApiVersion:MinorVersion")?.Value;
 
         return new Result<object>
         {
-            IsSuccess = statusCode is >= 200 and < 300,
-            StatusCode = statusCode,
-            Data = data,
-            ApiVersion = !string.IsNullOrEmpty(majorVersion) && !string.IsNullOrEmpty(minorVersion)
-                ? $"{majorVersion}.{minorVersion}"
-                : null
+            IsSuccess = isSuccess,
+            Data = data, // Başarılıysa deserialize edilmiş data, hatalıysa null
+            Message = string.Empty,
+            Errors = []
         };
     }
 
@@ -459,6 +488,95 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
 
         memStream.Position = 0;
         return await new StreamReader(memStream).ReadToEndAsync();
+    }
+
+    /// <summary>
+    /// Validation hatası olup olmadığını kontrol eder
+    /// </summary>
+    private static bool IsValidationError(List<string> errors, int statusCode)
+    {
+        // HTTP 400 (Bad Request) veya 422 (Unprocessable Entity) validation hataları için kullanılır
+        if (statusCode != 400 && statusCode != 422)
+            return false;
+
+        // Validation hata kalıplarını kontrol et
+        foreach (var error in errors)
+        {
+            var lowerError = error.ToLower();
+            
+            // Validation anahtar kelimeleri
+            if (lowerError.Contains("validation") ||
+                lowerError.Contains("required") ||
+                lowerError.Contains("invalid") ||
+                lowerError.Contains("must be") ||
+                lowerError.Contains("should be") ||
+                lowerError.Contains("cannot be") ||
+                lowerError.Contains("length") ||
+                lowerError.Contains("format") ||
+                lowerError.Contains("range") ||
+                lowerError.Contains("field") ||
+                lowerError.Contains("email") ||
+                lowerError.Contains("password") ||
+                lowerError.Contains("gerekli") ||
+                lowerError.Contains("geçersiz") ||
+                lowerError.Contains("olmalı") ||
+                lowerError.Contains("uzunluk") ||
+                lowerError.Contains("karakter") ||
+                lowerError.Contains(":")) // Field: Error formatı (Email: Email gerekli)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// HTTP status koduna göre kullanıcı dostu mesaj döner
+    /// </summary>
+    private static string GetUserFriendlyMessage(int statusCode)
+    {
+        return statusCode switch
+        {
+            400 => "Your request could not be processed",
+            401 => "Authentication is required to access this resource",
+            403 => "You don't have permission to access this resource", 
+            404 => "The requested resource was not found",
+            405 => "This operation is not allowed",
+            409 => "This request conflicts with the current state",
+            422 => "Please check your input data",
+            429 => "Too many requests. Please try again later",
+            500 => "An internal error occurred. Please try again later",
+            501 => "This feature is not available",
+            502 => "Service is temporarily unavailable",
+            503 => "Service is temporarily unavailable",
+            504 => "The request timed out. Please try again",
+            _ => "An error occurred while processing your request"
+        };
+    }
+
+    /// <summary>
+    /// HTTP status koduna göre teknik açıklayıcı mesaj döner
+    /// </summary>
+    private static string GetStatusCodeMessage(int statusCode)
+    {
+        return statusCode switch
+        {
+            400 => "Bad Request - The request was invalid or malformed",
+            401 => "Unauthorized - Authentication required",
+            403 => "Forbidden - Access denied", 
+            404 => "Not Found - The requested resource was not found",
+            405 => "Method Not Allowed - HTTP method not supported",
+            409 => "Conflict - Request conflicts with current state",
+            422 => "Unprocessable Entity - Validation failed",
+            429 => "Too Many Requests - Rate limit exceeded",
+            500 => "Internal Server Error - An unexpected error occurred",
+            501 => "Not Implemented - Feature not implemented",
+            502 => "Bad Gateway - Invalid response from upstream server",
+            503 => "Service Unavailable - Service temporarily unavailable",
+            504 => "Gateway Timeout - Upstream server timeout",
+            _ => $"HTTP {statusCode} - Request failed"
+        };
     }
 
     private static void LogResponse(HttpContext context, string json)
