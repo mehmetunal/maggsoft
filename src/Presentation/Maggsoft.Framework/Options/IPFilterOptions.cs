@@ -51,4 +51,10 @@ public class IPFilterOptions
     /// Paths that are exempt from IP filtering
     /// </summary>
     public List<string> ExemptPaths { get; set; } = new();
+
+    /// <summary>
+    /// Strict Mode: Sadece WhitelistedIPs ve AllowedIPs listesindeki IP'ler erişebilir
+    /// Strict Mode: Only IPs in WhitelistedIPs and AllowedIPs lists can access
+    /// </summary>
+    public bool StrictMode { get; set; } = false;
 }

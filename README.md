@@ -1117,38 +1117,246 @@ public class ModelStateFeatureFilter : IActionResult
 
 #### 6.14 IP Filter Middleware
 
+IP bazlı erişim kontrolü için gelişmiş bir middleware'dir. Belirli IP adreslerine erişim izni verme, engelleme ve IP aralıklarını kontrol etme özellikleri sunar.
+
+##### Temel Özellikler
+
+- **Whitelist/Blacklist**: Belirli IP adreslerine izin verme veya engelleme
+- **CIDR Desteği**: IP aralıklarını CIDR formatında tanımlama
+- **Path Muafiyeti**: Belirli endpoint'leri IP kontrolünden muaf tutma
+- **Strict Mode**: Sadece whitelist'teki IP'lere erişim izni verme
+- **Rate Limiting**: Dakika başına maksimum istek sayısı kontrolü
+- **Logging**: IP erişim logları ve güvenlik olayları
+
+##### Konfigürasyon
+
 ```csharp
 // Startup.cs'de IP Filter konfigürasyonu
 services.Configure<IPFilterOptions>(configuration.GetSection("IPFilter"));
 
-// appsettings.json'da IP Filter ayarları:
-{
-  "IPFilter": {
-    "WhitelistedIPs": ["192.168.1.1", "10.0.0.1"],
-    "BlockedIPs": ["192.168.1.100"],
-    "AllowedIPRanges": ["192.168.1.0/24"],
-    "BlockedIPRanges": ["10.0.0.0/8"],
-    "MaxRequestsPerMinute": 100,
-    "DefaultAllow": true,
-    "ExemptPaths": ["/health", "/metrics"]
-  }
-}
-
 // Middleware kullanımı
 app.UseMiddleware<IPFilterMiddleware>();
 
-// IP Filter Options sınıfı:
-public class IPFilterOptions
+// Veya extension method ile
+app.UseIPFilter();
+```
+
+##### appsettings.json Konfigürasyonu
+
+```json
 {
-    public List<string> WhitelistedIPs { get; set; } = new();
-    public List<string> BlockedIPs { get; set; } = new();
-    public List<string> AllowedIPRanges { get; set; } = new();
-    public List<string> BlockedIPRanges { get; set; } = new();
-    public int MaxRequestsPerMinute { get; set; } = 100;
-    public bool DefaultAllow { get; set; } = true;
-    public List<string> ExemptPaths { get; set; } = new();
+  "IPFilter": {
+    "WhitelistedIPs": ["192.168.1.1", "10.0.0.1", "::1"],
+    "BlockedIPs": ["192.168.1.100", "10.0.0.50"],
+    "AllowedIPRanges": ["192.168.1.0/24", "10.0.0.0/8"],
+    "BlockedIPRanges": ["172.16.0.0/12"],
+    "MaxRequestsPerMinute": 100,
+    "DefaultAllow": true,
+    "ExemptPaths": ["/health", "/metrics", "/api/status"],
+    "StrictMode": false
+  }
 }
 ```
+
+##### IP Filter Options Sınıfı
+
+```csharp
+public class IPFilterOptions
+{
+    /// <summary>
+    /// İzin verilen IP adresleri listesi (Whitelist)
+    /// </summary>
+    public List<string> WhitelistedIPs { get; set; } = new();
+
+    /// <summary>
+    /// İzin verilen IP adresleri listesi (Legacy)
+    /// </summary>
+    public List<string> AllowedIPs { get; set; } = new();
+
+    /// <summary>
+    /// Yasaklanan IP adresleri listesi (Blacklist)
+    /// </summary>
+    public List<string> BlockedIPs { get; set; } = new();
+
+    /// <summary>
+    /// İzin verilen IP aralıkları (CIDR formatında)
+    /// </summary>
+    public List<string> AllowedIPRanges { get; set; } = new();
+
+    /// <summary>
+    /// Yasaklanan IP aralıkları (CIDR formatında)
+    /// </summary>
+    public List<string> BlockedIPRanges { get; set; } = new();
+
+    /// <summary>
+    /// Dakika başına izin verilen maksimum istek sayısı
+    /// </summary>
+    public int MaxRequestsPerMinute { get; set; } = 100;
+
+    /// <summary>
+    /// Varsayılan izin politikası (true: izin ver, false: engelle)
+    /// </summary>
+    public bool DefaultAllow { get; set; } = true;
+
+    /// <summary>
+    /// IP filtreleme için muaf tutulacak path'ler
+    /// </summary>
+    public List<string> ExemptPaths { get; set; } = new();
+
+    /// <summary>
+    /// Strict Mode: Sadece WhitelistedIPs ve AllowedIPs listesindeki IP'ler erişebilir
+    /// </summary>
+    public bool StrictMode { get; set; } = false;
+}
+```
+
+##### Strict Mode Özelliği
+
+Strict Mode aktif edildiğinde, sadece `WhitelistedIPs` ve `AllowedIPs` listesindeki IP adresleri erişebilir. Bu mod, güvenlik seviyesini maksimuma çıkarır.
+
+```csharp
+// Strict Mode aktif
+{
+  "IPFilter": {
+    "StrictMode": true,
+    "WhitelistedIPs": ["192.168.1.100", "10.0.0.10"],
+    "AllowedIPs": ["127.0.0.1", "::1"],
+    "DefaultAllow": false // Strict Mode'da bu ayar önemsizdir
+  }
+}
+```
+
+**Strict Mode Davranışı:**
+- ✅ `WhitelistedIPs` listesindeki IP'ler erişebilir
+- ✅ `AllowedIPs` listesindeki IP'ler erişebilir  
+- ❌ `BlockedIPs` listesindeki IP'ler erişemez
+- ❌ IP aralıkları (CIDR) kontrol edilmez
+- ❌ `DefaultAllow` politikası devre dışı kalır
+- ❌ Sadece whitelist'te olmayan tüm IP'ler engellenir
+
+##### Kullanım Örnekleri
+
+###### 1. Basit Whitelist
+```csharp
+// Sadece belirli IP'lere izin ver
+services.Configure<IPFilterOptions>(options =>
+{
+    options.WhitelistedIPs = ["192.168.1.100", "10.0.0.10"];
+    options.DefaultAllow = false; // Sadece whitelist'teki IP'ler
+});
+```
+
+###### 2. Production Güvenlik
+```csharp
+// Production ortamında sıkı güvenlik
+services.Configure<IPFilterOptions>(options =>
+{
+    options.StrictMode = true; // En yüksek güvenlik seviyesi
+    options.WhitelistedIPs = ["203.0.113.1", "198.51.100.1"]; // Sadece production IP'leri
+    options.ExemptPaths = ["/health", "/metrics"]; // Monitoring endpoint'leri muaf
+});
+```
+
+###### 3. Development Ortamı
+```csharp
+// Development ortamında esnek ayarlar
+services.Configure<IPFilterOptions>(options =>
+{
+    options.WhitelistedIPs = ["127.0.0.1", "::1", "192.168.1.0/24"];
+    options.DefaultAllow = true; // Geliştirici IP'leri için esnek
+    options.ExemptPaths = ["/swagger", "/health"];
+});
+```
+
+##### Extension Method Kullanımı
+
+```csharp
+// Program.cs'de
+builder.Services.AddIPFilter(options =>
+{
+    options.StrictMode = true;
+    options.WhitelistedIPs = ["192.168.1.100", "10.0.0.10"];
+    options.ExemptPaths = ["/health", "/metrics"];
+});
+
+var app = builder.Build();
+
+// Middleware'i ekle
+app.UseIPFilter();
+```
+
+##### Güvenlik Senaryoları
+
+###### 1. **API Gateway Güvenliği**
+```json
+{
+  "IPFilter": {
+    "StrictMode": true,
+    "WhitelistedIPs": ["10.0.1.10", "10.0.1.11"], // Sadece API Gateway IP'leri
+    "ExemptPaths": ["/health", "/metrics"]
+  }
+}
+```
+
+###### 2. **Admin Panel Güvenliği**
+```json
+{
+  "IPFilter": {
+    "StrictMode": true,
+    "WhitelistedIPs": ["192.168.1.50", "192.168.1.51"], // Sadece admin IP'leri
+    "ExemptPaths": ["/api/public/*"] // Public endpoint'ler muaf
+  }
+}
+```
+
+###### 3. **Multi-Tenant Güvenliği**
+```json
+{
+  "IPFilter": {
+    "StrictMode": false,
+    "WhitelistedIPs": ["203.0.113.0/24"], // Tenant A IP aralığı
+    "BlockedIPs": ["198.51.100.0/24"], // Tenant B IP aralığı
+    "DefaultAllow": false
+  }
+}
+```
+
+##### Logging ve Monitoring
+
+IP Filter Middleware, tüm güvenlik olaylarını loglar:
+
+```csharp
+// Log örnekleri
+_logger.LogInformation("IP adresi izin verildi: {IpAddress}", ipAddress);
+_logger.LogWarning("IP adresi engellendi: {IpAddress}", ipAddress);
+_logger.LogInformation("Strict Mode aktif: IP {IpAddress} sadece whitelist kontrolü yapılıyor", ipAddress);
+```
+
+##### Performance Optimizasyonu
+
+- **IP Parsing**: Hızlı IP adresi parsing ve validation
+- **CIDR Hesaplama**: Optimize edilmiş subnet hesaplamaları
+- **Memory Efficient**: Minimal memory kullanımı
+- **Async Processing**: Non-blocking async operations
+
+##### Hata Yönetimi
+
+```csharp
+// IP erişim engellendiğinde dönen yanıt
+{
+  "error": "Bu IP adresinden erişim engellendi",
+  "ipAddress": "192.168.1.100"
+}
+```
+
+##### Best Practices
+
+1. **Production'da Strict Mode Kullanın**: En yüksek güvenlik seviyesi için
+2. **Monitoring Endpoint'leri Muaf Tutun**: `/health`, `/metrics` gibi
+3. **IP Aralıklarını Kullanın**: Tek tek IP yerine CIDR formatında
+4. **Regular Log Review**: Güvenlik loglarını düzenli kontrol edin
+5. **Fail-Safe Default**: `DefaultAllow: false` ile güvenli varsayılan
+6. **Exempt Path'leri Sınırlayın**: Sadece gerekli endpoint'leri muaf tutun
 
 #### 6.15 Request Pipeline Konfigürasyonu
 

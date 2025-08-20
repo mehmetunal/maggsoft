@@ -67,6 +67,13 @@ public class IPFilterMiddleware
         if (_options.AllowedIPs.Contains(ipAddress))
             return true;
 
+        // Strict Mode aktifse, sadece whitelist'teki IP'lere izin ver
+        if (_options.StrictMode)
+        {
+            _logger.LogInformation("Strict Mode aktif: IP {IpAddress} sadece whitelist kontrolü yapılıyor", ipAddress);
+            return false; // Sadece yukarıdaki whitelist kontrollerinde true dönen IP'ler erişebilir
+        }
+
         // IP adresi yasaklı bir aralıkta mı?
         if (IsIPInRanges(ipAddress, _options.BlockedIPRanges))
             return false;
