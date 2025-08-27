@@ -17,10 +17,56 @@ namespace Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
 [AttributeUsage(AttributeTargets.All)]
 public class IgnoreResponseRewindMiddlewareAttribute : Attribute { }
+public class ApiResponseMessages
+{
+    public string ValidationFailed { get; set; } = "Validation failed. Please check your input data.";
+    public string AnErrorOccurred { get; set; } = "An error occurred";
+    public string MultipleErrorsOccurred { get; set; } = "Multiple errors occurred";
+    public string ResponseProcessingError { get; set; } = "An error occurred while processing the response";
+    public string JsonParseError { get; set; } = "JSON Parse Error: {0}";
+    public string ResponseValidationFailed { get; set; } = "Response format validation failed";
+    public string RequestProcessingError { get; set; } = "An error occurred while processing your request";
+    public string ProblemDetailsParseError { get; set; } = "ProblemDetails Parse Error: {0}";
+    public string ErrorDetailsProcessingFailed { get; set; } = "Error details processing failed";
+    
+    // HTTP Status Code Messages - User Friendly
+    public string BadRequest { get; set; } = "Your request could not be processed";
+    public string Unauthorized { get; set; } = "Authentication is required to access this resource";
+    public string Forbidden { get; set; } = "You don't have permission to access this resource";
+    public string NotFound { get; set; } = "The requested resource was not found";
+    public string MethodNotAllowed { get; set; } = "This operation is not allowed";
+    public string Conflict { get; set; } = "This request conflicts with the current state";
+    public string UnprocessableEntity { get; set; } = "Please check your input data";
+    public string TooManyRequests { get; set; } = "Too many requests. Please try again later";
+    public string InternalServerError { get; set; } = "An internal error occurred. Please try again later";
+    public string NotImplemented { get; set; } = "This feature is not available";
+    public string BadGateway { get; set; } = "Service is temporarily unavailable";
+    public string ServiceUnavailable { get; set; } = "Service is temporarily unavailable";
+    public string GatewayTimeout { get; set; } = "The request timed out. Please try again";
+    public string DefaultError { get; set; } = "An error occurred while processing your request";
+    
+    // HTTP Status Code Messages - Technical
+    public string TechnicalBadRequest { get; set; } = "Bad Request - The request was invalid or malformed";
+    public string TechnicalUnauthorized { get; set; } = "Unauthorized - Authentication required";
+    public string TechnicalForbidden { get; set; } = "Forbidden - Access denied";
+    public string TechnicalNotFound { get; set; } = "Not Found - The requested resource was not found";
+    public string TechnicalMethodNotAllowed { get; set; } = "Method Not Allowed - HTTP method not supported";
+    public string TechnicalConflict { get; set; } = "Conflict - Request conflicts with current state";
+    public string TechnicalUnprocessableEntity { get; set; } = "Unprocessable Entity - Validation failed";
+    public string TechnicalTooManyRequests { get; set; } = "Too Many Requests - Rate limit exceeded";
+    public string TechnicalInternalServerError { get; set; } = "Internal Server Error - An unexpected error occurred";
+    public string TechnicalNotImplemented { get; set; } = "Not Implemented - Feature not implemented";
+    public string TechnicalBadGateway { get; set; } = "Bad Gateway - Invalid response from upstream server";
+    public string TechnicalServiceUnavailable { get; set; } = "Service Unavailable - Service temporarily unavailable";
+    public string TechnicalGatewayTimeout { get; set; } = "Gateway Timeout - Upstream server timeout";
+    public string TechnicalDefaultError { get; set; } = "HTTP {0} - Request failed";
+}
+
 public class IgnoreResponseOption
 {
     public string[] IgnoreAcceptHeader { get; set; } = ["image/"];
     public bool UseCamelCase { get; set; } = false;
+    public ApiResponseMessages Messages { get; set; } = new();
 }
 
 /*
@@ -249,13 +295,13 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
                         
                         if (isValidationError)
                         {
-                            result.Message = "Validation failed. Please check your input data.";
+                            result.Message = _options?.Messages?.ValidationFailed ?? "Validation failed. Please check your input data.";
                         }
                         else
                         {
                             result.Message = result.Errors.Count == 1 
-                                ? "An error occurred" 
-                                : "Multiple errors occurred";
+                                ? (_options?.Messages?.AnErrorOccurred ?? "An error occurred") 
+                                : (_options?.Messages?.MultipleErrorsOccurred ?? "Multiple errors occurred");
                         }
                     }
                     
@@ -270,10 +316,10 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
         {
             // Parse hatası durumında basit bir Result oluştur
             var isSuccess = statusCode is >= 200 and < 300;
-            var userMessage = "An error occurred while processing the response";
+            var userMessage = _options?.Messages?.ResponseProcessingError ?? "An error occurred while processing the response";
             var technicalError = environment.IsDevelopment() 
-                ? $"JSON Parse Error: {ex.Message}" 
-                : "Response format validation failed";
+                ? string.Format(_options?.Messages?.JsonParseError ?? "JSON Parse Error: {0}", ex.Message)
+                : (_options?.Messages?.ResponseValidationFailed ?? "Response format validation failed");
                 
             return new Result<object>
             {
@@ -403,7 +449,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             // Result oluştur
             var validationErrors = errors != null ? ExtractValidationMessages(errors) : [];
             var userMessage = validationErrors.Count > 0 
-                ? "Validation failed. Please check your input data."
+                ? (_options?.Messages?.ValidationFailed ?? "Validation failed. Please check your input data.")
                 : (!string.IsNullOrEmpty(detail) ? detail : title);
                 
             var result = new Result<object>
@@ -422,10 +468,10 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
         catch (Exception ex)
         {
             // ProblemDetails parse edilemezse sadece hata mesajı döner
-            var userMessage = "An error occurred while processing your request";
+            var userMessage = _options?.Messages?.RequestProcessingError ?? "An error occurred while processing your request";
             var technicalError = environment.IsDevelopment() 
-                ? $"ProblemDetails Parse Error: {ex.Message}" 
-                : "Error details processing failed";
+                ? string.Format(_options?.Messages?.ProblemDetailsParseError ?? "ProblemDetails Parse Error: {0}", ex.Message)
+                : (_options?.Messages?.ErrorDetailsProcessingFailed ?? "Error details processing failed");
                 
             return new Result<object>
             {
@@ -534,48 +580,50 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     /// <summary>
     /// HTTP status koduna göre kullanıcı dostu mesaj döner
     /// </summary>
-    private static string GetUserFriendlyMessage(int statusCode)
+    private string GetUserFriendlyMessage(int statusCode)
     {
+        var messages = _options?.Messages;
         return statusCode switch
         {
-            400 => "Your request could not be processed",
-            401 => "Authentication is required to access this resource",
-            403 => "You don't have permission to access this resource", 
-            404 => "The requested resource was not found",
-            405 => "This operation is not allowed",
-            409 => "This request conflicts with the current state",
-            422 => "Please check your input data",
-            429 => "Too many requests. Please try again later",
-            500 => "An internal error occurred. Please try again later",
-            501 => "This feature is not available",
-            502 => "Service is temporarily unavailable",
-            503 => "Service is temporarily unavailable",
-            504 => "The request timed out. Please try again",
-            _ => "An error occurred while processing your request"
+            400 => messages?.BadRequest ?? "Your request could not be processed",
+            401 => messages?.Unauthorized ?? "Authentication is required to access this resource",
+            403 => messages?.Forbidden ?? "You don't have permission to access this resource", 
+            404 => messages?.NotFound ?? "The requested resource was not found",
+            405 => messages?.MethodNotAllowed ?? "This operation is not allowed",
+            409 => messages?.Conflict ?? "This request conflicts with the current state",
+            422 => messages?.UnprocessableEntity ?? "Please check your input data",
+            429 => messages?.TooManyRequests ?? "Too many requests. Please try again later",
+            500 => messages?.InternalServerError ?? "An internal error occurred. Please try again later",
+            501 => messages?.NotImplemented ?? "This feature is not available",
+            502 => messages?.BadGateway ?? "Service is temporarily unavailable",
+            503 => messages?.ServiceUnavailable ?? "Service is temporarily unavailable",
+            504 => messages?.GatewayTimeout ?? "The request timed out. Please try again",
+            _ => messages?.DefaultError ?? "An error occurred while processing your request"
         };
     }
 
     /// <summary>
     /// HTTP status koduna göre teknik açıklayıcı mesaj döner
     /// </summary>
-    private static string GetStatusCodeMessage(int statusCode)
+    private string GetStatusCodeMessage(int statusCode)
     {
+        var messages = _options?.Messages;
         return statusCode switch
         {
-            400 => "Bad Request - The request was invalid or malformed",
-            401 => "Unauthorized - Authentication required",
-            403 => "Forbidden - Access denied", 
-            404 => "Not Found - The requested resource was not found",
-            405 => "Method Not Allowed - HTTP method not supported",
-            409 => "Conflict - Request conflicts with current state",
-            422 => "Unprocessable Entity - Validation failed",
-            429 => "Too Many Requests - Rate limit exceeded",
-            500 => "Internal Server Error - An unexpected error occurred",
-            501 => "Not Implemented - Feature not implemented",
-            502 => "Bad Gateway - Invalid response from upstream server",
-            503 => "Service Unavailable - Service temporarily unavailable",
-            504 => "Gateway Timeout - Upstream server timeout",
-            _ => $"HTTP {statusCode} - Request failed"
+            400 => messages?.TechnicalBadRequest ?? "Bad Request - The request was invalid or malformed",
+            401 => messages?.TechnicalUnauthorized ?? "Unauthorized - Authentication required",
+            403 => messages?.TechnicalForbidden ?? "Forbidden - Access denied", 
+            404 => messages?.TechnicalNotFound ?? "Not Found - The requested resource was not found",
+            405 => messages?.TechnicalMethodNotAllowed ?? "Method Not Allowed - HTTP method not supported",
+            409 => messages?.TechnicalConflict ?? "Conflict - Request conflicts with current state",
+            422 => messages?.TechnicalUnprocessableEntity ?? "Unprocessable Entity - Validation failed",
+            429 => messages?.TechnicalTooManyRequests ?? "Too Many Requests - Rate limit exceeded",
+            500 => messages?.TechnicalInternalServerError ?? "Internal Server Error - An unexpected error occurred",
+            501 => messages?.TechnicalNotImplemented ?? "Not Implemented - Feature not implemented",
+            502 => messages?.TechnicalBadGateway ?? "Invalid response from upstream server",
+            503 => messages?.TechnicalServiceUnavailable ?? "Service temporarily unavailable",
+            504 => messages?.TechnicalGatewayTimeout ?? "Upstream server timeout",
+            _ => string.Format(messages?.TechnicalDefaultError ?? "HTTP {0} - Request failed", statusCode)
         };
     }
 
