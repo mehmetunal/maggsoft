@@ -1,6 +1,6 @@
-﻿using Maggsoft.Core.Base;
+﻿#nullable enable
+using Maggsoft.Core.Base;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -12,7 +12,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
-
 
 namespace Maggsoft.Framework.Middleware.ApiResponseMiddleware;
 
@@ -145,7 +144,7 @@ public class IgnoreResponseOption
     /// <summary>
     /// Event'i tetikler
     /// </summary>
-    internal void TriggerLocalizationEvent(object sender, MessageLocalizationEventArgs args)
+    public void TriggerLocalizationEvent(object sender, MessageLocalizationEventArgs args)
     {
         OnMessageLocalization?.Invoke(sender, args);
     }
@@ -266,7 +265,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     }
 }*/
 
-public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration configuration,
+public sealed class ApiResponseMiddleware(RequestDelegate next,
     IHostEnvironment environment,
     IOptions<IgnoreResponseOption>? options = null)
 {
@@ -541,8 +540,8 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
             var result = new Result<object>
             {
                 IsSuccess = false,
-                Message = userMessage,
-                Errors = validationErrors.Count > 0 ? validationErrors : [!string.IsNullOrEmpty(detail) ? detail : title ?? "An error occurred"],
+                Message = userMessage ?? "An error occurred",
+                Errors = validationErrors.Count > 0 ? validationErrors : [!string.IsNullOrEmpty(detail) ? detail! : title ?? "An error occurred"],
                 Data = null // Hata durumlarında Data her zaman null olmalı
             };
 
@@ -808,7 +807,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     /// </summary>
     private string GetLocalizedMessage(HttpContext context, string messageKey, string fallback, params object[] args)
     {
-        if (_options?.OnMessageLocalization != null)
+        if (_options != null)
         {
             var eventArgs = new MessageLocalizationEventArgs
             {
@@ -837,7 +836,7 @@ public sealed class ApiResponseMiddleware(RequestDelegate next, IConfiguration c
     /// </summary>
     private string GetMessage(string fallback, params object[] args)
     {
-        return args.Length > 0 ? string.Format(fallback, args) : fallback;
+        return args.Length > 0 ? string.Format(fallback, args) : fallback; 
     }
 
     /// <summary>
