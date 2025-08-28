@@ -44,13 +44,8 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
 
     public IList<T> FindAll(Func<IQueryable<T>, IQueryable<T>> func = null)
     {
-        IList<T> FindAll()
-        {
-            var query = func != null ? func(_dbSet) : _dbSet;
-            return query.ToList();
-        }
-
-        return FindAll();
+        var query = func != null ? func(_dbSet) : _dbSet;
+        return query.ToList();
     }
 
     public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> @where)
@@ -58,13 +53,8 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
 
     public async Task<IList<T>> FindAllAsync(Func<IQueryable<T>, IQueryable<T>> func = null)
     {
-        Task<List<T>> FindAllAsync()
-        {
-            var query = func != null ? func(_dbSet) : _dbSet;
-            return query.ToListAsync();
-        }
-
-        return await FindAllAsync();
+        var query = func != null ? func(_dbSet) : _dbSet;
+        return await query.ToListAsync();
     }
     public T Find(Expression<Func<T, bool>> @where)
         => _dbSet.FirstOrDefault(where);
@@ -193,14 +183,14 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
         return entity;
     }
 
-    public async Task<T> UpdateAsync(T entity)
-        => await Task.Run(() =>
-        {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            _dbSet.Update(entity);
-            return entity;
-        });
+    public Task<T> UpdateAsync(T entity)
+    {
+        if (entity == null)
+            throw new ArgumentNullException(nameof(entity));
+        
+        _dbSet.Update(entity);
+        return Task.FromResult(entity);
+    }
 
     public IEnumerable<T> UpdateRange(IEnumerable<T> entities)
     {
@@ -215,17 +205,17 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
         return baseEntities;
     }
 
-    public async Task<IEnumerable<T>> UpdateRangeAsync(IEnumerable<T> entities)
-        => await Task.Run(() =>
-        {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-            if (!entities.Any())
-                return null;
-            var baseEntities = entities.ToList();
-            _dbSet.UpdateRange(baseEntities);
-            return baseEntities;
-        });
+    public Task<IEnumerable<T>> UpdateRangeAsync(IEnumerable<T> entities)
+    {
+        if (entities == null)
+            throw new ArgumentNullException(nameof(entities));
+        if (!entities.Any())
+            return Task.FromResult<IEnumerable<T>>(null);
+        
+        var baseEntities = entities.ToList();
+        _dbSet.UpdateRange(baseEntities);
+        return Task.FromResult<IEnumerable<T>>(baseEntities);
+    }
 
     public T Delete(T entity)
     {
@@ -241,18 +231,17 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
         return remove.Entity;
     }
 
-    public async Task<T> DeleteAsync(T entity)
-        => await Task.Run(() =>
+    public Task<T> DeleteAsync(T entity)
+    {
+        if (entity == null)
+            throw new ArgumentNullException(nameof(entity));
+        if (_context.Entry(entity).State == EntityState.Detached)
         {
-            if (entity == null)
-                throw new ArgumentNullException(nameof(entity));
-            if (_context.Entry(entity).State == EntityState.Detached)
-            {
-                _context.Attach(entity);
-            }
-            var remove = _dbSet.Remove(entity);
-            return remove.Entity;
-        });
+            _context.Attach(entity);
+        }
+        var remove = _dbSet.Remove(entity);
+        return Task.FromResult(remove.Entity);
+    }
 
     public void Delete(Expression<Func<T, bool>> @where)
         => Delete(Find(where));
@@ -263,17 +252,17 @@ public sealed class Repository<T> : IMssqlRepository<T> where T : BaseEntity, IE
     public void Delete(IEnumerable<T> entities)
         => _dbSet.RemoveRange(entities);
 
-    public async Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities)
-        => await Task.Run(() =>
-        {
-            if (entities == null)
-                throw new ArgumentNullException(nameof(entities));
-            if (!entities.Any())
-                return null;
-            var baseEntities = entities.ToList();
-            _dbSet.RemoveRange(baseEntities);
-            return baseEntities;
-        });
+    public Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities)
+    {
+        if (entities == null)
+            throw new ArgumentNullException(nameof(entities));
+        if (!entities.Any())
+            return Task.FromResult<IEnumerable<T>>(null);
+        
+        var baseEntities = entities.ToList();
+        _dbSet.RemoveRange(baseEntities);
+        return Task.FromResult<IEnumerable<T>>(baseEntities);
+    }
 
     public T Delete(object id)
         => Delete(FindById(id));

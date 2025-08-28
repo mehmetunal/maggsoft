@@ -48,8 +48,6 @@ public static class ServiceCollectionExtension
         //TODO: WepApi de eklenmesi gerek
         //services.AddSingleton<IEventPublisher, EventPublisher>();
 
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
         services.Configure<ApiBehaviorOptions>(options => { options.InvalidModelStateResponseFactory = ctx => new ModelStateFeatureFilter(); });
 
         services.AddLogging();
@@ -88,20 +86,6 @@ public static class ServiceCollectionExtension
         {
             app.UseDeveloperExceptionPage();
         }
-        else
-        {
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.IsLocal())
-                {
-                    // Forbidden http status code
-                    context.Response.StatusCode = 403;
-                    return;
-                }
-
-                await next.Invoke();
-            });
-        }
 
         app.UseStaticFiles();
 
@@ -113,15 +97,17 @@ public static class ServiceCollectionExtension
 
         app.UseMiddleware<ApiResponseMiddleware>();
 
-        app.UseExceptionHandler(c => c.Run(context =>
+        app.UseExceptionHandler(c => c.Run(async context =>
         {
             var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-            throw exception;
-            /*
-              var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
-              var response = new { error = exception.InnerException == null ? exception.Message : exception.InnerException.Message };
-              await context.Response.WriteAsJsonAsync(response);
-             */
+            var response = new { 
+                error = exception.InnerException?.Message ?? exception.Message,
+                detail = exception.StackTrace 
+            };
+            
+            context.Response.StatusCode = 500;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(response);
         }));
 
         app.UseAuthentication();
