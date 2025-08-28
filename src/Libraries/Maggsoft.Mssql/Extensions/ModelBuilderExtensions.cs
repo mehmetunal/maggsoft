@@ -94,11 +94,11 @@ public static class ModelBuilderExtensions
 
         if (enable == true)
         {
-            await context.Database.ExecuteSqlRawAsync($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
+            await context.Database.ExecuteSqlAsync($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
         }
         else
         {
-            await context.Database.ExecuteSqlRawAsync($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
+            await context.Database.ExecuteSqlAsync($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
         }
     }
 
@@ -132,11 +132,11 @@ public static class ModelBuilderExtensions
 
         if (enable == true)
         {
-            context.Database.ExecuteSqlRaw($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
+            context.Database.ExecuteSql($"alter table {tb} drop constraint \"{primaryKeyDefaultName}\"");
         }
         else
         {
-            context.Database.ExecuteSqlRaw($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
+            context.Database.ExecuteSql($"alter table {tb} ADD constraint \"{primaryKeyDefaultName}\" PRIMARY KEY(\"{primaryKeyColumnName}\")");
             //context.Database.ExecuteSqlRaw($"alter table {tb} ALTER COLUMN \"{primaryKeyColumnName}\" SET DATA TYPE UUID USING(uuid_generate_v4())");
         }
     }
