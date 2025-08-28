@@ -27,8 +27,6 @@ maggsoft-framework-project (13 projects)
 ├── Libraries/                           # Core kütüphaneler (9 projects)
 │   ├── Data/                           # Veritabanı katmanı (1 project)
 │   │   └── Maggsoft.Data.Mssql/        # MSSQL desteği
-│   ├── Dto/                            # DTO katmanı (1 project)
-│   │   └── Maggsoft.Dto.Mssql/         # MSSQL DTO'ları
 │   ├── Endpoints/                      # Endpoint katmanı (2 projects)
 │   │   ├── Maggsoft.Endpoints.Api/     # API Endpoints
 │   │   └── Maggsoft.Endpoints.BackgroundServicesApi/ # Background Services API
@@ -364,8 +362,6 @@ maggsoft-framework-project/
 ├── Libraries/                           # Core kütüphaneler
 │   ├── Data/                           # Veritabanı katmanı
 │   │   └── Maggsoft.Data.Mssql/        # MSSQL desteği
-│   ├── Dto/                            # DTO katmanı
-│   │   └── Maggsoft.Dto.Mssql/         # MSSQL DTO'ları
 │   ├── Endpoints/                      # Endpoint katmanı
 │   │   ├── Maggsoft.Endpoints.Api/     # API Endpoints
 │   │   └── Maggsoft.Endpoints.BackgroundServicesApi/ # Background Services API
