@@ -352,6 +352,19 @@ public sealed class ApiResponseMiddleware(RequestDelegate next,
                 return CreateEmptyResponse(statusCode);
             }
             
+            // Rate Limiting (429) için özel handling
+            // Rate limiting middleware text response döndürür, JSON değil
+            if (statusCode == 429)
+            {
+                return new Result<object>
+                {
+                    IsSuccess = false,
+                    Data = null,
+                    Message = GetUserFriendlyMessage(statusCode),
+                    Errors = [GetStatusCodeMessage(statusCode)]
+                };
+            }
+            
             // JSON'ı parse et
             using var jsonDocument = JsonDocument.Parse(json);
             var root = jsonDocument.RootElement;
