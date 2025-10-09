@@ -273,7 +273,8 @@ public sealed class ApiResponseMiddleware(RequestDelegate next,
     {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = options?.Value?.UseCamelCase == true ? JsonNamingPolicy.CamelCase : null,
-        AllowTrailingCommas = true
+        AllowTrailingCommas = true,
+        WriteIndented = true // Pretty print (girintili JSON)
     };
     private readonly IgnoreResponseOption? _options = options?.Value;
     private HttpContext? _currentContext;
