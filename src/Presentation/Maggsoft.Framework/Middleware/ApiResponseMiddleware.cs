@@ -357,6 +357,9 @@ public sealed class ApiResponseMiddleware(RequestDelegate next,
             // Rate limiting middleware text response döndürür, JSON değil
             if (statusCode == 429)
             {
+                if (_currentContext != null)
+                    _currentContext.Response.ContentType = "application/json; charset=utf-8";
+
                 return new Result<object>
                 {
                     IsSuccess = false,
