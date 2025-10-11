@@ -27,6 +27,14 @@ public static class MssqlExtensions
         services.AddScoped<DbContext, TContext>();
         return services;
     }
+    
+    public static IServiceCollection AddMssqlConfig<TContext>(this IServiceCollection services,
+        string connectionString, Action<SqlServerDbContextOptionsBuilder>? sqlServerOptionsAction = null) where TContext : DbContext
+    {
+        services.AddDbContext<TContext>(options => { options.UseSqlServer(connectionString, sqlServerOptionsAction); });
+        services.AddScoped<DbContext, TContext>();
+        return services;
+    }
     public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
         IConfiguration configuration) 
     {
