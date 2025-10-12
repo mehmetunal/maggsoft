@@ -62,6 +62,32 @@ public static class MssqlExtensions
 
         return services;
     }
+    public static IServiceCollection AddFluentMigratorConfig(this IServiceCollection services,
+        string connectionString) 
+    {
+        var mAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => typeof(MigrationBase).IsAssignableFrom(p) && p.IsClass == true)
+            .Select(t => t.Assembly)
+            .Where(assembly => !assembly.FullName.Contains("FluentMigrator.Runner"))
+            .Distinct()
+            .ToArray();
+
+        services
+            .AddFluentMigratorCore()
+            .ConfigureRunner(builder =>
+            {
+                builder.AddSqlServer();
+                builder.WithGlobalConnectionString(connectionString);
+                builder.ScanIn(mAssemblies).For.Migrations();
+            })
+            .AddLogging(op => op.AddFluentMigratorConsole());
+
+        services.AddTransient(p => new Lazy<IVersionLoader>(p.GetRequiredService<IVersionLoader>()));
+        services.AddScoped<IMigrationManager, MigrationManager>();
+
+        return services;
+    }
     // <summary>
     // 
     // </summary>
