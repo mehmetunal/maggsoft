@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Maggsoft.Core.Model.DataTables;
@@ -15,7 +16,18 @@ public class DataTablesRequest
     public Search Search { get; set; }
     public ColumnCollection Columns { get; set; }
 
+    /// <summary>
+    /// .NET Core 8+ için BindAsync metodu - ParameterInfo parametresi ile
+    /// </summary>
+    public static async ValueTask<DataTablesRequest?> BindAsync(HttpContext context, ParameterInfo parameter)
+    {
+        var result = await DatatableModelBinder.BindModelAsync(context.Request.Query);
+        return result;
+    }
 
+    /// <summary>
+    /// Eski sürümler için geriye dönük uyumluluk - ParameterInfo parametresi olmadan
+    /// </summary>
     public static ValueTask<DataTablesRequest> BindAsync(HttpContext context)
     {
         var result = DatatableModelBinder.BindModelAsync(context.Request.Query).GetAwaiter().GetResult();
