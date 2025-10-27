@@ -36,28 +36,32 @@ public class DataTablesRequest
 
     public PaginationFilter ToPaginationFilter()
     {
-        var sorts = new List<Maggsoft.Core.Model.Sort>();
-        var filters = new List<Maggsoft.Core.Model.Filter>();
+        var sorts = new List<Sort>();
+        var filters = new List<Filter>();
 
-        if (this.Columns == null || this.Columns.Count() == 0)
+        if (!Columns.Any())
         {
-            return new PaginationFilter(this.Start, this.Length, filters, sorts); ;
+            return new PaginationFilter(Start, Length, filters, sorts); ;
         }
 
-        var sortedColumns = this.Columns.GetSortedColumns();
-        var filteredColumns = this.Columns.GetFilteredColumns();
+        var sortedColumns = Columns.GetSortedColumns();
+        var filteredColumns = Columns.GetFilteredColumns();
 
-        foreach (var column in sortedColumns)
-        {
-            sorts.Add(new Maggsoft.Core.Model.Sort { Asc = (column.SortDirection == OrderDirection.Ascendant), Field = column.Data });
-        }
+        sorts.AddRange(sortedColumns.Select(column => new Sort
+            { Asc = (column.SortDirection == OrderDirection.Ascendant), Field = column.Data }));
 
         foreach (var column in filteredColumns)
         {
-            filters.Add(new Maggsoft.Core.Model.Filter { Field = !string.IsNullOrEmpty(column.Name) ? column.Name : column.Data, Operator = "contains", Value = column.Search.Value });
+            var operatorType = "contains";
+            var columnName = !string.IsNullOrEmpty(column.Name) ? column.Name.ToLower() : column.Data.ToLower();
+            
+            if (columnName.Contains("date"))
+                operatorType = "equals";
+            
+            filters.Add(new Filter { Field = !string.IsNullOrEmpty(column.Name) ? column.Name : column.Data, Operator = operatorType, Value = column.Search.Value });
         }
 
-        var fResult = new PaginationFilter(this.Start, this.Length, filters, sorts);
+        var fResult = new PaginationFilter(Start, Length, filters, sorts);
 
         return fResult;
     }
