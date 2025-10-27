@@ -53,12 +53,26 @@ public class DataTablesRequest
         foreach (var column in filteredColumns)
         {
             var operatorType = "contains";
-            var columnName = !string.IsNullOrEmpty(column.Name) ? column.Name.ToLower() : column.Data.ToLower();
+            var columnName = !string.IsNullOrEmpty(column.Name) ? column.Name : column.Data;
             
-            if (columnName.Contains("date"))
-                operatorType = "equals";
+            // Boş veya null field'ları atla (Action buttons vb.)
+            if (string.IsNullOrEmpty(columnName))
+                continue;
             
-            filters.Add(new Filter { Field = !string.IsNullOrEmpty(column.Name) ? column.Name : column.Data, Operator = operatorType, Value = column.Search.Value });
+            // SearchOperator'ı name'den parse et (format: "ColumnName|equals")
+            if (columnName.Contains("|"))
+            {
+                var parts = columnName.Split('|');
+                columnName = parts[0]; // Gerçek column name
+                operatorType = parts[1]; // Operator (equals, contains, vb.)
+            }
+            
+            filters.Add(new Filter 
+            { 
+                Field = columnName, 
+                Operator = operatorType, 
+                Value = column.Search.Value 
+            });
         }
 
         var fResult = new PaginationFilter(Start, Length, filters, sorts);
