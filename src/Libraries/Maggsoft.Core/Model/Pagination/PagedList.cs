@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Maggsoft.Core.Model.Pagination;
 
@@ -12,6 +13,21 @@ namespace Maggsoft.Core.Model.Pagination;
 [Serializable]
 public class PagedList<T> : IPagedList<T>
 {
+    /// <summary>
+    /// Parameterless constructor for JSON deserialization
+    /// </summary>
+    [JsonConstructor]
+    public PagedList()
+    {
+        Data = new List<T>();
+        Filters = new List<Filter>();
+        Sorts = new List<Sort>();
+        PageIndex = 0;
+        PageSize = 1;
+        TotalCount = 0;
+        TotalPages = 0;
+    }
+    
     /// <summary>
     /// Ctor
     /// </summary>

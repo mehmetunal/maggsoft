@@ -54,24 +54,20 @@ public class DataTablesRequest
         {
             var operatorType = "contains";
             var columnName = !string.IsNullOrEmpty(column.Name) ? column.Name : column.Data;
+            var searchValue = column.Search.Value;
             
-            // Boş veya null field'ları atla (Action buttons vb.)
-            if (string.IsNullOrEmpty(columnName))
-                continue;
-            
-            // SearchOperator'ı name'den parse et (format: "ColumnName|equals")
-            if (columnName.Contains("|"))
+            // Date alanları için DateTime.TryParse kontrolü
+            if (!string.IsNullOrEmpty(columnName) && columnName.Contains("date", StringComparison.OrdinalIgnoreCase) 
+                && DateTime.TryParse(searchValue, out _))
             {
-                var parts = columnName.Split('|');
-                columnName = parts[0]; // Gerçek column name
-                operatorType = parts[1]; // Operator (equals, contains, vb.)
+                operatorType = "equals";
             }
             
             filters.Add(new Filter 
             { 
                 Field = columnName, 
                 Operator = operatorType, 
-                Value = column.Search.Value 
+                Value = searchValue 
             });
         }
 
