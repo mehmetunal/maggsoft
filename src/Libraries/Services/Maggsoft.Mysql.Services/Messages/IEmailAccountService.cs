@@ -1,4 +1,6 @@
-﻿using Maggsoft.Data.Mysql.Messages;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Maggsoft.Data.Mysql.Messages;
 
 namespace Maggsoft.Mysql.Services.Messages;
 

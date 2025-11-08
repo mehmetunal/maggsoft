@@ -1,4 +1,5 @@
-﻿using FluentMigrator;
+﻿using System;
+using FluentMigrator;
 using FluentMigrator.Runner;
 using Maggsoft.Data.DataProviders;
 using Maggsoft.Data.Migration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using MySqlConnector;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 
 namespace Maggsoft.Mysql.Extensions;

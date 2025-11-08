@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Threading.Tasks;
 using Maggsoft.Core.Entities;
 using Maggsoft.Core.Repository;
 using Maggsoft.Data.Mysql;
