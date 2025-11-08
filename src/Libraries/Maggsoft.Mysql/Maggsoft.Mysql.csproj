@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="AspectCore.Abstractions" />
+        <PackageReference Include="FluentMigrator"/>
+        <PackageReference Include="FluentMigrator.Runner"/>
+        <PackageReference Include="FluentMigrator.Runner.MySql"/>
+
+        <PackageReference Include="Microsoft.EntityFrameworkCore" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"  />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Data\Maggsoft.Data.Mysql\Maggsoft.Data.Mysql.csproj" />
+      <ProjectReference Include="..\Maggsoft.Core\Maggsoft.Core.csproj" />
+    </ItemGroup>
+
+</Project>

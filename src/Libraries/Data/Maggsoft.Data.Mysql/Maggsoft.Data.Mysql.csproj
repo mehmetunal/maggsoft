@@ -1,0 +1,23 @@
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
+
+<PropertyGroup>
+    <TargetFramework>$(TargetFramework)</TargetFramework>
+    <Copyright>$(Copyright)</Copyright>
+    <Company>$(Company)</Company>
+    <Authors>$(Authors)</Authors>
+    <Version>2.1.0</Version>
+    <Description>The Maggsoft.Data.Mysql project contains a set of core classes for maggsoft, such as caching, events, helpers, and business objects (for example, Order and Customer entities).</Description>
+    <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+    <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
+    <RepositoryType>$(RepositoryType)</RepositoryType>
+</PropertyGroup>
+
+<ItemGroup>
+    <ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
+    <ProjectReference Include="..\Maggsoft.Data\Maggsoft.Data.csproj" />
+</ItemGroup>
+
+</Project>

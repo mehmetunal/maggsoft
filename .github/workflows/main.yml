@@ -16,6 +16,7 @@ jobs:
         MaggsoftData: "src/Libraries/Data/Maggsoft.Data/Maggsoft.Data.csproj"
         MaggsoftDataMongo: "src/Libraries/Data/Maggsoft.Data.Mongo/Maggsoft.Data.Mongo.csproj"
         MaggsoftDataMssql: "src/Libraries/Data/Maggsoft.Data.Mssql/Maggsoft.Data.Mssql.csproj"
+        MaggsoftDataMysql: "src/Libraries/Data/Maggsoft.Data.Mysql/Maggsoft.Data.Mysql.csproj"
         MaggsoftDataNpgsql: "src/Libraries/Data/Maggsoft.Data.Npgsql/Maggsoft.Data.Npgsql.csproj"
         MaggsoftDataSqlite: "src/Libraries/Data/Maggsoft.Data.Sqlite/Maggsoft.Data.Sqlite.csproj"
 
@@ -28,12 +29,14 @@ jobs:
         MaggsoftOcelotCore: "src/Libraries/Ocelot/Maggsoft.Ocelot.Core/Maggsoft.Ocelot.Core.csproj"
         MaggsoftMongoServices: "src/Libraries/Services/Maggsoft.Mongo.Services/Maggsoft.Mongo.Services.csproj"
         MaggsoftMssqlServices: "src/Libraries/Services/Maggsoft.Mssql.Services/Maggsoft.Mssql.Services.csproj"
+        MaggsoftMysqlServices: "src/Libraries/Services/Maggsoft.Mysql.Services/Maggsoft.Mysql.Services.csproj"
         MaggsoftNpgsqlServices: "src/Libraries/Services/Maggsoft.Npgsql.Services/Maggsoft.Npgsql.Services.csproj"
         MaggsoftServices: "src/Libraries/Services/Maggsoft.Services/Maggsoft.Services.csproj"
         MaggsoftSqliteServices: "src/Libraries/Services/Maggsoft.Sqlite.Services/Maggsoft.Sqlite.Services.csproj"
         MaggsoftCore: "src/Libraries/Maggsoft.Core/Maggsoft.Core.csproj"
         MaggsoftMongo: "src/Libraries/Maggsoft.Mongo/Maggsoft.Mongo.csproj"
         MaggsoftMssql: "src/Libraries/Maggsoft.Mssql/Maggsoft.Mssql.csproj"
+        MaggsoftMysql: "src/Libraries/Maggsoft.Mysql/Maggsoft.Mysql.csproj"
         MaggsoftNpgsql: "src/Libraries/Maggsoft.Npgsql/Maggsoft.Npgsql.csproj"
         MaggsoftSqlite: "src/Libraries/Maggsoft.Sqlite/Maggsoft.Sqlite.csproj"
         MaggsoftFramework: "src/Presentation/Maggsoft.Framework/Maggsoft.Framework.csproj"
@@ -106,7 +109,11 @@ jobs:
                    PROJECT=${{env.MaggsoftDataMssql}}
                    VFN="MaggsoftDataMssql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMssql" )
-                elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Npgsql"* ]]; then
+              elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Mysql"* ]]; then
+                 PROJECT=${{env.MaggsoftDataMysql}}
+                 VFN="MaggsoftDataMysql"
+                 VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataMysql" )
+              elif [[ "${file}" == *"src/Libraries/Data/Maggsoft.Data.Npgsql"* ]]; then
                    PROJECT=${{env.MaggsoftDataNpgsql}}
                    VFN="MaggsoftDataNpgsql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftDataNpgsql" )
@@ -151,6 +158,10 @@ jobs:
                    PROJECT=${{env.MaggsoftMssqlServices}}
                    VFN="MaggsoftMssqlServices"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssqlServices" )
+                elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Mysql.Services"* ]]; then
+                   PROJECT=${{env.MaggsoftMysqlServices}}
+                   VFN="MaggsoftMysqlServices"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMysqlServices" )
                 elif [[ "${file}" == *"src/Libraries/Services/Maggsoft.Npgsql.Services"* ]]; then
                    PROJECT=${{env.MaggsoftNpgsqlServices}}
                    VFN="MaggsoftNpgsqlServices"
@@ -175,6 +186,10 @@ jobs:
                    PROJECT=${{env.MaggsoftMssql}}
                    VFN="MaggsoftMssql"
                    VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMssql" )
+                elif [[ "${file}" == *"src/Libraries/Maggsoft.Mysql"* ]]; then
+                   PROJECT=${{env.MaggsoftMysql}}
+                   VFN="MaggsoftMssql"
+                   VERSION=$(dotnet run --project src/Tools/Maggsoft.VersioningTool -- "MaggsoftMysql" )
                 elif [[ "${file}" == *"src/Libraries/Maggsoft.Npgsql"* ]]; then
                    PROJECT=${{env.MaggsoftNpgsql}}
                    VFN="MaggsoftNpgsql"
