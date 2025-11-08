@@ -1,9 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <TargetFramework>$(TargetFramework)</TargetFramework>
+        <Copyright>$(Copyright)</Copyright>
+        <Company>$(Company)</Company>
+        <Authors>$(Authors)</Authors>
+        <Version>1.0.0</Version>
+        <Description>The Maggsoft.Mssql.Services.</Description>
+        <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
+        <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+        <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+        <PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
+        <RepositoryType>$(RepositoryType)</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
