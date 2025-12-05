@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Maggsoft.Framework.Options;
 
@@ -57,4 +57,22 @@ public class IPFilterOptions
     /// Strict Mode: Only IPs in WhitelistedIPs and AllowedIPs lists can access
     /// </summary>
     public bool StrictMode { get; set; } = false;
+
+    /// <summary>
+    /// İzin verilen domain listesi (örn: example.com, *.example.com)
+    /// Whitelist of allowed domains (e.g., example.com, *.example.com)
+    /// </summary>
+    public List<string> WhitelistedDomains { get; set; } = new();
+
+    /// <summary>
+    /// Yasaklanan domain listesi (örn: spam.com, *.spam.com)
+    /// Blacklist of blocked domains (e.g., spam.com, *.spam.com)
+    /// </summary>
+    public List<string> BlockedDomains { get; set; } = new();
+
+    /// <summary>
+    /// Domain kontrolünü aktif et
+    /// Enable domain filtering
+    /// </summary>
+    public bool EnableDomainFilter { get; set; } = false;
 }

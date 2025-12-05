@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -37,6 +37,25 @@ public class IPFilterMiddleware
             return;
         }
 
+        // Domain kontrolü (IP kontrolünden önce)
+        if (_options.EnableDomainFilter)
+        {
+            var domain = GetDomain(context);
+            if (!IsDomainAllowed(domain))
+            {
+                _logger.LogWarning("Domain engellendi: {Domain} (IP: {IpAddress})", domain, ipAddress);
+                context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                await context.Response.WriteAsJsonAsync(new 
+                { 
+                    error = "Bu domain'den erişim engellendi",
+                    domain = domain,
+                    ipAddress = ipAddress
+                });
+                return;
+            }
+        }
+
+        // IP kontrolü
         if (IsIPAllowed(ipAddress))
         {
             await _next(context);
@@ -161,5 +180,64 @@ public class IPFilterMiddleware
         }
 
         return "0.0.0.0";
+    }
+
+    private static string GetDomain(HttpContext context)
+    {
+        // Host header'ından domain'i al
+        var host = context.Request.Headers["Host"].FirstOrDefault();
+        if (string.IsNullOrEmpty(host))
+        {
+            return string.Empty;
+        }
+
+        // Port numarasını kaldır (örn: example.com:8080 -> example.com)
+        var domain = host.Split(':')[0].ToLower().Trim();
+        return domain;
+    }
+
+    private bool IsDomainAllowed(string domain)
+    {
+        if (string.IsNullOrEmpty(domain))
+        {
+            // Domain bilgisi yoksa varsayılan politikayı uygula
+            return _options.DefaultAllow;
+        }
+
+        // Domain direkt olarak yasaklı listede mi?
+        if (IsDomainInList(domain, _options.BlockedDomains))
+            return false;
+
+        // Domain direkt olarak izin verilen listede mi?
+        if (IsDomainInList(domain, _options.WhitelistedDomains))
+            return true;
+
+        // Hiçbir kural eşleşmezse varsayılan politikayı uygula
+        return _options.DefaultAllow;
+    }
+
+    private static bool IsDomainInList(string domain, List<string> domainList)
+    {
+        foreach (var listedDomain in domainList)
+        {
+            var normalizedListedDomain = listedDomain.ToLower().Trim();
+            
+            // Tam eşleşme kontrolü
+            if (domain.Equals(normalizedListedDomain, System.StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            // Wildcard domain kontrolü (örn: *.example.com)
+            if (normalizedListedDomain.StartsWith("*."))
+            {
+                var baseDomain = normalizedListedDomain.Substring(2); // "*." kısmını kaldır
+                if (domain.EndsWith("." + baseDomain, System.StringComparison.OrdinalIgnoreCase) ||
+                    domain.Equals(baseDomain, System.StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
