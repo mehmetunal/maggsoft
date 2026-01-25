@@ -1,4 +1,4 @@
-﻿using AutoMapper.QueryableExtensions;
+using AutoMapper.QueryableExtensions;
 using Maggsoft.Core.Mapper;
 using Maggsoft.Core.Model;
 using Maggsoft.Core.Model.DataTables;
@@ -70,9 +70,11 @@ public static class EnumerableExtensions
             return q;
 
         var parameter = Expression.Parameter(typeof(TSource), "x");
-        foreach (var f in args.Where(w => !string.IsNullOrEmpty(w.Field) && w.Value.IsNotNull()))
+        foreach (var f in args.Where(w => w != null && !string.IsNullOrEmpty(w.Field) && w.Value.IsNotNull()))
         {
-            var propertyInfo = typeof(TSource).GetProperty(f.Field);
+            var propertyInfo = typeof(TSource).GetProperty(f.Field.Trim(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (propertyInfo == null)
+                continue;
             var propertyExpression = Expression.Property(parameter, propertyInfo.Name);
             var converter = TypeDescriptor.GetConverter(propertyInfo.PropertyType); // 1
             var propertyOperation = propertyInfo.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
@@ -160,8 +162,10 @@ public static class EnumerableExtensions
 
         foreach (var sort in args)
         {
+            if (sort == null || string.IsNullOrWhiteSpace(sort.Field)) continue;
+            var pi = typeof(T).GetProperty(sort.Field.Trim(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+            if (pi == null) continue;
             var classPara = Expression.Parameter(typeof(T), "t");
-            var pi = typeof(T).GetProperty(sort.Field);
             q = q.Provider.CreateQuery<T>(Expression.Call(typeof(Queryable), sort.Asc ? "OrderBy" : "OrderByDescending", new Type[] { typeof(T), pi.PropertyType }, q.Expression, Expression.Lambda(Expression.Property(classPara, pi), classPara)));
         }
 
