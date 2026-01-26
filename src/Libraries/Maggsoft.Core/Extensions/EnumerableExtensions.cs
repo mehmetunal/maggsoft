@@ -5,6 +5,7 @@ using Maggsoft.Core.Model.DataTables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -70,55 +71,213 @@ public static class EnumerableExtensions
             return q;
 
         var parameter = Expression.Parameter(typeof(TSource), "x");
-        foreach (var f in args.Where(w => w != null && !string.IsNullOrEmpty(w.Field) && w.Value.IsNotNull()))
+        foreach (var f in args.Where(w => !string.IsNullOrEmpty(w.Field) && w.Value.IsNotNull()))
         {
             var propertyInfo = typeof(TSource).GetProperty(f.Field.Trim(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
             if (propertyInfo == null)
                 continue;
             var propertyExpression = Expression.Property(parameter, propertyInfo.Name);
-            var converter = TypeDescriptor.GetConverter(propertyInfo.PropertyType); // 1
-            var propertyOperation = propertyInfo.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
-            object propertyValue = null;
+            var propType = propertyInfo.PropertyType;
+            var isNullableDateTime = propType == typeof(DateTime?) || (propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>) && propType.GetGenericArguments()[0] == typeof(DateTime));
+            var isDateTime = propType == typeof(DateTime) || isNullableDateTime;
 
-            if (string.IsNullOrEmpty(propertyOperation) && (converter is DateTimeConverter || f.Operator == "contains" && (propertyInfo.PropertyType != typeof(string) && propertyInfo.PropertyType != typeof(String))))
+            var propertyOperation = propertyInfo.GetCustomAttributes<DTFilterOperation>(true).FirstOrDefault()?.Name;
+            if (string.IsNullOrEmpty(propertyOperation) && isDateTime)
                 f.Operator = "eq";
             if (!string.IsNullOrEmpty(propertyOperation))
                 f.Operator = propertyOperation;
 
-            try
+            object propertyValue;
+            var raw = f.Operator == Operators.Contains ? f.Value?.ToString()?.ToLower() : f.Value?.ToString();
+            if (string.IsNullOrEmpty(raw))
+                continue;
+
+            if (isDateTime)
             {
-                propertyValue = converter.ConvertFromInvariantString(
-                    f.Operator == Operators.Contains
-                    ? f.Value.ToString().ToLower()
-                    : f.Value.ToString()
-                    ); // 3
+                if (!DateTime.TryParse(raw, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dt))
+                    continue;
+                propertyValue = isNullableDateTime ? (DateTime?)dt : dt;
             }
-            catch
+            else
             {
-                propertyValue = converter.ConvertFrom(
-                    f.Operator == Operators.Contains
-                    ? f.Value.ToString().ToLower()
-                    : f.Value.ToString()
-                    ); // 3
+                var converter = TypeDescriptor.GetConverter(propType.IsGenericType && propType.GetGenericTypeDefinition() == typeof(Nullable<>)
+                    ? Nullable.GetUnderlyingType(propType) ?? propType
+                    : propType);
+                try
+                {
+                    propertyValue = converter.ConvertFromInvariantString(raw)!;
+                }
+                catch
+                {
+                    try
+                    {
+                        propertyValue = converter.ConvertFrom(null, CultureInfo.InvariantCulture, raw)!;
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+                if (propertyValue == null)
+                    continue;
             }
-            var constant = Expression.Constant(propertyValue);
-            var valueExpression = Expression.Convert(constant, propertyInfo.PropertyType); // 4
-            Expression filter = Expression.Equal(propertyExpression, valueExpression);
+
+            // Ensure propertyValue matches the property type exactly to avoid SQL conversion issues
+            // EF Core needs the constant to match the property type for proper parameter generation
+            object typedValue = propertyValue;
+            if (propertyValue.GetType() != propertyInfo.PropertyType)
+            {
+                if (propertyInfo.PropertyType == typeof(DateTime?) && propertyValue is DateTime dt)
+                {
+                    typedValue = (DateTime?)dt;
+                }
+                else if (propertyInfo.PropertyType == typeof(DateTime) && propertyValue is DateTime dtValue)
+                {
+                    typedValue = dtValue;
+                }
+                else if (propertyInfo.PropertyType == typeof(DateTime) && propertyValue is DateTime?)
+                {
+                    var dtNullable = (DateTime?)propertyValue;
+                    typedValue = dtNullable.Value;
+                }
+                else if (!propertyInfo.PropertyType.IsInstanceOfType(propertyValue))
+                {
+                    // Try to convert if types don't match
+                    try
+                    {
+                        typedValue = Convert.ChangeType(propertyValue, Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType);
+                        if (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                        {
+                            typedValue = Activator.CreateInstance(propertyInfo.PropertyType, typedValue)!;
+                        }
+                    }
+                    catch
+                    {
+                        continue; // Skip this filter if conversion fails
+                    }
+                }
+            }
+
+            // Use closure pattern to force EF Core to use SQL parameters instead of string literals
+            // This is critical for DateTime values to avoid SQL conversion errors
+            // Lambda closure approach: create a lambda that captures the value, forcing parameterization
+            Expression valueExpression;
+            if (isDateTime)
+            {
+                // For DateTime, use lambda closure to ensure EF Core parameterizes the value
+                // This prevents SQL conversion errors by using parameters instead of string literals
+                var closureValue = typedValue;
+                if (propertyInfo.PropertyType == typeof(DateTime))
+                {
+                    Expression<Func<DateTime>> valueLambda = () => (DateTime)closureValue;
+                    valueExpression = valueLambda.Body;
+                }
+                else // DateTime?
+                {
+                    Expression<Func<DateTime?>> valueLambda = () => (DateTime?)closureValue;
+                    valueExpression = valueLambda.Body;
+                }
+            }
+            else
+            {
+                // For other types, use constant directly
+                valueExpression = Expression.Constant(typedValue, propertyInfo.PropertyType);
+            }
+            Expression filter;
+            
+            // For DateTime fields with 'eq' operator, check if this is a Date-only filter
+            // If the time component is 00:00:00, treat it as a date range filter (start of day to start of next day)
+            if (isDateTime && f.Operator == Operators.Equal)
+            {
+                DateTime? filterDateNullable = null;
+                if (typedValue is DateTime dt)
+                    filterDateNullable = dt;
+                else if (typedValue != null && typedValue.GetType() == typeof(DateTime?))
+                {
+                    var dtNullable = (DateTime?)typedValue;
+                    if (dtNullable.HasValue)
+                        filterDateNullable = dtNullable.Value;
+                }
+                
+                if (!filterDateNullable.HasValue)
+                {
+                    filter = Expression.Equal(propertyExpression, valueExpression);
+                }
+                else
+                {
+                    var filterDate = filterDateNullable.Value;
+                    
+                    // Check if this is a date-only filter (time is 00:00:00 or very close to midnight)
+                    // This handles DatePicker filters where only date is selected
+                    // Also check if time is exactly midnight (UTC conversion might shift it slightly)
+                    if (filterDate.TimeOfDay.TotalSeconds < 1 || 
+                        (filterDate.Hour == 0 && filterDate.Minute == 0 && filterDate.Second == 0) ||
+                        (filterDate.Hour >= 21 && filterDate.Hour <= 23)) // UTC conversion: TR timezone is UTC+3, so 00:00 TR = 21:00 UTC previous day
+                    {
+                        // Convert to date range: >= startOfDay AND < startOfNextDay
+                        // Handle UTC conversion: if time is 21:00-23:59 UTC, it's likely the previous day in local time
+                        DateTime startOfDay;
+                        if (filterDate.Hour >= 21 && filterDate.Hour <= 23)
+                        {
+                            // UTC time represents previous day in local timezone (UTC+3)
+                            startOfDay = filterDate.Date.AddDays(1); // Next day in local time
+                        }
+                        else
+                        {
+                            startOfDay = filterDate.Date; // 00:00:00 of the selected date
+                        }
+                        var startOfNextDay = startOfDay.AddDays(1); // 00:00:00 of next day
+                        
+                        // Create expressions for startOfDay and startOfNextDay
+                        Expression startExpression, endExpression;
+                        if (propertyInfo.PropertyType == typeof(DateTime))
+                        {
+                            Expression<Func<DateTime>> startLambda = () => startOfDay;
+                            Expression<Func<DateTime>> endLambda = () => startOfNextDay;
+                            startExpression = startLambda.Body;
+                            endExpression = endLambda.Body;
+                        }
+                        else // DateTime?
+                        {
+                            Expression<Func<DateTime?>> startLambda = () => (DateTime?)startOfDay;
+                            Expression<Func<DateTime?>> endLambda = () => (DateTime?)startOfNextDay;
+                            startExpression = startLambda.Body;
+                            endExpression = endLambda.Body;
+                        }
+                        
+                        // Create: property >= startOfDay AND property < startOfNextDay
+                        var greaterThanOrEqual = Expression.GreaterThanOrEqual(propertyExpression, startExpression);
+                        var lessThan = Expression.LessThan(propertyExpression, endExpression);
+                        filter = Expression.AndAlso(greaterThanOrEqual, lessThan);
+                    }
+                    else
+                    {
+                        // Regular DateTime equality (with time component)
+                        filter = Expression.Equal(propertyExpression, valueExpression);
+                    }
+                }
+            }
+            else
+            {
+                // For non-DateTime fields or non-eq operators, use standard equality
+                filter = Expression.Equal(propertyExpression, valueExpression);
+            }
 
             if (f.Operator == Operators.NotEqual || f.Operator == Operators.IsNotNull)
                 filter = Expression.NotEqual(propertyExpression, valueExpression);
             else if (f.Operator == Operators.StartsWith)
-                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), valueExpression);
+                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("StartsWith", [typeof(string)])!, valueExpression);
             else if (f.Operator == Operators.Contains)
             {
-                var toLower = Expression.Call(propertyExpression, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes));
-                filter = Expression.Call(toLower, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
+                var toLower = Expression.Call(propertyExpression, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes)!);
+                filter = Expression.Call(toLower, typeof(string).GetMethod("Contains", [typeof(string)])!, valueExpression);
             }
             //filter = Expression.Call(member, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression);
             else if (f.Operator == Operators.EndsWith)
-                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), valueExpression);
+                filter = Expression.Call(propertyExpression, typeof(string).GetMethod("EndsWith", [typeof(string)])!, valueExpression);
             else if (f.Operator == Operators.DoesNotContain)
-                filter = Expression.Not(Expression.Call(propertyExpression, typeof(string).GetMethod("Contains", new Type[] { typeof(string) }), valueExpression));
+                filter = Expression.Not(Expression.Call(propertyExpression, typeof(string).GetMethod("Contains", [typeof(string)
+                ])!, valueExpression));
             else if (f.Operator == Operators.GreaterThan)
                 filter = Expression.GreaterThan(propertyExpression, valueExpression);
             else if (f.Operator == Operators.GreaterThanOrEqual)

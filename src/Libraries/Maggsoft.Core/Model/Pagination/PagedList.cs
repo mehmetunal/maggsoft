@@ -53,7 +53,9 @@ public class PagedList<T> : IPagedList<T>
 
         if (filters.Count() > 0 && pageIndex > total)
             pageIndex = total - 1;
-
+        if (pageIndex < 0)
+            pageIndex = 0;
+        
         Filters = filters;
         Sorts = sorts;
 
@@ -87,6 +89,8 @@ public class PagedList<T> : IPagedList<T>
 
         if (filters.Count() > 0 && pageIndex > TotalCount)
             pageIndex = TotalCount - 1;
+        if (pageIndex < 0)
+            pageIndex = 0;
 
         Filters = filters;
         Sorts = sorts;
@@ -110,7 +114,10 @@ public class PagedList<T> : IPagedList<T>
 
         if (TotalCount % pageSize > 0)
             TotalPages++;
-
+        
+        if (pageIndex < 0)
+            pageIndex = 0;
+        
         PageSize = pageSize;
         PageIndex = pageIndex;
 
