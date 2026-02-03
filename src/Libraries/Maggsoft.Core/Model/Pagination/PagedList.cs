@@ -64,7 +64,7 @@ public class PagedList<T> : IPagedList<T>
         #endregion
 
         #region NormalPage
-        Data = source.AddFilterQuery(Filters).Skip(pageIndex * pageSize).Take(pageSize).AddSortQuery(Sorts).ToList();
+        Data = source.AddFilterQuery(Filters).AddSortQuery(Sorts).Skip(pageIndex * pageSize).Take(pageSize).ToList();
         #endregion
     }
 
@@ -95,7 +95,7 @@ public class PagedList<T> : IPagedList<T>
         Filters = filters;
         Sorts = sorts;
 
-        Data = source.AsQueryable().AddFilterQuery(Filters).Skip(pageIndex * pageSize).Take(pageSize).AddSortQuery(Sorts).ToList();
+        Data = source.AsQueryable().AddFilterQuery(Filters).AddSortQuery(Sorts).Skip(pageIndex * pageSize).Take(pageSize).ToList();
     }
 
     /// <summary>

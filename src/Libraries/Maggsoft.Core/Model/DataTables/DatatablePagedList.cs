@@ -49,8 +49,9 @@ namespace Maggsoft.Core.Model.DataTables
 
                 Filters = filters;
                 Sorts = sorts;
-                Data = source.AddFilterQuery(Filters).Skip(pageIndex).Take(pageSize)
+                Data = source.AddFilterQuery(Filters)
                     .AddSortQuery(Sorts)
+                    .Skip(pageIndex).Take(pageSize)
                     .ToList();
             }
         }
@@ -73,9 +74,10 @@ namespace Maggsoft.Core.Model.DataTables
 
             Filters = filters;
             Sorts = sorts;
-            Data = source.AsQueryable().AddFilterQuery(Filters).Skip(pageIndex)
-                .Take(pageSize)
+            Data = source.AsQueryable().AddFilterQuery(Filters)
                 .AddSortQuery(Sorts)
+                .Skip(pageIndex)
+                .Take(pageSize)
                 .ToList();
         }
 
