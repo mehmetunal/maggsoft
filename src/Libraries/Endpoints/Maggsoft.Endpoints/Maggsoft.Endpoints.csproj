@@ -11,7 +11,6 @@
 		<PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
 		<PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
 		<RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
-		<PackageIconUrl>$(PackageIconUrl)</PackageIconUrl>
 		<RepositoryType>$(RepositoryType)</RepositoryType>
 	</PropertyGroup>
 	

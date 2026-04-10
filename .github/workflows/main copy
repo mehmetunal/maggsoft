@@ -49,9 +49,7 @@ jobs:
     name: changed-files
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+            
       - name: Restore ConsoleProject dependencies
         run: dotnet restore src/Tools/Maggsoft.VersioningTool 
 
@@ -233,37 +231,28 @@ jobs:
             
             done
 
-      - name: NuGet — yalnızca değişen projeleri yayınla
-        if: github.event_name != 'pull_request'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      - name: Restore,Build Packages Push All Projects
         run: |
-          set -e
-          : > ./nuget_publish_projects.txt
-          for file in ${ALL_CHANGED_FILES}; do
-            p="$(bash .github/scripts/resolve-publish-csproj.sh "$file")"
-            if [[ -n "$p" ]]; then
-              echo "$p" >> ./nuget_publish_projects.txt
-            fi
-          done
-          sort -u ./nuget_publish_projects.txt -o ./nuget_publish_projects.txt
-          if [[ ! -s ./nuget_publish_projects.txt ]]; then
-            echo "NuGet: Bu koşuda yayınlanacak paket yok (ilgili src yollarında değişiklik yok)."
-            exit 0
-          fi
-          echo "NuGet yayın listesi:"
-          cat ./nuget_publish_projects.txt
           dotnet nuget locals all --clear
           mkdir -p ./nupkgs
-          while IFS= read -r proj; do
-            [[ -z "$proj" ]] && continue
-            echo ">>> NuGet publish: $proj"
-            rm -f ./nupkgs/*.nupkg
-            dotnet restore "$proj"
-            dotnet build "$proj" --configuration Release
-            dotnet pack "$proj" --configuration Release --output ./nupkgs
-            dotnet nuget push ./nupkgs/*.nupkg --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY" --skip-duplicate
-            sleep 3
-          done < ./nuget_publish_projects.txt
+          for proj in $(find . -name '*.csproj'); do
+            echo "projeeeeee: $proj"      
+            if [[ "${proj}" == *"src/Libraries"* || "${proj}" == *"src/Presentation"*  || "${proj}" == *"src/Tools/Test"* ]]; then
+                
+                    echo "projeeeeee: $proj"    
+
+                    if [ -f "$proj" ]; then
+                        echo "projeeeeee find okey: $proj"
+                        rm -f ./nupkgs/*.nupkg
+                        dotnet restore "$proj"
+                        dotnet build "$proj" --configuration Release
+                        dotnet pack $proj --configuration Release --output ./nupkgs
+                        dotnet nuget push ./nupkgs/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
+                        sleep 3
+                    else
+                        echo "File does not exist. :  $proj"
+                    fi
+            fi
+          done
+        continue-on-error: true  # Hata olsa bile devam et
 

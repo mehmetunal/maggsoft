@@ -9,7 +9,6 @@
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>maggsoft</ToolCommandName>
 		<PackageLicenseUrl>https://www.maggsoft.com/license</PackageLicenseUrl>
-		<PackageIconUrl>https://raw.githubusercontent.com/mehmetunal/maggsoft-logo/main/icon.png</PackageIconUrl>
 		<!-- CLI aracınızın terminaldeki adı -->
 	</PropertyGroup>
 </Project>

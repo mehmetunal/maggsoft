@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)NuGetPackageReadme.md" Pack="true" PackagePath="\README.md" />
+  </ItemGroup>
+</Project>
