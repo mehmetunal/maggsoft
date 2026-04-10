@@ -21,6 +21,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Maggsoft.Core\Maggsoft.Core.csproj" />
-	</ItemGroup>
+	</ItemGroup> 
 
 </Project>
