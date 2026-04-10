@@ -1,6 +1,12 @@
 name: CI
 on:
-  workflow_dispatch: # GitHub Actions sekmesinden elle çalıştırmak için
+  workflow_dispatch:
+    inputs:
+      publish_all_packages:
+        description: "Tüm paketlenebilir projeleri NuGet'e gönder (eksik sürümler için)"
+        required: false
+        type: boolean
+        default: false
   push:
     branches: [ "main" ]
   pull_request:
@@ -237,15 +243,43 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          PUBLISH_ALL_PACKAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.publish_all_packages == true && 'true' || 'false' }}
         run: |
           set -e
           : > ./nuget_publish_projects.txt
-          for file in ${ALL_CHANGED_FILES}; do
-            p="$(bash .github/scripts/resolve-publish-csproj.sh "$file")"
-            if [[ -n "$p" ]]; then
-              echo "$p" >> ./nuget_publish_projects.txt
-            fi
-          done
+          FULL_PUBLISH=false
+          if [[ "$PUBLISH_ALL_PACKAGES" == "true" ]]; then
+            FULL_PUBLISH=true
+            echo "NuGet: publish_all_packages etkin — tüm paketlenebilir projeler listeleniyor."
+          fi
+          if [[ "$FULL_PUBLISH" != true ]]; then
+            for file in ${ALL_CHANGED_FILES}; do
+              case "$file" in
+                src/Directory.Build.props|src/Directory.Packages.props|src/NuGetPackageReadme.md|src/icon.png|nuget.config)
+                  FULL_PUBLISH=true
+                  echo "NuGet: Ortak paket metadata değişti ($file) — tüm paketlenebilir projeler yayınlanacak."
+                  break
+                  ;;
+              esac
+            done
+          fi
+          if [[ "$FULL_PUBLISH" == true ]]; then
+            while IFS= read -r proj; do
+              proj="${proj#./}"
+              if [[ "$proj" == src/Libraries/* || "$proj" == src/Presentation/* || "$proj" == src/Tools/Test/* ]]; then
+                if [[ "$proj" != *"Backup"* ]]; then
+                  echo "$proj" >> ./nuget_publish_projects.txt
+                fi
+              fi
+            done < <(find . -name '*.csproj' | sort)
+          else
+            for file in ${ALL_CHANGED_FILES}; do
+              p="$(bash .github/scripts/resolve-publish-csproj.sh "$file")"
+              if [[ -n "$p" ]]; then
+                echo "$p" >> ./nuget_publish_projects.txt
+              fi
+            done
+          fi
           sort -u ./nuget_publish_projects.txt -o ./nuget_publish_projects.txt
           if [[ ! -s ./nuget_publish_projects.txt ]]; then
             echo "NuGet: Bu koşuda yayınlanacak paket yok (ilgili src yollarında değişiklik yok)."
