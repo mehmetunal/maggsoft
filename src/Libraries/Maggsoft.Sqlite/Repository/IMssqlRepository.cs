@@ -16,7 +16,7 @@ public interface ISqliteRepository<T> : IRepository<T> where T : BaseEntity, IEn
     IQueryable<T> Table { get; }
     #endregion
 
-    #region SaveChange
+    #region SaveChange.     
     int SaveChanges();
     Task<int> SaveChangesAsync();
     #endregion
