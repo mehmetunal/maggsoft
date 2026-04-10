@@ -14,7 +14,7 @@ public interface IMssqlRepository<T> : IRepository<T> where T : BaseEntity, IEnt
     int Execute(string sql, params object[] par);
     Task<int> ExecuteAsync(string sql, params object[] par);
     IQueryable<T> Table { get; }
-    #endregion
+    #endregion.  
 
     #region SaveChange
     int SaveChanges();
