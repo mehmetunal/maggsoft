@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Maggsoft.Framework.Options;
+using Maggsoft.Framework.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -41,7 +42,7 @@ public class IPFilterMiddleware
         if (_options.EnableDomainFilter)
         {
             var domain = GetDomain(context);
-            if (!IsDomainAllowed(domain))       
+            if (!IsDomainAllowed(domain))
             {
                 _logger.LogWarning("Domain engellendi: {Domain} (IP: {IpAddress})", domain, ipAddress);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
@@ -160,30 +161,8 @@ public class IPFilterMiddleware
 
     private static string GetIPAddress(HttpContext context)
     {
-        // UseForwardedHeaders + KnownProxies/KnownNetworks sonrası RemoteIpAddress güvenilir istemci IP'sidir.
-        // X-Forwarded-For önce okunursa istemci sahte başlık göndererek StrictMode'u bypass edebilir.
-        var remoteIp = context.Connection.RemoteIpAddress;
-        if (remoteIp != null)
-        {
-            if (remoteIp.IsIPv4MappedToIPv6)
-            {
-                remoteIp = remoteIp.MapToIPv4();
-            }
-
-            var remoteIpString = remoteIp.ToString();
-            if (!string.IsNullOrEmpty(remoteIpString))
-            {
-                return remoteIpString;
-            }
-        }
-
-        var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrEmpty(forwardedFor))
-        {
-            return forwardedFor.Split(',')[0].Trim();
-        }
-
-        return "0.0.0.0";
+        // Cloudflare: CF-Connecting-IP gerçek ziyaretçi IP'sidir; RemoteIpAddress çoğu zaman 141.101.x / 172.69.x olur.
+        return HttpContextClientIpResolver.GetClientIpAddress(context);
     }
 
     private static string GetDomain(HttpContext context)
