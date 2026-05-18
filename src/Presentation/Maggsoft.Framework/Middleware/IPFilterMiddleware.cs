@@ -41,7 +41,7 @@ public class IPFilterMiddleware
         if (_options.EnableDomainFilter)
         {
             var domain = GetDomain(context);
-            if (!IsDomainAllowed(domain))
+            if (!IsDomainAllowed(domain))       
             {
                 _logger.LogWarning("Domain engellendi: {Domain} (IP: {IpAddress})", domain, ipAddress);
                 context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
