@@ -160,23 +160,27 @@ public class IPFilterMiddleware
 
     private static string GetIPAddress(HttpContext context)
     {
-        // X-Forwarded-For header'ını kontrol et
-        var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-        if (!string.IsNullOrEmpty(forwardedFor))
-        {
-            return forwardedFor.Split(',')[0].Trim();
-        }
-
-        // Remote IP adresini al
+        // UseForwardedHeaders + KnownProxies/KnownNetworks sonrası RemoteIpAddress güvenilir istemci IP'sidir.
+        // X-Forwarded-For önce okunursa istemci sahte başlık göndererek StrictMode'u bypass edebilir.
         var remoteIp = context.Connection.RemoteIpAddress;
         if (remoteIp != null)
         {
-            // IPv6 ise IPv4'e dönüştür
             if (remoteIp.IsIPv4MappedToIPv6)
             {
                 remoteIp = remoteIp.MapToIPv4();
             }
-            return remoteIp.ToString();
+
+            var remoteIpString = remoteIp.ToString();
+            if (!string.IsNullOrEmpty(remoteIpString))
+            {
+                return remoteIpString;
+            }
+        }
+
+        var forwardedFor = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+        if (!string.IsNullOrEmpty(forwardedFor))
+        {
+            return forwardedFor.Split(',')[0].Trim();
         }
 
         return "0.0.0.0";
